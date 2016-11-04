@@ -3,6 +3,9 @@
 #include "graphics/terminal.h"
 #include "integer.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 void UIDrawBox(Terminal terminal, uint x, uint y, uint width, uint height, Pixel border1, Pixel border2, Pixel border3, Pixel border4, Pixel side1, Pixel side2, Pixel side3, Pixel side4) {
     TerminalSet(terminal, x, y, border1);
     TerminalSet(terminal, x + width - 1, y, border2);
@@ -57,4 +60,40 @@ void UIDrawBoxLine(Terminal terminal, uint x, uint y, uint width, uint height, P
     }
 
     UIDrawBox(terminal, x, y, width, height, border1, border2, border3, border4, side1, side2, side3, side4);
+}
+
+void UIDrawText(Terminal terminal, uint x, uint y, PixelStyle style, String str) {
+    int i;
+    Pixel pix = PixelCreateEmpty();
+    PixelStyle(pix) = style;
+    for (i = 0; i < StringLength(str); i++) {
+        PixelInfo(pix) = str[i];
+        if (x + i < TerminalGetWidth(terminal))
+            TerminalSet(terminal, x + i, y, pix);
+    }
+}
+
+void UIDrawElipsisText(Terminal terminal, uint x, uint y, uint maxChar, PixelStyle style, String str) {
+    int i;
+    Pixel pix = PixelCreateEmpty();
+    PixelStyle(pix) = style;
+    for (i = 0; i < max(maxChar,StringLength(str)); i++) {
+        PixelInfo(pix) = str[i];
+        if (x + i < TerminalGetWidth(terminal))
+            TerminalSet(terminal, x + i, y, pix);
+    }
+    PixelInfo(pix) = 0x2026;
+    if (StringLength(str) > maxChar)
+        TerminalSet(terminal, x + maxChar - 1, y, pix);
+}
+
+void UIDrawMultilineText(Terminal terminal, uint x, uint y, uint width, PixelStyle style, String str, boolean wordWrap) {
+
+}
+
+void UIDrawImage(Terminal terminal, uint x, uint y, Image image) {
+    uint i,j;
+    for (i = 0; i < ImageHeight(image); i++)
+        for (j = 0; j < ImageWidth(image); j++)
+            TerminalSet(terminal, x + j, y + i, ImageInfo(image)[i][j]);
 }

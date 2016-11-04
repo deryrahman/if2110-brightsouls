@@ -4,6 +4,8 @@
 #include "integer.h"
 #include "graphics/terminal.h"
 #include "graphics/pixel.h"
+#include "graphics/image.h"
+#include "xstring.h"
 
 typedef enum {THINLINE, THICKLINE, MULTILINE} LineBorder;
 
@@ -11,5 +13,11 @@ void UIDrawBox(Terminal terminal, uint x, uint y, uint width, uint height, Pixel
 
 void UIDrawBoxChar(Terminal terminal, uint x, uint y, uint width, uint height, Pixel character);
 void UIDrawBoxLine(Terminal terminal, uint x, uint y, uint width, uint height, PixelStyle style, LineBorder border);
+
+void UIDrawText(Terminal terminal, uint x, uint y, PixelStyle style, String str);
+void UIDrawElipsisText(Terminal terminal, uint x, uint y, uint maxChar, PixelStyle style, String str);
+void UIDrawMultilineText(Terminal terminal, uint x, uint y, uint width, PixelStyle style, String str, boolean wordWrap);
+
+void UIDrawImage(Terminal terminal, uint x, uint y, Image image);
 
 #endif

@@ -32,6 +32,14 @@ TerminalBuffer TerminalGetBuffer(Terminal terminal) {
     return terminal.buffer;
 }
 
+uint TerminalGetCenterX(Terminal terminal, uint width) {
+    return (TerminalGetWidth(terminal) + 1 - width + 1) / 2 - 1;
+}
+
+uint TerminalGetCenterY(Terminal terminal, uint height) {
+    return (TerminalGetHeight(terminal) + 1 - height + 1) / 2 - 1;
+}
+
 void TerminalMake(Terminal* terminal, uint width, uint height) {
     setlocale(LC_ALL, "");
     terminal->width = width;

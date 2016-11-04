@@ -20,6 +20,9 @@ uint TerminalGetWidth(Terminal terminal);
 uint TerminalGetHeight(Terminal terminal);
 TerminalBuffer TerminalGetBuffer(Terminal terminal);
 
+uint TerminalGetCenterX(Terminal terminal, uint width);
+uint TerminalGetCenterY(Terminal terminal, uint height);
+
 void TerminalMake(Terminal* terminal, uint width, uint height);
 void TerminalMakeDefault(Terminal* terminal);
 
