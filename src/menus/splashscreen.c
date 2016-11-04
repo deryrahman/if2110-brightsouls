@@ -1,5 +1,6 @@
 #include "graphics/terminal.h"
 #include "graphics/ui.h"
+#include "menus/splashscreen.h"
 
 void SplashScreenShow(Terminal terminal) {
     UIDrawBoxLine(terminal, 1, 1, TerminalGetWidth(terminal) - 2, TerminalGetHeight(terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
@@ -12,4 +13,6 @@ void SplashScreenShow(Terminal terminal) {
     }
 
     TerminalRender(terminal);
+
+    String str = StringStr(""); StringReadln(&str);
 }

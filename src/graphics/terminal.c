@@ -1,12 +1,16 @@
 #include "graphics/terminal.h"
 #include "boolean.h"
+#include "xstring.h"
 
+#include <wchar.h>
 #include <sys/ioctl.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include <fcntl.h>
+#include <time.h>
 
 uint TerminalGetActualWidth() {
     struct winsize w;
@@ -89,10 +93,16 @@ void TerminalRender(Terminal terminal) {
     for (i = 0; i < TerminalGetHeight(terminal); i++) {
         for (j = 0; j < TerminalGetWidth(terminal); j++)
             PixelPrint(buffer[i*TerminalGetWidth(terminal) + j]);
-        printf("\n");
+        wprintf(L"\n");
     }
 }
 
 void TerminalDealoc(Terminal* terminal) {
     free (terminal->buffer);
+}
+
+void TerminalDelay(uint milisec) {
+    clock_t start = clock();
+    clock_t finished = start + ((unsigned long long) milisec* (unsigned long long) CLOCKS_PER_SEC)/1000;
+    while (clock() < finished);
 }

@@ -4,6 +4,7 @@
 #include "graphics/pixel.h"
 #include "integer.h"
 #include "boolean.h"
+#include "xstring.h"
 
 typedef Pixel* TerminalBuffer;
 
