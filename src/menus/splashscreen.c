@@ -14,5 +14,5 @@ void SplashScreenShow(Terminal terminal) {
 
     TerminalRender(terminal);
 
-    String str = StringStr(""); StringReadln(&str);
+    String str = StringCreate(""); StringReadln(&str);
 }

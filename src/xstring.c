@@ -15,7 +15,7 @@
  * Implementasi str pada string.h
  * Tanggal : Minggu, 11 September 2016
  */
-String StringStr(char* lit) {
+String StringCreate(char* lit) {
 	String baru = 0;
 	StringResize(&baru, 0);
 

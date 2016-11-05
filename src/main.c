@@ -18,7 +18,7 @@ int main(int argc, char** argv){
 
 	//UIDrawBoxChar(terminal, 101, 11, 30, 30, PixelCreate(RESET,RED,WHITE,L'#'));
 
-	//UIDrawText(terminal, TerminalGetCenterX(terminal, StringLength(StringStr("jauhar"))), 10, PixelStyleCreateDefault(), StringStr("jauhar"));
+	//UIDrawText(terminal, TerminalGetCenterX(terminal, StringLength(StringCreate("jauhar"))), 10, PixelStyleCreateDefault(), StringCreate("jauhar"));
 
 	TerminalDealoc(&terminal);
 	return 0;

@@ -29,7 +29,7 @@ typedef char* String;
  * char* lit : berisi string literal
  * return : string hasil konversi
  */
-String StringMake(char* lit);
+String StringCreate(char* lit);
 
 /*
  * StringResize
