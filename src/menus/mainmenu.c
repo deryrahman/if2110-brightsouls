@@ -15,16 +15,16 @@ void MainMenuShow(Terminal terminal) {
         fclose(file);
     }
 
-    String str = StringStr("New Game");
+    String str = StringCreate("New Game");
     UIDrawText(terminal,TerminalGetCenterX(terminal, StringLength(str)), ImageHeight(mainmenuImage) + 10, PixelStyleCreateDefault(), str);
 
-    str = StringStr("Start Game");
+    str = StringCreate("Start Game");
     UIDrawText(terminal,TerminalGetCenterX(terminal, StringLength(str)), ImageHeight(mainmenuImage) + 12, PixelStyleCreateDefault(), str);
 
-    str = StringStr("Load");
+    str = StringCreate("Load");
     UIDrawText(terminal,TerminalGetCenterX(terminal, StringLength(str)), ImageHeight(mainmenuImage) + 14, PixelStyleCreateDefault(), str);
 
-    str = StringStr("Exit");
+    str = StringCreate("Exit");
     UIDrawText(terminal,TerminalGetCenterX(terminal, StringLength(str)), ImageHeight(mainmenuImage) + 16, PixelStyleCreateDefault(), str);
 
     TerminalRender(terminal);

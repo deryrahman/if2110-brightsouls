@@ -24,7 +24,7 @@ void ImageLoadFromFile(Image *image, FILE *file, PixelStyle style) {
 
     uint *info_width = (uint*) malloc(sizeof(uint));
 
-    String tmp = StringStr("");
+    String tmp = StringCreate("");
     while (StringFreadln(&tmp, file) != EOF) {
         if (__builtin_popcount(ImageHeight(*image)) == 1) {
             Pixel** before = ImageInfo(*image);
