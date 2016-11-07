@@ -16,6 +16,7 @@ File	: tree.h
 typedef int infotype;
 typedef struct tNode *address;
 typedef struct tNode {
+	boolean status;
 	infotype info;
 	address left;
 	address right;
@@ -23,6 +24,7 @@ typedef struct tNode {
 typedef address Tree;
 
 /* Selektor */
+#define TreeStatus(P) (P)->status
 #define TreeRoot(P) (P)->info
 #define TreeLeft(P) (P)->left
 #define TreeRight(P) (P)->right
@@ -34,5 +36,6 @@ boolean TreeIsOneElmt(Tree P);
 void TreeAddLeft(Tree P, infotype X, address *Pl);
 void TreeAddRight(Tree P, infotype X, address *Pr);
 void TreePrint(Tree P);
+void TreePrintActivated(Tree P);
 
 #endif

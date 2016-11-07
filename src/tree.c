@@ -42,17 +42,22 @@ void TreeAddRight(Tree P, infotype X, address *Pr){
 	*Pr=PRight;
 }
 void TreePrint(Tree P){
-	if (TreeLeft(P)==Nil || TreeRight(P)==Nil){
-		if (TreeRight(P)!=Nil){
-			TreePrint(TreeRight(P));
-		} else if (TreeLeft(P)!=Nil){
-			TreePrint(TreeLeft(P));
-		} else {
-			printf("[%d]",TreeRoot(P));
-		}
+	if (TreeLeft(P)==Nil && TreeRight(P)==Nil){
+		printf("[%d]",TreeRoot(P));
 	} else {
 		printf("%d->",TreeRoot(P));
 		TreePrint(TreeLeft(P));
 		TreePrint(TreeRight(P));
+	}
+}
+void TreePrintActivated(Tree P){
+	if (TreeStatus(P)==true){
+		if (TreeStatus(TreeLeft(P))==false && TreeStatus(TreeRight(P))==false){
+			printf("[%d]",TreeRoot(P));
+		} else {
+			printf("%d->",TreeRoot(P));
+			TreePrintActivated(TreeLeft(P));
+			TreePrintActivated(TreeRight(P));
+		}
 	}
 }

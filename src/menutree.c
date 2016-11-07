@@ -6,26 +6,34 @@ int main(){
 	address P,PChild;
 	scanf("%d",&X);
 	Tree root=TreeAlloc(X);
+	TreeStatus(root)=true;
 	// Left 
 	scanf("%d",&X);
 	TreeAddLeft(root,X,&P);
+		TreeStatus(P)=true;
 		// Left Left
 		scanf("%d",&X);
 		TreeAddLeft(P,X,&PChild);
+		TreeStatus(PChild)=false;
 		// Left Right
 		scanf("%d",&X);
 		TreeAddRight(P,X,&PChild);
+		TreeStatus(PChild)=false;
 
 	// Right
 	scanf("%d",&X);
 	TreeAddRight(root,X,&P);
+		TreeStatus(P)=false;
 		// Left Left
 		scanf("%d",&X);
 		TreeAddLeft(P,X,&PChild);
+		TreeStatus(PChild)=false;
 		// Left Right
 		scanf("%d",&X);
 		TreeAddRight(P,X,&PChild);
+		TreeStatus(PChild)=false;
 
-	TreePrint(root);
+	TreePrint(root);printf("\n");
+	TreePrintActivated(root);
 	return 0;
 }
