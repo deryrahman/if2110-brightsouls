@@ -7,7 +7,7 @@ File	: tree.c
 */
 
 #include <stdio.h>
-#include "../include/tree.h"
+#include "../include/tree.h" // masih dijalankan terpisah dari main utama
 
 address TreeAlloc(infotype X){
 	address P=(address) malloc(sizeof(Node));

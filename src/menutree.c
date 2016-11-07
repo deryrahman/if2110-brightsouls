@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/tree.h"
+#include "../include/tree.h" // masih dijalankan terpisah dari main utama
 
 int main(){
 	int X;
