@@ -7,7 +7,7 @@ void MainMenuShow(Terminal terminal) {
 
     UIDrawBoxLine(terminal, 1, 1, TerminalGetWidth(terminal) - 2, TerminalGetHeight(terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 
-    FILE *file = fopen("/home/jauhararifin/Projects/brightsouls/res/mainmenu.img","r");
+    FILE *file = fopen("res/mainmenu.img","r");
     Image mainmenuImage;
     if(file) {
         mainmenuImage = ImageCreateFromFile(file, PixelStyleCreateDefault());

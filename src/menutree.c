@@ -14,7 +14,7 @@ int main(){
 		// Left Left
 		scanf("%d",&X);
 		TreeAddLeft(P,X,&PChild);
-		TreeStatus(PChild)=false;
+		TreeStatus(PChild)=true;
 		// Left Right
 		scanf("%d",&X);
 		TreeAddRight(P,X,&PChild);
@@ -23,11 +23,11 @@ int main(){
 	// Right
 	scanf("%d",&X);
 	TreeAddRight(root,X,&P);
-		TreeStatus(P)=false;
+		TreeStatus(P)=true;
 		// Left Left
 		scanf("%d",&X);
 		TreeAddLeft(P,X,&PChild);
-		TreeStatus(PChild)=false;
+		TreeStatus(PChild)=true;
 		// Left Right
 		scanf("%d",&X);
 		TreeAddRight(P,X,&PChild);

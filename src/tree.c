@@ -51,8 +51,11 @@ void TreePrint(Tree P){
 	}
 }
 void TreePrintActivated(Tree P){
+	if (P == Nil)
+		return;
 	if (TreeStatus(P)==true){
-		if (TreeStatus(TreeLeft(P))==false && TreeStatus(TreeRight(P))==false){
+		if ((TreeLeft(P) == Nil || !TreeStatus(TreeLeft(P))) && (TreeRight(P) == Nil || !TreeStatus(TreeRight(P)))) {
+		//if (TreeStatus(TreeLeft(P))==false && TreeStatus(TreeRight(P))==false){
 			printf("[%d]",TreeRoot(P));
 		} else {
 			printf("%d->",TreeRoot(P));
