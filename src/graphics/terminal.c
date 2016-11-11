@@ -74,8 +74,10 @@ Pixel TerminalGet(Terminal terminal, uint x, uint y) {
 }
 
 void TerminalSet(Terminal terminal, uint x, uint y, Pixel pixel) {
-    TerminalBuffer buffer = TerminalGetBuffer(terminal);
-    buffer[y * TerminalGetWidth(terminal) + x] = pixel;
+    if (x >= 0 && x < TerminalGetWidth(terminal) && y >= 0 && y < TerminalGetHeight(terminal) ) {
+        TerminalBuffer buffer = TerminalGetBuffer(terminal);
+        buffer[y * TerminalGetWidth(terminal) + x] = pixel;
+    }
 }
 
 void TerminalClear(Terminal terminal) {
