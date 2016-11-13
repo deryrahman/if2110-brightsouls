@@ -53,16 +53,24 @@ void TreePrint(Tree P){
 	// 	TreePrint(TreeRight(P));
 	// }
 }
+<<<<<<< HEAD
 void TreePrintActivated(Tree P, int curr){
+=======
+void TreePrintActivated(Tree P){
+>>>>>>> 76d24d44ea92a4af69a1878d0c53912ce8de2568
 	if (P == Nil)
 		return;
 	if (TreeStatus(P)==true){
 		if ((TreeLeft(P) == Nil || !TreeStatus(TreeLeft(P))) && (TreeRight(P) == Nil || !TreeStatus(TreeRight(P)))) {
 		//if (TreeStatus(TreeLeft(P))==false && TreeStatus(TreeRight(P))==false){
+<<<<<<< HEAD
 			for(int i=0;i<curr;i++){
 				printf("|   ");
 			}
 			printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
+=======
+			printf("[%d]",TreeRoot(P));
+>>>>>>> 76d24d44ea92a4af69a1878d0c53912ce8de2568
 		} else {
 			for(int i=0;i<curr;i++){
 				printf("|   ");
