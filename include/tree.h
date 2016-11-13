@@ -37,7 +37,9 @@ boolean TreeIsEmpty(Tree P);
 boolean TreeIsOneElmt(Tree P);
 void TreeAddLeft(Tree P, Skill X, TreeAddress *Pl);
 void TreeAddRight(Tree P, Skill X, TreeAddress *Pr);
-void TreePrint(Tree P);
+void TreePrint(Tree P, int curr);
 void TreePrintActivated(Tree P, int curr);
+uint SkillTotalAttack(Tree P);
+uint SkillTotalDeffense(Tree P);
 
 #endif

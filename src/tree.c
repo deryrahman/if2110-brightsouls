@@ -44,33 +44,31 @@ void TreeAddRight(Tree P, Skill X, TreeAddress *Pr){
 	TreeRight(P)=PRight;
 	*Pr=PRight;
 }
-void TreePrint(Tree P){
-	// if (TreeLeft(P)==Nil && TreeRight(P)==Nil){
-	// 	printf("[%d]",TreeRoot(P));
-	// } else {
-	// 	printf("%d->",TreeRoot(P));
-	// 	TreePrint(TreeLeft(P));
-	// 	TreePrint(TreeRight(P));
-	// }
+void TreePrint(Tree P, int curr){
+	if(P==Nil){}
+	if ((TreeLeft(P) == Nil) || (TreeRight(P) == Nil)) {
+		for(int i=0;i<curr;i++){
+			printf("|   ");
+		}
+		printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
+	} else {
+		for(int i=0;i<curr;i++){
+			printf("|   ");
+		}
+		printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
+		TreePrint(TreeLeft(P),curr+1);
+		TreePrint(TreeRight(P),curr+1);
+	}
 }
-<<<<<<< HEAD
 void TreePrintActivated(Tree P, int curr){
-=======
-void TreePrintActivated(Tree P){
->>>>>>> 76d24d44ea92a4af69a1878d0c53912ce8de2568
 	if (P == Nil)
 		return;
 	if (TreeStatus(P)==true){
 		if ((TreeLeft(P) == Nil || !TreeStatus(TreeLeft(P))) && (TreeRight(P) == Nil || !TreeStatus(TreeRight(P)))) {
-		//if (TreeStatus(TreeLeft(P))==false && TreeStatus(TreeRight(P))==false){
-<<<<<<< HEAD
 			for(int i=0;i<curr;i++){
 				printf("|   ");
 			}
 			printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
-=======
-			printf("[%d]",TreeRoot(P));
->>>>>>> 76d24d44ea92a4af69a1878d0c53912ce8de2568
 		} else {
 			for(int i=0;i<curr;i++){
 				printf("|   ");
@@ -78,6 +76,28 @@ void TreePrintActivated(Tree P){
 			printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
 			TreePrintActivated(TreeLeft(P),curr+1);
 			TreePrintActivated(TreeRight(P),curr+1);
+		}
+	}
+}
+
+uint SkillTotalAttack(Tree P){
+	if (P==Nil){}
+	if (TreeStatus(P)==true){
+		if ((TreeLeft(P) == Nil || !TreeStatus(TreeLeft(P))) && (TreeRight(P) == Nil || !TreeStatus(TreeRight(P)))){
+			return TreeRoot(P).attack;
+		} else {
+			return TreeRoot(P).attack+SkillTotalAttack(TreeLeft(P))+SkillTotalAttack(TreeRight(P));
+		}
+	}
+}
+
+uint SkillTotalDeffense(Tree P){
+	if (P==Nil){}
+	if (TreeStatus(P)==true){
+		if ((TreeLeft(P) == Nil || !TreeStatus(TreeLeft(P))) && (TreeRight(P) == Nil || !TreeStatus(TreeRight(P)))){
+			return TreeRoot(P).deffense;
+		} else {
+			return TreeRoot(P).deffense+SkillTotalDeffense(TreeLeft(P))+SkillTotalDeffense(TreeRight(P));
 		}
 	}
 }
