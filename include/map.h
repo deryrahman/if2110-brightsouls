@@ -2,6 +2,10 @@
 #define _H_MAP
 
 #include "point.h"
+#include "graphics/terminal.h"
+#include "integer.h"
+
+#include <wchar.h>
 
 typedef struct {
     uint width;
@@ -21,6 +25,9 @@ typedef struct {
     Map *bottom;
 } MapNode;
 
+uint MapWidth(Map map);
+uint MapHeight(Map map);
+
 void MapMakeEmpty(Map *map);
 void MapMake(Map *map, uint width, uint height);
 
@@ -30,7 +37,9 @@ Map MapCreateEmpty();
 Map MapCreate(uint width, uint height);
 
 uint MapGet(Map map, uint x, uint y);
-uint MapSet(Map map, uint x, uint y, uint info);
+void MapSet(Map map, uint x, uint y, uint info);
+
+void MapPutOnTerminal(Map map, Terminal terminal, uint x, uint y);
 
 void MapDealoc(Map map);
 

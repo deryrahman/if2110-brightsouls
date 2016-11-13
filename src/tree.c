@@ -9,8 +9,11 @@ File	: tree.c
 #include <stdio.h>
 #include "../include/tree.h" // masih dijalankan terpisah dari main utama
 
-address TreeAlloc(infotype X){
-	address P=(address) malloc(sizeof(Node));
+Tree TreeCreate(){
+	return TreeAlloc(SkillCreate(0,0));
+}
+TreeAddress TreeAlloc(Skill X){
+	TreeAddress P=(TreeAddress) malloc(sizeof(Node));
 	if(P!=Nil){
 		TreeRoot(P)=X;
 		TreeLeft(P)=Nil;
@@ -18,7 +21,7 @@ address TreeAlloc(infotype X){
 	}
 	return P;
 }
-void TreeDealloc(address P){
+void TreeDealloc(TreeAddress P){
 	free(P);
 }
 boolean TreeIsEmpty(Tree P){
@@ -31,33 +34,42 @@ boolean TreeIsOneElmt(Tree P){
 		return false;
 	}
 }
-void TreeAddLeft(Tree P, infotype X, address *Pl){
-	address PLeft=TreeAlloc(X);
+void TreeAddLeft(Tree P, Skill X, TreeAddress *Pl){
+	TreeAddress PLeft=TreeAlloc(X);
 	TreeLeft(P)=PLeft;
 	*Pl=PLeft;
 }
-void TreeAddRight(Tree P, infotype X, address *Pr){
-	address PRight=TreeAlloc(X);
+void TreeAddRight(Tree P, Skill X, TreeAddress *Pr){
+	TreeAddress PRight=TreeAlloc(X);
 	TreeRight(P)=PRight;
 	*Pr=PRight;
 }
 void TreePrint(Tree P){
-	if (TreeLeft(P)==Nil && TreeRight(P)==Nil){
-		printf("[%d]",TreeRoot(P));
-	} else {
-		printf("%d->",TreeRoot(P));
-		TreePrint(TreeLeft(P));
-		TreePrint(TreeRight(P));
-	}
+	// if (TreeLeft(P)==Nil && TreeRight(P)==Nil){
+	// 	printf("[%d]",TreeRoot(P));
+	// } else {
+	// 	printf("%d->",TreeRoot(P));
+	// 	TreePrint(TreeLeft(P));
+	// 	TreePrint(TreeRight(P));
+	// }
 }
-void TreePrintActivated(Tree P){
+void TreePrintActivated(Tree P, int curr){
+	if (P == Nil)
+		return;
 	if (TreeStatus(P)==true){
-		if (TreeStatus(TreeLeft(P))==false && TreeStatus(TreeRight(P))==false){
-			printf("[%d]",TreeRoot(P));
+		if ((TreeLeft(P) == Nil || !TreeStatus(TreeLeft(P))) && (TreeRight(P) == Nil || !TreeStatus(TreeRight(P)))) {
+		//if (TreeStatus(TreeLeft(P))==false && TreeStatus(TreeRight(P))==false){
+			for(int i=0;i<curr;i++){
+				printf("|   ");
+			}
+			printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
 		} else {
-			printf("%d->",TreeRoot(P));
-			TreePrintActivated(TreeLeft(P));
-			TreePrintActivated(TreeRight(P));
+			for(int i=0;i<curr;i++){
+				printf("|   ");
+			}
+			printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
+			TreePrintActivated(TreeLeft(P),curr+1);
+			TreePrintActivated(TreeRight(P),curr+1);
 		}
 	}
 }

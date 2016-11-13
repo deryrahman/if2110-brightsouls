@@ -9,19 +9,20 @@ File	: tree.h
 #ifndef _TREE_H
 #define _TREE_H
 #include "boolean.h"
+#include "integer.h"
+#include "skill.h"
 #include <stdlib.h>
 
 #define Nil NULL
 
-typedef int infotype;
-typedef struct tNode *address;
+typedef struct tNode *TreeAddress;
 typedef struct tNode {
 	boolean status;
-	infotype info;
-	address left;
-	address right;
+	Skill info;
+	TreeAddress left;
+	TreeAddress right;
 } Node;
-typedef address Tree;
+typedef TreeAddress Tree;
 
 /* Selektor */
 #define TreeStatus(P) (P)->status
@@ -29,13 +30,14 @@ typedef address Tree;
 #define TreeLeft(P) (P)->left
 #define TreeRight(P) (P)->right
 
-address TreeAlloc(infotype X);
-void TreeDealloc(address P);
+Tree TreeCreate();
+TreeAddress TreeAlloc(Skill X);
+void TreeDealloc(TreeAddress P);
 boolean TreeIsEmpty(Tree P);
 boolean TreeIsOneElmt(Tree P);
-void TreeAddLeft(Tree P, infotype X, address *Pl);
-void TreeAddRight(Tree P, infotype X, address *Pr);
+void TreeAddLeft(Tree P, Skill X, TreeAddress *Pl);
+void TreeAddRight(Tree P, Skill X, TreeAddress *Pr);
 void TreePrint(Tree P);
-void TreePrintActivated(Tree P);
+void TreePrintActivated(Tree P, int curr);
 
 #endif

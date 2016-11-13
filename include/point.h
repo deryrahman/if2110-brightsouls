@@ -1,6 +1,8 @@
 #ifndef _H_POINT
 #define _H_POINT
 
+#include "integer.h"
+
 typedef struct {
     uint x;
     uint y;
