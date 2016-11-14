@@ -9,7 +9,7 @@ bin/%.o: src/%.c include/*.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 testbin/%.o: tests/%.c include/*.h
-	mkdir -p testbinbin
+	mkdir -p testbin
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 built_test: bin/xstring.o bin/graphics/terminal.o bin/graphics/pixel.o bin/graphics/ui.o bin/graphics/image.o bin/menus/splashscreen.o bin/menus/mainmenu.o bin/map.o bin/point.o testbin/map_test.o
