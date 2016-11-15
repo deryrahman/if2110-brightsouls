@@ -1,3 +1,11 @@
+/*
+Author
+Nama 	: Dery Rahman A
+NIM		: 13515097
+Tanggal	: 13/11/2016
+File	: skill.h
+*/
+
 #include <stdio.h>
 #include "../include/skill.h" // masih dijalankan terpisah dari main utama
 
