@@ -10,14 +10,13 @@ File	: stackt.h
 #define stackt_H
 #include "boolean.h"
 
-#define Nil 0
-#define MaxEl 10
+#define StackMaxEl 10
 
 typedef int StackInfoType;
 typedef int StackAddress;
 
 typedef struct { 
-	StackInfoType T[MaxEl+1];
+	StackInfoType T[StackMaxEl+1];
 	StackAddress TOP;
 } Stack;
 

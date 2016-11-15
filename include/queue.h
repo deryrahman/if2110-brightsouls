@@ -5,16 +5,14 @@ NIM		: 13515097
 Tanggal	: 16/11/2016
 File	: queue.h
 */
-/* Model Implementasi Versi III dengan circular buffer */
+/* Model Implementasi Versi II */
 
 #ifndef queue_H
 #define queue_H
 
 #include "boolean.h"
 
-#define Nil 0
-
-typedef int QueueInfoType;
+typedef char QueueInfoType;
 typedef int QueueAddress;
 typedef struct { 
 	QueueInfoType * T;

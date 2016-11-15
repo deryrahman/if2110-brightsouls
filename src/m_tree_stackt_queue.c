@@ -1,7 +1,12 @@
+/* Driver */
+
 #include <stdio.h>
 #include "../include/tree.h" // masih dijalankan terpisah dari main utama
+#include "../include/stackt.h" // masih dijalankan terpisah dari main utama
+#include "../include/queue.h" // masih dijalankan terpisah dari main utama
 
 int main(){
+	/*
 	uint X,Y;
 
 	TreeAddress P,PChild;
@@ -37,5 +42,16 @@ int main(){
 	TreePrint(root,0);printf("\n");
 	TreePrintActivated(root,0);
 	printf("%u\n%u\n", SkillTotalAttack(root), SkillTotalDeffense(root));
+	*/
+
+	Queue Q;
+	QueueInfoType X;
+	QueueCreateEmpty(&Q,4);
+	while(!QueueIsFull(Q)){
+		scanf("%c",&X);
+		if(X!='\n'){
+			QueueAdd(&Q,X);
+		}
+	}
 	return 0;
 }

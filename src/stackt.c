@@ -10,14 +10,14 @@ File	: stackt.c
 #include "../include/stackt.h" // masih dijalankan terpisah dari main utama
 
 void StackCreateEmpty (Stack *S){
-	StackTop(*S)=Nil;
+	StackTop(*S)=0;
 }
 
 boolean StackIsEmpty (Stack S){
-	return StackTop(S)==Nil;
+	return StackTop(S)==0;
 }
 boolean StackIsFull (Stack S){
-	return StackTop(S)==MaxEl;
+	return StackTop(S)==StackMaxEl;
 }
 
 void StackPush (Stack * S, StackInfoType X){
