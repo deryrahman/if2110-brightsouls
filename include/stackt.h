@@ -10,9 +10,9 @@ File	: stackt.h
 #define stackt_H
 #include "boolean.h"
 
-#define StackMaxEl 10
+#define StackMaxEl 4
 
-typedef int StackInfoType;
+typedef char StackInfoType;
 typedef int StackAddress;
 
 typedef struct { 
@@ -29,5 +29,6 @@ boolean StackIsEmpty (Stack S);
 boolean StackIsFull (Stack S);
 void StackPush (Stack * S, StackInfoType X);
 void StackPop (Stack * S, StackInfoType* X);
-
+Stack StackReverse (Stack S);
+int StackNbElmt(Stack S);
 #endif

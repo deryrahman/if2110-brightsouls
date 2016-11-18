@@ -29,3 +29,24 @@ void StackPop (Stack * S, StackInfoType* X){
 	*X=StackInfoTop(*S);
 	StackTop(*S)--;
 }
+
+Stack StackReverse (Stack S){
+	StackInfoType X;
+	Stack STemp;
+	StackCreateEmpty(&STemp);
+	while(!StackIsEmpty(S)){
+		StackPop(&S,&X);
+		StackPush(&STemp,X);
+	}
+	return STemp;
+}
+
+int StackNbElmt(Stack S){
+	int count=0;
+	StackInfoType X;
+	while(!StackIsEmpty(S)){
+		StackPop(&S,&X);
+		count++;
+	}
+	return count;
+}
