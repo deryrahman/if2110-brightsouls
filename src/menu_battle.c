@@ -18,6 +18,7 @@ int HPMAX=20;
 int STR=5;
 int DEF=3;
 int Round=1;
+int EXP=50;
 int EHPMAX=50;
 int ESTR=10;
 int EDEF=8;
@@ -180,7 +181,7 @@ void CommandHeader(int *irand, Queue QMusuh, int round){
 		i++;
 	}
 	printf(" |\n");
-	printf("|====================================================================================================     Press 'S' to open Skill tree\n");
+	printf("|====================================================================================================\n");
 }
 void CommandPanel(int info){
 	printf("|\n| ");

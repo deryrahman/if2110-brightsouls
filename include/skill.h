@@ -17,11 +17,13 @@ typedef struct tSkill *SkillAddress;
 typedef struct tSkill {
 	uint attack;
 	uint deffense;
+	uint exp_req;
 } Skill;
 
 #define Attack(X) (X).attack
 #define Deffense(X) (X).deffense
+#define EXP(X) (X).exp_req
 
-Skill SkillCreate(uint X, uint Y);
-void SkillMake(Skill *skill, uint X, uint Y);
+Skill SkillCreate(uint X, uint Y, uint exp_req);
+void SkillMake(Skill *skill, uint X, uint Y, uint exp_req);
 #endif

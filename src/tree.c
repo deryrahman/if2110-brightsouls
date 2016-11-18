@@ -10,7 +10,7 @@ File	: tree.c
 #include "../include/tree.h" // masih dijalankan terpisah dari main utama
 
 Tree TreeCreate(){
-	return TreeAlloc(SkillCreate(0,0));
+	return TreeAlloc(SkillCreate(0,0,0));
 }
 TreeAddress TreeAlloc(Skill X){
 	TreeAddress P=(TreeAddress) malloc(sizeof(Node));
@@ -50,12 +50,28 @@ void TreePrint(Tree P, int curr){
 		for(int i=0;i<curr;i++){
 			printf("|   ");
 		}
-		printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
+		printf("|-------------------- Min EXP : %u\n", TreeRoot(P).exp_req);
+		for(int i=0;i<curr;i++){
+			printf("|   ");
+		}
+		printf("|- Att : ++%u\n",TreeRoot(P).attack);
+		for(int i=0;i<curr;i++){
+			printf("|   ");
+		}
+		printf("|- Def : ++%u\n",TreeRoot(P).deffense);
 	} else {
 		for(int i=0;i<curr;i++){
 			printf("|   ");
 		}
-		printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
+		printf("|-------------------- Min EXP : %u\n", TreeRoot(P).exp_req);
+		for(int i=0;i<curr;i++){
+			printf("|   ");
+		}
+		printf("|- Att : ++%u\n",TreeRoot(P).attack);
+		for(int i=0;i<curr;i++){
+			printf("|   ");
+		}
+		printf("|- Def : ++%u\n",TreeRoot(P).deffense);
 		TreePrint(TreeLeft(P),curr+1);
 		TreePrint(TreeRight(P),curr+1);
 	}
@@ -68,12 +84,28 @@ void TreePrintActivated(Tree P, int curr){
 			for(int i=0;i<curr;i++){
 				printf("|   ");
 			}
-			printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
+			printf("|-------------------- Min EXP : %u\n", TreeRoot(P).exp_req);
+			for(int i=0;i<curr;i++){
+				printf("|   ");
+			}
+			printf("|- Att : ++%u\n",TreeRoot(P).attack);
+			for(int i=0;i<curr;i++){
+				printf("|   ");
+			}
+			printf("|- Def : ++%u\n",TreeRoot(P).deffense);
 		} else {
 			for(int i=0;i<curr;i++){
 				printf("|   ");
 			}
-			printf("|-Attack : %u | Deffense : %u\n",TreeRoot(P).attack,TreeRoot(P).deffense);
+			printf("|-------------------- Min EXP : %u\n", TreeRoot(P).exp_req);
+			for(int i=0;i<curr;i++){
+				printf("|   ");
+			}
+			printf("|- Att : ++%u\n",TreeRoot(P).attack);
+			for(int i=0;i<curr;i++){
+				printf("|   ");
+			}
+			printf("|- Def : ++%u\n",TreeRoot(P).deffense);
 			TreePrintActivated(TreeLeft(P),curr+1);
 			TreePrintActivated(TreeRight(P),curr+1);
 		}
@@ -99,5 +131,15 @@ uint SkillTotalDeffense(Tree P){
 		} else {
 			return TreeRoot(P).deffense+SkillTotalDeffense(TreeLeft(P))+SkillTotalDeffense(TreeRight(P));
 		}
+	}
+}
+
+void SkillActivatedGenerate(Tree *P, int EXP){
+	if (*P == Nil){}
+	else if (EXP<TreeRoot(*P).exp_req) {
+	} else {
+		TreeStatus(*P)=true;
+		SkillActivatedGenerate(&TreeLeft(*P),EXP);
+		SkillActivatedGenerate(&TreeRight(*P),EXP);
 	}
 }
