@@ -14,6 +14,7 @@ SOURCE=bin/xstring.o \
 	bin/graphics/image.o \
 	bin/menus/splashscreen.o \
 	bin/menus/mainmenu.o \
+	bin/menus/newgame.o \
 	bin/menus/menu_battle.o \
 	bin/menus/menu_skill.o \
 	bin/menus/mapmenu.o \
@@ -34,5 +35,5 @@ testbin/%.o: tests/%.c include/*.h
 build: $(SOURCE)
 	$(CC) -o bin/brightsouls $^ $(CFLAGS)
 
-built_test: bin/xstring.o bin/graphics/terminal.o bin/graphics/pixel.o bin/graphics/ui.o bin/graphics/image.o bin/menus/splashscreen.o bin/menus/mainmenu.o bin/map.o bin/point.o testbin/map_test.o
+built_test: bin/xstring.o bin/graphics/terminal.o bin/graphics/pixel.o bin/graphics/ui.o bin/graphics/image.o bin/menus/splashscreen.o bin/menus/mainmenu.o bin/menus/newgame.o bin/map.o bin/point.o testbin/map_test.o
 	$(CC) -o testbin/map_test $^ $(CFLAGS)
