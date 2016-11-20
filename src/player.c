@@ -2,13 +2,13 @@
  * Author
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Sabtu, 5 November 2016
- * Nama File	: player.c 
+ * Nama File	: player.c
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "xstring.h"
-#include "./include/player.h"
+#include "player.h"
 
 
 /* Author
@@ -61,7 +61,7 @@ int loadHP(FILE *FStats,int *PosOut){
 	RealHP = atoi(HP);
 	*PosOut = i;
 	return RealHP;
-	
+
 }
 
 
@@ -161,7 +161,7 @@ int loadSP(FILE *FStats,int PosIn){
 		}
 	}
 	i = ftell(FStats);
-	RealSP = atoi(SP);	
+	RealSP = atoi(SP);
 	return RealSP;
 }
 
@@ -174,7 +174,7 @@ void TulisStats(int HP, int STR, int DEF, int LVL, int SP){
 	FILE *FStats2 = fopen("./doc/playerstats.txt","w");
 	fprintf(FStats2,"HP: %d | STR: %d | DEF: %d | LVL: %d | SP: %d |",HP,STR,DEF,LVL,SP);
 	fclose(FStats2);
-	
+
 
 }
 
@@ -194,7 +194,7 @@ void NewGame(){
 /*void loadNama(FILE *FStats,String *Nama, int *Pos){
 	char c[20],cc;
 	int i=0,len;
-	
+
 }*/
 
 /* Author

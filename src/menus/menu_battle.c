@@ -1,13 +1,14 @@
 /* Driver */
 
+#include "menus/menu_battle.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#include "../include/tree.h" // masih dijalankan terpisah dari main utama
-#include "../include/stackt.h" // masih dijalankan terpisah dari main utama
-#include "../include/queue.h" // masih dijalankan terpisah dari main utama
-#include "../include/xstring.h" // masih dijalankan terpisah dari main utama
+#include "tree.h"
+#include "stackt.h"
+#include "queue.h"
+#include "xstring.h"
 
 // GLOBAL VARIABLE
 
@@ -27,20 +28,7 @@ int HP=30,EHP=50;
 int STRSKILL=10;
 int DEFSKILL=8;
 
-Queue RandomAction();
-Stack QueueToStack(Queue Q);
-void CetakQ(Queue Q);
-void Random2Number(int *irand);
-void CommandHeader(int *irand, Queue QMusuh,int round);
-void CommandPanel(int info);
-void CommandInputShow(Queue QPlayer);
-void CommandInput(Queue *QPlayer, QueueInfoType *Xq);
-int CommandBattle(Queue QPlayer, Queue QMusuh);
-void CommandBox(Queue QMusuh, Queue QPlayer, int *irand, int info, int round);
-void CommandCalculation(int STR, int ESTR, int DEF, int EDEF, int *HP, int *EHP, int info);
-
-int main(){
-
+void BattleMenuShow (){
 	int irand[2];
 	Queue QPlayer;
 	QueueInfoType Xq;
@@ -60,7 +48,7 @@ int main(){
 		while(!QueueIsFull(QPlayer)){
 			CommandBox(QMusuh, QPlayer, irand, info, ronde);
 			CommandInput(&QPlayer,&Xq);
-			
+
 			CommandBox(QMusuh, QPlayer, irand, info, ronde);
 			printf("| 'E' to remove previous command or 'C' to continue... ");
 			scanf("%c",&rm);scanf("%c",&nl);
@@ -106,8 +94,6 @@ int main(){
 	} else {
 		CommandBox(QMusuh, QPlayer, irand, 10, ronde);
 	}
-
-	return 0;
 }
 
 Queue RandomAction(){
@@ -168,7 +154,7 @@ void CommandHeader(int *irand, Queue QMusuh, int round){
 	printf("| PLAYER : %s | LVL : %d | HP : %d | STR : %d | DEF : %d | Round : %d |\n", Name, LVL, HP, STR, DEF, round);
 	printf("|====================================================================================================     HP + %d | DEF + %d\n", STRSKILL, DEFSKILL);
 	printf("| ENEMY : %s | HP : %d | Command : ", EName, EHP);
-	
+
 	int i=0;
 	QueueInfoType Xq;
 	while(i<4){

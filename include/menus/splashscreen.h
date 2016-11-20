@@ -1,6 +1,8 @@
 #ifndef _H_SPLASHSCREEN
 #define _H_SPLASHSCREEN
 
-void SplashScreenShow(Terminal terminal);
+#include "gamestate.h"
+
+void SplashScreenShow(GameState* gameState);
 
 #endif

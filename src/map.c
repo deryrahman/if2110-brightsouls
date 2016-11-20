@@ -12,11 +12,19 @@ const uint MAP_FREE = 0;
 const uint MAP_WALL = 1;
 const uint MAP_ENEMY = 2;
 const uint MAP_HEAL = 3;
+const uint MAP_PLAYER = 4;
 
 const wchar TERMINAL_FREE = L'.';
 const wchar TERMINAL_WALL = L'#';
 const wchar TERMINAL_ENEMY = L'E';
 const wchar TERMINAL_HEAL = L'M';
+const wchar TERMINAL_PLAYER = L'P';
+
+PixelStyle TERMINAL_FREE_PIXEL = {RESET,WHITE,WHITE};
+PixelStyle TERMINAL_WALL_PIXEL = {RESET,BLACK,BLACK};
+PixelStyle TERMINAL_ENEMY_PIXEL = {RESET,RED,WHITE};
+PixelStyle TERMINAL_HEAL_PIXEL = {RESET,GREEN,WHITE};
+PixelStyle TERMINAL_PLAYER_PIXEL = {RESET,YELLOW,WHITE};
 
 uint MapWidth(Map map) {
     return map.width;
@@ -50,6 +58,7 @@ void MapFillFromFile(Map *map, FILE *file) {
         boolean bStartTop = false;
         boolean bStartLeft = false;
         boolean bStartBottom = false;
+        boolean bStartCenter = false;
         boolean allocated = false;
 
         String str = StringCreate("");
@@ -57,6 +66,7 @@ void MapFillFromFile(Map *map, FILE *file) {
         while (StringFreadln(&str, file) != EOF) {
             String key = StringCreate("");
             uint value = 0;
+            uint value2 = 0;
 
             boolean spacedstring = true;
 
@@ -69,8 +79,11 @@ void MapFillFromFile(Map *map, FILE *file) {
                     spacedstring = false;
             for (; i < StringLength(str) && str[i] >= '0' && str[i] <= '9'; i++)
                 spacedstring = false, value = 10*value + (uint) (str[i]-'0');
+            for (value2=0, i++; i < StringLength(str) && (str[i] < '0' || str[i] > '9'); i++);
+            for (; i < StringLength(str) && str[i] >= '0' && str[i] <= '9'; i++)
+                spacedstring = false, value2 = 10*value2 + (uint) (str[i] - '0');
 
-            if (bWidth && bHeight && bStartRight && bStartTop && bStartLeft && bStartBottom && !spacedstring) {
+            if (bWidth && bHeight && bStartRight && bStartTop && bStartLeft && bStartBottom && bStartCenter && !spacedstring) {
                 y++;
                 for (i = 0; i < StringLength(str); i++) {
                     uint x = MAP_FREE;
@@ -98,6 +111,8 @@ void MapFillFromFile(Map *map, FILE *file) {
                 bStartLeft = true, map->startLeft = PointCreate(value,0);
             else if (StringEquals(key, StringCreate("startBottom")))
                 bStartBottom = true, map->startBottom = PointCreate(0,value);
+            else if (StringEquals(key, StringCreate("startCenter")))
+                bStartCenter = true, map->startCenter = PointCreate(value,value2);
 
             if (bWidth && bHeight && !allocated)
                 allocated = true, MapMake(map, map->width, map->height);
@@ -140,15 +155,21 @@ void MapPutOnTerminal(Map map, Terminal terminal, uint x, uint y) {
         uint j;
         for (j = 0; j < map.width; j++) {
             wchar w = L' ';
-            if (MapGet(map, i+1, j+1) == MAP_FREE)
-                w = TERMINAL_FREE;
-            else if (MapGet(map, i+1, j+1) == MAP_WALL)
-                w = TERMINAL_WALL;
-            else if (MapGet(map, i+1, j+1) == MAP_ENEMY)
-                w = TERMINAL_ENEMY;
-            else if (MapGet(map, i+1, j+1) == MAP_HEAL)
-                w = TERMINAL_HEAL;
-            TerminalSet(terminal, x + j, y + i, PixelCreateDefault(w));
+            PixelStyle s;
+            if (MapGet(map, j+1, i+1) == MAP_FREE)
+                w = TERMINAL_FREE, s = TERMINAL_FREE_PIXEL;
+            else if (MapGet(map, j+1, i+1) == MAP_WALL)
+                w = TERMINAL_WALL, s = TERMINAL_WALL_PIXEL;
+            else if (MapGet(map, j+1, i+1) == MAP_ENEMY)
+                w = TERMINAL_ENEMY, s = TERMINAL_ENEMY_PIXEL;
+            else if (MapGet(map, j+1, i+1) == MAP_HEAL)
+                w = TERMINAL_HEAL, s = TERMINAL_HEAL_PIXEL;
+            else if (MapGet(map, j+1, i+1) == MAP_PLAYER)
+                w = TERMINAL_PLAYER, s = TERMINAL_PLAYER_PIXEL;
+
+            Pixel p = PixelCreateDefault(w);
+            p.style = s;
+            TerminalSet(terminal, x + j, y + i, p);
         }
     }
 }

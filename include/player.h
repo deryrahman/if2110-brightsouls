@@ -1,15 +1,17 @@
-#ifndef player_H
-#define player_H
+#ifndef _H_PLAYER
+#define _H_PLAYER
+
 #include <stdio.h>
+#include "xstring.h"
 
-
-struct player{
+typedef struct {
+  String name;
   int HP;
   int STR;
   int DEF;
   int LVL;
   int SP;
-};
+} Player;
 
 //void loadNama(FILE *FStats,String *Nama, int *Pos);
 /*Merubah teks nama menjadi variable nama di program*/
@@ -17,17 +19,17 @@ struct player{
 int loadHP(FILE *FStats,int *PosOut);
 /*Merubah teks HP dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong
-  F.S. = Internal variable terisi oleh HP dari eksternal file, berupa integer*/ 
+  F.S. = Internal variable terisi oleh HP dari eksternal file, berupa integer*/
 
 int loadSTR(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks STR dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong
-  F.S. = Internal variable terisi oleh STR dari eksternal file, berupa integer*/ 
+  F.S. = Internal variable terisi oleh STR dari eksternal file, berupa integer*/
 
 int loadLVL(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks LVL dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong.
-  F.S. = Internal variable terisi oleh LVL dari eksternal file, berupa integer*/ 
+  F.S. = Internal variable terisi oleh LVL dari eksternal file, berupa integer*/
 
 int loadDEF(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks DEF dari file playerstats.txt menjadi internal variable
@@ -37,7 +39,7 @@ int loadDEF(FILE *FStats,int PosIn,int *PosOut);
 int loadSP(FILE *FStats,int PosIn);
 /*Merubah teks SP(Skill Point) dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong.
-  F.S. = Internal variable terisi oleh SP dari eksternal file, berupa integer*/  
+  F.S. = Internal variable terisi oleh SP dari eksternal file, berupa integer*/
 
 int CharToInt(char cc);
 /*Mengkonversi char menjadi int

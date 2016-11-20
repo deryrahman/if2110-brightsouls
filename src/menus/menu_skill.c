@@ -1,14 +1,15 @@
 /* Driver */
 
 #include <stdio.h>
-#include "../include/tree.h" // masih dijalankan terpisah dari main utama
+#include "menus/menu_skill.h"
+#include "tree.h" // masih dijalankan terpisah dari main utama
 
-int main(){
+void SkillMenuShow() {
 	uint X,Y;
 
 	TreeAddress P,PChild;
 	Tree root=TreeAlloc(SkillCreate(10,5,10));
-	// Left 
+	// Left
 	TreeAddLeft(root,SkillCreate(10,5,20),&P);
 		// Left Left
 		TreeAddLeft(P,SkillCreate(20,5,40),&PChild);
@@ -29,5 +30,4 @@ int main(){
 	TreePrintActivated(root,0);printf("\n");
 	printf("TOTAL SKILL :\n");
 	printf("++%u\n++%u\n", SkillTotalAttack(root), SkillTotalDeffense(root));
-	return 0;
 }
