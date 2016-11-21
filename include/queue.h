@@ -34,5 +34,6 @@ void QueueCreateEmpty (Queue * Q, int Max);
 void QueueDeAlokasi(Queue * Q);
 void QueueAdd (Queue * Q, QueueInfoType X);
 void QueueDel (Queue * Q, QueueInfoType * X);
+void QueueCopy (Queue Q, Queue *Qout);
 
 #endif

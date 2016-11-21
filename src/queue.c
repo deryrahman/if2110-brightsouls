@@ -65,3 +65,11 @@ void QueueDel(Queue * Q, QueueInfoType * X){
 		QueueHead(*Q)++;
 	}
 }
+
+void QueueCopy (Queue Q, Queue *Qout){
+	QueueInfoType Xq;
+	while(!QueueIsEmpty(Q)){
+		QueueDel(&Q,&Xq);
+		QueueAdd(Qout,Xq);
+	}
+}
