@@ -27,6 +27,11 @@ int loadHP(FILE *FStats,int *PosOut);
   I.S. = Internal variable kosong
   F.S. = Internal variable terisi oleh HP dari eksternal file, berupa integer*/
 
+int loadMaxHP(FILE *FStats,int PosIn,int *PosOut);
+/*Merubah teks Maks HP dari file playerstats.txt menjadi internal variable
+  I.S. = Internal variable kosong
+  F.S. = Internal variable terisi oleh Maks HP dari eksternal file, berupa integer*/
+
 int loadSTR(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks STR dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong
@@ -42,10 +47,12 @@ int loadDEF(FILE *FStats,int PosIn,int *PosOut);
   I.S. = Internal variable kosong.
   F.S. = Internal variable terisi oleh DEF dari eksternal file, berupa integer*/
 
-int loadSP(FILE *FStats,int PosIn);
+int loadSP(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks SP(Skill Point) dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong.
   F.S. = Internal variable terisi oleh SP dari eksternal file, berupa integer*/
+
+int loadEXP(FILE *FStats,int PosIn,int *PosOut);
 
 int CharToInt(char cc);
 /*Mengkonversi char menjadi int
