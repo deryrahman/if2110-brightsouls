@@ -7,11 +7,17 @@
 typedef struct {
   String name;
   int HP;
+  int EXP;
+  int MAXHP;
+  int STRSKILL;
+  int DEFSKILL;
   int STR;
   int DEF;
   int LVL;
   int SP;
 } Player;
+
+typedef Player Enemy;
 
 //void loadNama(FILE *FStats,String *Nama, int *Pos);
 /*Merubah teks nama menjadi variable nama di program*/

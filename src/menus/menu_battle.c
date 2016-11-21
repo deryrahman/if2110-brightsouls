@@ -1,42 +1,43 @@
 /* Driver */
 
 #include "menus/menu_battle.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
+#include "graphics/terminal.h"
+#include "graphics/ui.h"
 #include "tree.h"
+#include "player.h"
+#include "gamestate.h"
 #include "stackt.h"
 #include "queue.h"
 #include "xstring.h"
+#include <stdio.h>
+#include <wchar.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
 
-// GLOBAL VARIABLE
+Queue RandomAction();
+void CetakQ(Queue Q);
+Stack QueueToStack(Queue Q);
+void Random2Number(int *irand);
+void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, int DEF, int EDEF, int *HP, int *EHP, int info);
+void CommandHeader(GameState* gameState, Enemy* enemy, int *irand, Queue QMusuh, int round);
+void CommandPanel(GameState* gameState, Enemy* enemy, int info);
+void CommandInput(GameState* gameState, Enemy* enemy, Queue *QPlayer, QueueInfoType *Xq);
+void CommandInputShow(GameState* gameState, Enemy* enemy, Queue QPlayer);
+int CommandBattle(GameState* gameState, Enemy* enemy, Queue QPlayer, Queue QMusuh);
+void CommandBox(GameState* gameState, Enemy* enemy, Queue QMusuh, Queue QPlayer, int *irand, int info, int round);
 
-String Name="Dery";
-String EName="Lucifer";
-int LVL=1;
-int HPMAX=20;
-int STR=5;
-int DEF=3;
-int Round=1;
-int EXP=50;
-int EHPMAX=50;
-int ESTR=10;
-int EDEF=8;
-int i,j,k;
-int HP=30,EHP=50;
-int STRSKILL=10;
-int DEFSKILL=8;
-
-void BattleMenuShow (){
+void BattleMenuShow (GameState* gameState, Enemy* enemy){
+	Terminal* terminal = gameState->terminal;
+	Player* player = gameState->player;
 	int irand[2];
 	Queue QPlayer;
 	QueueInfoType Xq;
 	int curr;
 	int info=0;
 	int ronde_max=10,ronde=1;
-	char nl,rm,next;
 	Queue QMusuh;
+	String cmd = StringCreate("");
 	do{
 		// Bikin queue pergerakan musuh
 		QMusuh = RandomAction();
@@ -46,53 +47,53 @@ void BattleMenuShow (){
 		QueueCreateEmpty(&QPlayer,4);
 		info=0;
 		while(!QueueIsFull(QPlayer)){
-			CommandBox(QMusuh, QPlayer, irand, info, ronde);
-			CommandInput(&QPlayer,&Xq);
+			CommandBox(gameState, enemy, QMusuh, QPlayer, irand, info, ronde);
+			CommandInput(gameState, enemy, &QPlayer,&Xq);
 
-			CommandBox(QMusuh, QPlayer, irand, info, ronde);
-			printf("| 'E' to remove previous command or 'C' to continue... ");
-			scanf("%c",&rm);scanf("%c",&nl);
-			while(rm!='E' && rm!='C'){
-				printf("| WRONG INPUT! ");
-				scanf("%c",&rm);scanf("%c",&nl);
+			CommandBox(gameState, enemy, QMusuh, QPlayer, irand, info, ronde);
+			wprintf(L"| 'E' to remove previous command or 'C' to continue... ");
+			StringReadln(&cmd);
+			while(cmd[0] != 'E' && cmd[0] != 'C'){
+				wprintf(L"| WRONG INPUT! ");
+				StringReadln(&cmd);
 			}
-			if(rm=='E'){
+			if(cmd[0]=='E'){
 				QueueDelLast(&QPlayer,&Xq);
-			} else if (rm=='C'){
+			} else if (cmd[0]=='C'){
 				curr=QueueNBElmt(QPlayer)-1;
 
 				// eksekusi hasil
-				info=CommandBattle(QPlayer,QMusuh);
+				info=CommandBattle(gameState, enemy, QPlayer,QMusuh);
 
 				//jika irand sama dengan NbElmt SPlayer, maka ubah nilainya
 				irand[0]=(curr==irand[0])?4:irand[0];
 				irand[1]=(curr==irand[1])?4:irand[1];
-				CommandCalculation(STR+STRSKILL, ESTR, DEF+DEFSKILL, EDEF, &HP, &EHP, info);
+				CommandCalculation(gameState, enemy, player->STR+player->STRSKILL, enemy->STR, player->DEF+player->DEFSKILL, enemy->DEF, &(player->HP), &(enemy->HP), info);
 			}
-			if(HP<=0 || EHP<=0)
+			if(player->HP<=0 || enemy->HP<=0)
 				break;
 		}
-		CommandBox(QMusuh, QPlayer, irand, info, ronde);
-		if(HP>0 && EHP>0){
-			printf("| 'C' to continue next battle... ");
-			scanf("%c",&rm);scanf("%c",&nl);
-			while(rm!='C'){
-				printf("| WRONG INPUT! ");
-				scanf("%c",&rm);scanf("%c",&nl);
+		CommandBox(gameState, enemy, QMusuh, QPlayer, irand, info, ronde);
+		if(player->HP>0 && enemy->HP>0){
+			wprintf(L"| 'C' to continue next battle... ");
+			StringReadln(&cmd);
+			while(cmd[0] != 'C'){
+				wprintf(L"| WRONG INPUT! ");
+				StringReadln(&cmd);
 			}
 		}
-		if(HP<=0 || EHP<=0)
-				break;
+		if(player->HP<=0 || enemy->HP<=0)
+			break;
 		ronde++;
 		QueueCreateEmpty(&QPlayer,4);
-	} while (ronde<ronde_max && HP>0 && EHP>0);
+	} while (ronde<ronde_max && player->HP>0 && enemy->HP>0);
 	// mengembalikan QMusuh jadi empty
-	if(HP<=0){
-		CommandBox(QMusuh, QPlayer, irand, 9, ronde);
-	} else if (EHP<=0){
-		CommandBox(QMusuh, QPlayer, irand, 8, ronde);
+	if(player->HP<=0){
+		CommandBox(gameState, enemy, QMusuh, QPlayer, irand, 9, ronde);
+	} else if (enemy->HP<=0){
+		CommandBox(gameState, enemy, QMusuh, QPlayer, irand, 8, ronde);
 	} else {
-		CommandBox(QMusuh, QPlayer, irand, 10, ronde);
+		CommandBox(gameState, enemy, QMusuh, QPlayer, irand, 10, ronde);
 	}
 }
 
@@ -118,7 +119,7 @@ void CetakQ(Queue Q){
 	while(!QueueIsEmpty(Q)){
 		char Xq;
 		QueueDel(&Q,&Xq);
-		printf("%c", Xq);
+		wprintf(L"%c", Xq);
 	}
 }
 
@@ -126,7 +127,7 @@ Stack QueueToStack(Queue Q){
 	Stack S;
 	StackInfoType Xs;
 	StackCreateEmpty(&S);
-	while(!StackIsFull(S)){
+	while(!QueueIsEmpty(Q)){
 		QueueDel(&Q,&Xs);
 		StackPush(&S,Xs);
 	}
@@ -149,68 +150,72 @@ void Random2Number(int *irand){
 	}
 }
 
-void CommandHeader(int *irand, Queue QMusuh, int round){
-	printf("|====================================================================================================     SKILL : \n");
-	printf("| PLAYER : %s | LVL : %d | HP : %d | STR : %d | DEF : %d | Round : %d |\n", Name, LVL, HP, STR, DEF, round);
-	printf("|====================================================================================================     HP + %d | DEF + %d\n", STRSKILL, DEFSKILL);
-	printf("| ENEMY : %s | HP : %d | Command : ", EName, EHP);
+void CommandHeader(GameState* gameState, Enemy* enemy, int *irand, Queue QMusuh, int round){
+	Player* player = gameState->player;
+	wprintf(L"|====================================================================================================     SKILL : \n");
+	wprintf(L"| PLAYER : %s | LVL : %d | HP : %d | STR : %d | DEF : %d | Round : %d |\n", player->name, player->LVL, player->HP, player->STR, player->DEF, round);
+	wprintf(L"|====================================================================================================     HP + %d | DEF + %d\n", player->STRSKILL, player->DEFSKILL);
+	wprintf(L"| ENEMY : %s | HP : %d | Command : ", enemy->name, enemy->HP);
 
 	int i=0;
 	QueueInfoType Xq;
 	while(i<4){
 		QueueDel(&QMusuh,&Xq);
 		if(irand[0]==i || irand[1]==i){
-			printf("#");
+			wprintf(L"#");
 		} else {
-			printf("%c", Xq);
+			wprintf(L"%c", Xq);
 		}
 		i++;
 	}
-	printf(" |\n");
-	printf("|====================================================================================================\n");
+	wprintf(L" |\n");
+	wprintf(L"|====================================================================================================\n");
 }
-void CommandPanel(int info){
-	printf("|\n| ");
+void CommandPanel(GameState* gameState, Enemy* enemy, int info){
+	Player* player = gameState->player;
+	wprintf(L"|\n| ");
 	switch (info) {
-		case 1 : printf("DRAW\n|"); break;
-		case 2 : printf("PLAYER Attack! But it's blocked.\n| HP ENEMY : +%d", EDEF/2); break;
-		case 3 : printf("PLAYER Attack! It's very effective.\n| HP ENEMY : -%d",STR+STRSKILL); break;
-		case 4 : printf("ENEMY Attack! But it's blocked.\n| HP PLAYER : +%d", (DEF+DEFSKILL)/2); break;
-		case 5 : printf("ENEMY Flank! Bad decision dude.\n| HP PLAYER : -%d",ESTR*2); break;
-		case 6 : printf("ENEMY Attack! Bad decision dude.\n| HP PLAYER : -%d",ESTR); break;
-		case 7 : printf("USER Flank! It's very effective.\n| HP ENEMY : -%d",(STR+STRSKILL)*2); break;
-		case 8 : printf("CONGRATULATION!\n| You Win!"); break;
-		case 9 : printf("GAME OVER!\n| Please restart game, or load previous saved game"); break;
-		case 10 : printf("DRAW!\n| Try again"); break;
-		default : printf("PREPARE YOURSELF, ENEMY IS WATCHING YOU!\n| Please enter command.."); break;
+		case 1 : wprintf(L"DRAW\n|"); break;
+		case 2 : wprintf(L"PLAYER Attack! But it's blocked.\n| HP ENEMY : +%d", enemy->DEF/2); break;
+		case 3 : wprintf(L"PLAYER Attack! It's very effective.\n| HP ENEMY : -%d",player->STR+player->STRSKILL); break;
+		case 4 : wprintf(L"ENEMY Attack! But it's blocked.\n| HP PLAYER : +%d", (player->DEF+player->DEFSKILL)/2); break;
+		case 5 : wprintf(L"ENEMY Flank! Bad decision dude.\n| HP PLAYER : -%d",enemy->STR*2); break;
+		case 6 : wprintf(L"ENEMY Attack! Bad decision dude.\n| HP PLAYER : -%d",enemy->STR); break;
+		case 7 : wprintf(L"USER Flank! It's very effective.\n| HP ENEMY : -%d",(player->STR+player->STRSKILL)*2); break;
+		case 8 : wprintf(L"CONGRATULATION!\n| You Win!"); break;
+		case 9 : wprintf(L"GAME OVER!\n| Please restart game, or load previous saved game"); break;
+		case 10 : wprintf(L"DRAW!\n| Try again"); break;
+		default : wprintf(L"PREPARE YOURSELF, ENEMY IS WATCHING YOU!\n| Please enter command.."); break;
 	}
-	printf("\n|\n|====================================================================================================\n");
+	wprintf(L"\n|\n|====================================================================================================\n");
 }
-void CommandInput(Queue *QPlayer, QueueInfoType *Xq){
-	char nl;
-	printf("| ");
-	scanf("%c",Xq);scanf("%c",&nl);
+void CommandInput(GameState* gameState, Enemy* enemy, Queue *QPlayer, QueueInfoType *Xq){
+	String cmd = StringCreate("");
+	wprintf(L"| ");
+	StringReadln(&cmd);
+	*Xq = cmd[0];
 	while (*Xq!='A' && *Xq!='B' && *Xq!='F'){
-		printf("| ");
-		printf("WRONG INPUT! ");
-		scanf("%c",Xq);scanf("%c",&nl);
+		wprintf(L"| ");
+		wprintf(L"WRONG INPUT! ");
+		StringReadln(&cmd);
+		*Xq = cmd[0];
 	}
-		QueueAdd(QPlayer,*Xq);
+	QueueAdd(QPlayer,*Xq);
 }
-void CommandInputShow(Queue QPlayer){
+void CommandInputShow(GameState* gameState, Enemy* enemy, Queue QPlayer){
 	int count=4;
-	printf("| Inserted Commands : ");
+	wprintf(L"| Inserted Commands : ");
 	while(!QueueIsEmpty(QPlayer)){
 		char Xq;
 		QueueDel(&QPlayer,&Xq);
-		printf("%c", Xq);
+		wprintf(L"%c", Xq);
 		count--;
 	}
 	while(count--){
-		printf("_");
+		wprintf(L"_");
 	}
 }
-int CommandBattle(Queue QPlayer, Queue QMusuh){
+int CommandBattle(GameState* gameState, Enemy* enemy, Queue QPlayer, Queue QMusuh){
 	QueueInfoType X1,X2;
 	while(!QueueIsEmpty(QPlayer) && QueueNBElmt(QPlayer)!=1){
 		QueueDel(&QPlayer,&X1);
@@ -240,15 +245,17 @@ int CommandBattle(Queue QPlayer, Queue QMusuh){
 			return 7;
 		}
 	}
+
+	return 0;
 }
-void CommandBox(Queue QMusuh, Queue QPlayer, int *irand, int info, int round){
+void CommandBox(GameState* gameState, Enemy* enemy, Queue QMusuh, Queue QPlayer, int *irand, int info, int round){
 	system("clear");
-	CommandHeader(irand,QMusuh,round);
-	CommandPanel(info);
-	CommandInputShow(QPlayer);printf("\n");
+	CommandHeader(gameState, enemy, irand,QMusuh,round);
+	CommandPanel(gameState, enemy, info);
+	CommandInputShow(gameState, enemy, QPlayer);wprintf(L"\n");
 }
 
-void CommandCalculation(int STR, int ESTR, int DEF, int EDEF, int *HP, int *EHP, int info){
+void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, int DEF, int EDEF, int *HP, int *EHP, int info){
 	switch (info){
 		case 2 : *EHP+=(EDEF/2); break;
 		case 3 : *EHP-=(STR); break;
@@ -257,6 +264,6 @@ void CommandCalculation(int STR, int ESTR, int DEF, int EDEF, int *HP, int *EHP,
 		case 6 : *HP-=(ESTR); break;
 		case 7 : *EHP-=(STR*2); break;
 	}
-	*EHP=(*EHP>EHPMAX)?EHPMAX:*EHP;
-	*HP=(*HP>HPMAX)?HPMAX:*HP;
+	*EHP=(*EHP>enemy->MAXHP)?enemy->MAXHP:*EHP;
+	*HP=(*HP>gameState->player->MAXHP)?gameState->player->MAXHP:*HP;
 }

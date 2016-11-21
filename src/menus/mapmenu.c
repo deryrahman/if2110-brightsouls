@@ -1,4 +1,5 @@
 #include "menus/mapmenu.h"
+#include "menus/menu_battle.h"
 #include "gamestate.h"
 #include "map.h"
 
@@ -61,8 +62,12 @@ void MapMenuShow(GameState *gameState) {
                 gameState->playerPosition = PointCreate(nx, ny);
             }
 
-            if (afterMove == MAP_ENEMY);
-            else if (afterMove == MAP_HEAL);
+            if (afterMove == MAP_ENEMY) {
+                Enemy enemy;
+                enemy.name = StringCreate("Lucifer");int EXP=50;
+                enemy.MAXHP = 50; enemy.STR = 10; enemy.DEF = 8; enemy.HP = 50;
+                BattleMenuShow(gameState, &enemy);
+            } else if (afterMove == MAP_HEAL);
         }
     }
 }

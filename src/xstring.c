@@ -131,9 +131,8 @@ boolean StringEquals(String s1, String s2) {
 int StringReadln(String *str) {
 	StringResize(str, 0);
 
-	uint i;
 	char x;
-	for (i = 0; x != '\n' && x != '\r'; i++) {
+	for (x = 1; x != 0 && x != '\n' && x != '\r';) {
 		x = (char) getchar();
 		if (x != '\n' && x != '\r' && x != EOF)
 			StringAppendChar(str, x);
