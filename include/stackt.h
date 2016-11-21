@@ -15,7 +15,7 @@ File	: stackt.h
 typedef char StackInfoType;
 typedef int StackAddress;
 
-typedef struct { 
+typedef struct {
 	StackInfoType T[StackMaxEl+1];
 	StackAddress TOP;
 } Stack;

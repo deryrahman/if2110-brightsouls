@@ -9,13 +9,14 @@ File	: skill.h
 #include <stdio.h>
 #include "../include/skill.h" // masih dijalankan terpisah dari main utama
 
-Skill SkillCreate(uint X, uint Y){
+Skill SkillCreate(uint X, uint Y, uint exp_req){
 	Skill P;
 	Attack(P)=X;
 	Deffense(P)=Y;
+	EXP(P)=exp_req;
 	return P;
 }
 
-void SkillMake(Skill *skill, uint X, uint Y){
-	*skill=SkillCreate(X,Y);
+void SkillMake(Skill *skill, uint X, uint Y, uint exp_req){
+	*skill=SkillCreate(X,Y,exp_req);
 }

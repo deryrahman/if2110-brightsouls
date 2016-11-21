@@ -2,13 +2,21 @@
  * Author
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Sabtu, 5 November 2016
+<<<<<<< HEAD
  * Nama File	: player.c 
+=======
+ * Nama File	: player.c
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "xstring.h"
+<<<<<<< HEAD
 #include "./include/player.h"
+=======
+#include "player.h"
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
 
 /* Author
@@ -61,7 +69,11 @@ int loadHP(FILE *FStats,int *PosOut){
 	RealHP = atoi(HP);
 	*PosOut = i;
 	return RealHP;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 }
 
 
@@ -161,7 +173,11 @@ int loadSP(FILE *FStats,int PosIn){
 		}
 	}
 	i = ftell(FStats);
+<<<<<<< HEAD
 	RealSP = atoi(SP);	
+=======
+	RealSP = atoi(SP);
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 	return RealSP;
 }
 
@@ -174,7 +190,11 @@ void TulisStats(int HP, int STR, int DEF, int LVL, int SP){
 	FILE *FStats2 = fopen("./doc/playerstats.txt","w");
 	fprintf(FStats2,"HP: %d | STR: %d | DEF: %d | LVL: %d | SP: %d |",HP,STR,DEF,LVL,SP);
 	fclose(FStats2);
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
 }
 
@@ -194,7 +214,11 @@ void NewGame(){
 /*void loadNama(FILE *FStats,String *Nama, int *Pos){
 	char c[20],cc;
 	int i=0,len;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 }*/
 
 /* Author
@@ -208,4 +232,8 @@ void LevelUp(int HP, int STR, int DEF, int *LVL, int *SP){
 	TulisStats(HP,STR,DEF,Level,SPU);
 	*LVL 	=Level;
 	*SP		=SPU;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
