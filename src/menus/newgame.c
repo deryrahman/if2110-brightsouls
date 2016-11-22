@@ -4,6 +4,7 @@
 #include "menus/mainmenu.h"
 #include "menus/newgame.h"
 #include "gamestate.h"
+#include "player.h"
 
 void NewGameShow(GameState* gameState) {
     Terminal* terminal = gameState->terminal;
@@ -20,7 +21,7 @@ void NewGameShow(GameState* gameState) {
         fclose(file);
     }
 
-    /* Membaca file yang berisi username */
+    /* Membaca file yang berisi username
     String username = StringCreate("");
     char CC;
     file = fopen("res/username", "r");
@@ -30,6 +31,7 @@ void NewGameShow(GameState* gameState) {
         fscanf(file, "%c", &CC);
     }
     fclose(file);
+    */
 
     String str = StringCreate("Please enter your name:");
     UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 8, PixelStyleCreateDefault(), str);
@@ -41,9 +43,11 @@ void NewGameShow(GameState* gameState) {
     StringReadln(&name);
     if(StringSize(name) == 0) NewGameShow(gameState);
     else{
+        gameState->player = PlayerNew(name);
+        /*
         file = fopen("res/username", "w");
         fprintf(file, "%s.", name);
         fclose(file);
-        MainMenuShow(gameState);
+        */
     }
 }

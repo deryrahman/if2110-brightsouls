@@ -10,6 +10,7 @@
 #include "menus/splashscreen.h"
 #include "menus/mainmenu.h"
 #include "menus/mapmenu.h"
+#include "menus/newgame.h"
 
 int main(int argc, char** argv){
 	Terminal terminal = TerminalCreateDefault();
@@ -17,17 +18,17 @@ int main(int argc, char** argv){
 
 	SplashScreenShow(gameState);
 
-	MainMenuShow(gameState);
-
-	gameState->player = (Player*) malloc(sizeof(Player));
-	gameState->player->name = StringCreate("Jauhar Arifin");
-	gameState->player->EXP = 0;
-	gameState->player->MAXHP = 50;
-	gameState->player->STRSKILL = 1;
-	gameState->player->DEFSKILL = 1;
-	gameState->player->STR = 10;
-	gameState->player->DEF = 10;
-	gameState->player->LVL = 1;
+	boolean stay = true;
+	do {
+		int menu = MainMenuShow(gameState);
+		switch (menu) {
+			case 1: NewGameShow(gameState); stay = true; break;
+			case 2: if (gameState->player != NULL && gameState->player->name != NULL) stay = false; break;
+			case 3: break; //load
+			case 4: return 0;
+			default: stay = true;
+		}
+	} while (stay);
 
 	MapMenuShow(gameState);
 

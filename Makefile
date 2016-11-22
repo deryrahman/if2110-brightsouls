@@ -8,6 +8,7 @@ SOURCE=bin/xstring.o \
 	bin/player.o \
 	bin/tree.o \
 	bin/gamestate.o \
+	bin/listinteger.o \
 	bin/graphics/terminal.o \
 	bin/graphics/pixel.o \
 	bin/graphics/ui.o \
@@ -21,7 +22,7 @@ SOURCE=bin/xstring.o \
 	bin/map.o \
 	bin/point.o \
 	bin/main.o
-CFLAGS=-I$(INCLUDE_DIR) -Wall -g -lm
+CFLAGS=-I$(INCLUDE_DIR) -Wall -g -lm -std=c99
 
 bin/%.o: src/%.c include/*.h
 	mkdir -p bin/graphics

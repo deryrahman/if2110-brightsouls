@@ -27,7 +27,7 @@ void CommandInputShow(GameState* gameState, Enemy* enemy, Queue QPlayer);
 int CommandBattle(GameState* gameState, Enemy* enemy, Queue QPlayer, Queue QMusuh);
 void CommandBox(GameState* gameState, Enemy* enemy, Queue QMusuh, Queue QPlayer, int *irand, int info, int round);
 
-void BattleMenuShow (GameState* gameState, Enemy* enemy){
+int BattleMenuShow (GameState* gameState, Enemy* enemy){
 	Terminal* terminal = gameState->terminal;
 	Player* player = gameState->player;
 	int irand[2];
@@ -88,13 +88,21 @@ void BattleMenuShow (GameState* gameState, Enemy* enemy){
 		QueueCreateEmpty(&QPlayer,4);
 	} while (ronde<ronde_max && player->HP>0 && enemy->HP>0);
 	// mengembalikan QMusuh jadi empty
+
+	int hasil = 0; // 0 draw, 1 menang, -1 kalah
 	if(player->HP<=0){
+		hasil = -1;
 		CommandBox(gameState, enemy, QMusuh, QPlayer, irand, 9, ronde);
 	} else if (enemy->HP<=0){
+		hasil = 1;
 		CommandBox(gameState, enemy, QMusuh, QPlayer, irand, 8, ronde);
 	} else {
 		CommandBox(gameState, enemy, QMusuh, QPlayer, irand, 10, ronde);
 	}
+
+	StringReadln(&cmd);
+
+	return hasil;
 }
 
 Queue RandomAction(){

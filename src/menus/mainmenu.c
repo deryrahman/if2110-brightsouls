@@ -8,7 +8,7 @@
 #include "menus/newgame.h"
 #include "gamestate.h"
 
-void MainMenuShow(GameState* gameState) {
+int MainMenuShow(GameState* gameState) {
     Terminal* terminal = gameState->terminal;
     TerminalClear(*terminal);
 
@@ -23,7 +23,7 @@ void MainMenuShow(GameState* gameState) {
         fclose(file);
     }
 
-    /* Membaca file yang berisi username */
+    /* Membaca file yang berisi username
     String username = StringCreate("");
     char CC;
     file = fopen("res/username", "r");
@@ -33,14 +33,14 @@ void MainMenuShow(GameState* gameState) {
         fscanf(file, "%c", &CC);
     }
     fclose(file);
+    */
 
     /* Tampilan akan berbeda antara dua kondisi: sudah ada username dan belum ada username */
-    if(StringLength(username) > 0){
+    if(gameState->player != NULL && gameState->player->name != NULL && StringLength(gameState->player->name) > 0){
         String username_notif = StringCreate("Your username is:");
-        String underline = StringCreate("----------------");
         UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(username_notif)), ImageHeight(mainmenuImage) + 8, PixelStyleCreateDefault(), username_notif);
-        UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(username)), ImageHeight(mainmenuImage) + 10, PixelStyleCreateDefault(), username);
-        UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(underline)), ImageHeight(mainmenuImage) + 12, PixelStyleCreateDefault(), underline);
+        UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(gameState->player->name)), ImageHeight(mainmenuImage) + 10, PixelStyleCreateDefault(), gameState->player->name);
+        UIDrawHLine(*terminal, TerminalGetCenterX(*terminal, 20), ImageHeight(mainmenuImage) + 12, 20, PixelCreateDefault(0x2501),PixelCreateDefault(0x2501),PixelCreateDefault(0x2501));
 
         String str = StringCreate("New Game");
         UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 14, PixelStyleCreateDefault(), str);
@@ -57,9 +57,6 @@ void MainMenuShow(GameState* gameState) {
         String str = StringCreate("New Game");
         UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 8, PixelStyleCreateDefault(), str);
 
-        str = StringCreate("Start Game");
-        UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 10, PixelStyleCreateDefault(), str);
-
         str = StringCreate("Load");
         UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 12, PixelStyleCreateDefault(), str);
 
@@ -72,9 +69,9 @@ void MainMenuShow(GameState* gameState) {
     /* Membaca menu */
     String menu = StringCreate("");
     StringReadln(&menu);
-    if (StringEquals(menu, StringCreate("New Game"))) NewGameShow(gameState);
-    else if (StringEquals(menu, StringCreate("Start Game"))) MainMenuShow(gameState);
-    else if (StringEquals(menu, StringCreate("Load"))) MainMenuShow(gameState);
-    else if (StringEquals(menu, StringCreate("Exit")));
-    else MainMenuShow(gameState);
+    if (StringEquals(menu, StringCreate("New Game"))) return 1;
+    else if (StringEquals(menu, StringCreate("Start Game"))) return 2;
+    else if (StringEquals(menu, StringCreate("Load"))) return 3;
+    else if (StringEquals(menu, StringCreate("Exit"))) return 4;
+    else return 0;
 }

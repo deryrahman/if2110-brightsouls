@@ -25,6 +25,18 @@ String StringCreate(char* lit) {
 	return baru;
 }
 
+String StringFromUint(uint n) {
+	String tmp = StringCreate("");
+	while (n > 0) {
+		StringAppendChar(&tmp, (char) ((n % 10) +'0'));
+		n /= 10;
+	}
+	String hasil = StringCreate("");
+	int i; for (i = StringLength(tmp)-1; i >= 0; i--)
+		StringAppendChar(&hasil, tmp[i]);
+	return hasil;
+}
+
 /*
  * Implementasi resize pada string.h
  * Tanggal : Minggu, 11 September 2016
