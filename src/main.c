@@ -15,6 +15,7 @@
 
 int main(int argc, char** argv){
 	Terminal terminal = TerminalCreateDefault();
+	TerminalClearScreen();
 	GameState *gameState = GameStateNew(&terminal, NULL, NULL);
 
 	SplashScreenShow(gameState);

@@ -21,11 +21,11 @@ const wchar TERMINAL_ENEMY = L'E';
 const wchar TERMINAL_HEAL = L'M';
 const wchar TERMINAL_PLAYER = L'P';
 
-PixelStyle TERMINAL_FREE_PIXEL = {RESET,WHITE,WHITE};
-PixelStyle TERMINAL_WALL_PIXEL = {RESET,BLACK,BLACK};
-PixelStyle TERMINAL_ENEMY_PIXEL = {RESET,RED,WHITE};
-PixelStyle TERMINAL_HEAL_PIXEL = {RESET,GREEN,WHITE};
-PixelStyle TERMINAL_PLAYER_PIXEL = {RESET,YELLOW,WHITE};
+PixelStyle TERMINAL_FREE_PIXEL = {RESET,BLACK,BLACK};
+PixelStyle TERMINAL_WALL_PIXEL = {RESET,WHITE,WHITE};
+PixelStyle TERMINAL_ENEMY_PIXEL = {RESET,RED,BLACK};
+PixelStyle TERMINAL_HEAL_PIXEL = {RESET,GREEN,BLACK};
+PixelStyle TERMINAL_PLAYER_PIXEL = {RESET,YELLOW,BLACK};
 
 uint MapWidth(Map map) {
     return map.width;
@@ -318,7 +318,9 @@ void MapPutOnTerminal(Map map, Terminal terminal, uint x, uint y) {
 
             Pixel p = PixelCreateDefault(w);
             p.style = s;
-            TerminalSet(terminal, x + j, y + i, p);
+            TerminalSet(terminal, x + j*2, y + i, p);
+            //if (w == TERMINAL_FREE || w == TERMINAL_WALL)
+                TerminalSet(terminal, x + j*2 + 1, y + i, p);
         }
     }
 }

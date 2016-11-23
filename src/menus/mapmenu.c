@@ -7,6 +7,31 @@
 #include <stdlib.h>
 #include <time.h>
 
+String getCommand() {
+    String result = StringCreate("");
+
+    char k = (char) TerminalWaitKey();
+    if (k == 0x1b) {
+        char x = (char) TerminalWaitKey();
+        char y = (char) TerminalWaitKey();
+        if (x == 91)
+            switch (y) {
+                case 65 : StringAppendString(&result, StringCreate("GU")); break;
+                case 68 : StringAppendString(&result, StringCreate("GL")); break;
+                case 67 : StringAppendString(&result, StringCreate("GR")); break;
+                case 66 : StringAppendString(&result, StringCreate("GD")); break;
+            }
+    } else {
+        wprintf(L"%c", k);
+        StringAppendChar(&result, k);
+        String new = StringCreate("");
+        StringReadln(&new);
+        StringAppendString(&result, new);
+    }
+
+    return result;
+}
+
 MapNode* getRandomMap() {
     static uint id = 0;
     String mapFile[1];
@@ -41,7 +66,7 @@ void showMapMenuInformation(GameState *gameState) {
 
     MapPutOnTerminal(gameState->currentMap->map, *(gameState->terminal),  TerminalGetCenterX(*(gameState->terminal), gameState->currentMap->map.width) , 2);
     UIDrawBoxLine(*gameState->terminal, TerminalGetCenterX(*gameState->terminal, gameState->currentMap->map.width) - 2, 1,
-        gameState->currentMap->map.width+4, gameState->currentMap->map.height+2,
+        2 * (gameState->currentMap->map.width) +4, gameState->currentMap->map.height+2,
         PixelStyleCreateDefault(), THICKLINE);
 
     UIDrawBox(*(gameState->terminal), 3, 3, 50, 5,
@@ -93,7 +118,7 @@ void MapMenuShow(GameState *gameState) {
     while (game_loop) {
         showMapMenuInformation(gameState);
 
-        StringReadln(&command);
+        command = getCommand();
 
         boolean move = false;
         uint mx = 0;
@@ -175,9 +200,8 @@ void MapMenuShow(GameState *gameState) {
                 Enemy* enemy = getRandomEnemy();
                 int result = BattleMenuShow(gameState, enemy);
                 if (result == 0) beforeMove = MAP_ENEMY;
-            } else if (afterMove == MAP_HEAL) {
-                gameState->player->HP += 5 + rand()%5;
-            }
+            } else if (afterMove == MAP_HEAL)
+                gameState->player->HP += max(gameState->player->HPMAX, 5 + rand()%5);
 
             if (gameState->player->HP <= 0)
                 return;
