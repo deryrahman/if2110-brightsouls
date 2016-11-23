@@ -27,6 +27,15 @@ MapNode* getRandomMap() {
     return mn;
 }
 
+Enemy* getRandomEnemy() {
+    String enemyFile[3];
+    enemyFile[0] = StringCreate("res/enemy1.enemy");
+    enemyFile[1] = StringCreate("res/enemy2.enemy");
+    enemyFile[2] = StringCreate("res/enemy3.enemy");
+
+    return LoadPlayerFromFile(enemyFile[rand()%3]);
+}
+
 void showMapMenuInformation(GameState *gameState) {
     TerminalClear(*(gameState->terminal));
 
@@ -163,12 +172,15 @@ void MapMenuShow(GameState *gameState) {
 
             beforeMove = MAP_FREE;
             if (afterMove == MAP_ENEMY) {
-                Enemy enemy;
-                enemy.name = StringCreate("Lucifer");
-                enemy.MAXHP = 50; enemy.STR = 10; enemy.DEF = 8; enemy.HP = 5;
-                int result = BattleMenuShow(gameState, &enemy);
+                Enemy* enemy = getRandomEnemy();
+                int result = BattleMenuShow(gameState, enemy);
                 if (result == 0) beforeMove = MAP_ENEMY;
-            } else if (afterMove == MAP_HEAL);
+            } else if (afterMove == MAP_HEAL) {
+                gameState->player->HP += 5 + rand()%5;
+            }
+
+            if (gameState->player->HP <= 0)
+                return;
         }
     }
 }

@@ -19,6 +19,7 @@ SOURCE=bin/xstring.o \
 	bin/menus/menu_battle.o \
 	bin/menus/menu_skill.o \
 	bin/menus/mapmenu.o \
+	bin/menus/endgame.o \
 	bin/map.o \
 	bin/point.o \
 	bin/main.o

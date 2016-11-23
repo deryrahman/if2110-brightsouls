@@ -55,7 +55,7 @@ int MainMenuShow(GameState* gameState) {
         UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 20, PixelStyleCreateDefault(), str);
     } else{
         String str = StringCreate("New Game");
-        UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 8, PixelStyleCreateDefault(), str);
+        UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 8, PixelStyleCreate(UNDERLINE,BLACK,WHITE), str);
 
         str = StringCreate("Load");
         UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 12, PixelStyleCreateDefault(), str);

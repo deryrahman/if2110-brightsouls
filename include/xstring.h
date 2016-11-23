@@ -39,6 +39,8 @@ String StringCreate(char* lit);
  */
 String StringFromUint(uint n);
 
+uint StringToUint(String str);
+
 /*
  * StringResize
  * mengubah ukuran container string. Jika nilai container kurang dari panjang string

@@ -64,7 +64,8 @@ void MapFillFromFile(Map *map, FILE *file) {
 
         String str = StringCreate("");
         uint y = 0;
-        while (StringFreadln(&str, file) != EOF) {
+        StringFreadln(&str, file);
+        while (StringLength(str) > 0 && !feof(file)) {
             String key = StringCreate("");
             uint value = 0;
             uint value2 = 0;
@@ -95,9 +96,13 @@ void MapFillFromFile(Map *map, FILE *file) {
                         x = MAP_HEAL;
                     else if (str[i] == (char) TERMINAL_ENEMY)
                         x = MAP_ENEMY;
+                    else if (str[i] == (char) TERMINAL_PLAYER)
+                        x = MAP_PLAYER;
 
                     MapSet(*map, i+1, y, x);
                 }
+                if (y >= map->height)
+                    break;
             }
 
             if (StringEquals(key, StringCreate("width")))
@@ -117,6 +122,8 @@ void MapFillFromFile(Map *map, FILE *file) {
 
             if (bWidth && bHeight && !allocated)
                 allocated = true, MapMake(map, map->width, map->height);
+
+            StringFreadln(&str, file);
         }
 
         (map->startTop).y = 1;
@@ -124,6 +131,51 @@ void MapFillFromFile(Map *map, FILE *file) {
         (map->startBottom).y = map->height; (map->startBottom).x = map->width - (map->startBottom).x;
         (map->startLeft).x = 1; (map->startLeft).y = map->height - (map->startLeft).y;
     }
+}
+
+MapNode* MapLoadNodeFromFile(String filename) {
+    MapNode* arr = (MapNode*) malloc(26 * sizeof(MapNode));
+    int i; for (i = 0; i < 26; i++) arr[i].left = arr[i].right = arr[i].top = arr[i].bottom = NULL;
+    FILE* file = fopen(filename, "r");
+
+    if (!file)
+        return NULL;
+
+    uint ret_id = 0;
+    while (!feof(file)) {
+        Map m = MapCreateEmpty();
+        MapFillFromFile(&m, file);
+        String str = StringCreate("");
+
+        StringFreadln(&str, file);
+        uint id = 0;
+        uint val = 0;
+        while (StringLength(str) > 0) {
+            String key = StringCreate("");
+            String value = StringCreate("");
+
+            int i = 0; for (;str[i] == ' ' || str[i] == '\t';i++);
+            for (;i < StringLength(str) && str[i] != ' ' && str[i] != '\t' && str[i] != '=';i++) StringAppendChar(&key, str[i]);
+            for (;str[i] == ' ' || str[i] == '\t' || str[i] == '=';i++);
+            for (;i < StringLength(str) && str[i] != ' ' && str[i] != '\t' && str[i] != '=';i++) StringAppendChar(&value, str[i]);
+
+            val = StringToUint(value);
+
+            if (StringEquals(key, StringCreate("id")))
+                id = val, arr[val].map = m, ret_id = ret_id ? ret_id : id;
+            else if (StringEquals(key, StringCreate("left")))
+                arr[id].left = &arr[val], arr[val].right = &arr[id];
+            else if (StringEquals(key, StringCreate("right")))
+                arr[id].right = &arr[val], arr[val].left = &arr[id];
+            else if (StringEquals(key, StringCreate("top")))
+                arr[id].top = &arr[val], arr[val].bottom = &arr[id];
+            else if (StringEquals(key, StringCreate("bottom")))
+                arr[id].bottom = &arr[val], arr[val].top = &arr[id];
+
+            StringFreadln(&str, file);
+        }
+    }
+    return (arr+ret_id);
 }
 
 String MapToString(MapNode map) {
@@ -152,6 +204,12 @@ String MapToString(MapNode map) {
     StringAppendString(&str, StringFromUint(map.map.startTop.x));
     StringAppendChar(&str, '\n');
 
+    StringAppendString(&str, StringCreate("startCenter="));
+    StringAppendString(&str, StringFromUint(map.map.startTop.x));
+    StringAppendChar(&str, ',');
+    StringAppendString(&str, StringFromUint(map.map.startTop.y));
+    StringAppendChar(&str, '\n');
+
     uint i;
     for (i = 0; i < map.map.height; i++) {
         uint j;
@@ -171,7 +229,6 @@ String MapToString(MapNode map) {
         }
         StringAppendChar(&str,'\n');
     }
-    StringAppendChar(&str, '\n');
 
     StringAppendString(&str, StringCreate("id="));
     StringAppendString(&str, StringFromUint(map.id));
@@ -185,6 +242,8 @@ String MapToString(MapNode map) {
         StringAppendString(&str, StringCreate("top=")), StringAppendString(&str, StringFromUint(map.top->id)), StringAppendChar(&str, '\n');
     if (map.bottom != NULL)
         StringAppendString(&str, StringCreate("bottom=")), StringAppendString(&str, StringFromUint(map.bottom->id)), StringAppendChar(&str, '\n');
+
+    StringAppendChar(&str, '\n');
 
     return str;
 }
