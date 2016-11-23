@@ -70,10 +70,37 @@ int loadHP(FILE *FStats,int *PosOut){
 	*PosOut = i;
 	return RealHP;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 =======
 
 >>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
+=======
+}
+
+/* Author
+ * Nama			: Aulia Ichsan RIfkyano
+ * Hari/Tanggal : Selasa, 22 November 2016*/
+
+int loadMaxHP(FILE *FStats,int PosIn,int *PosOut){
+	char c,MHP[9],CPos;
+	CPos=PosIn;
+	int i,pos=0,RealMHP;
+	fseek(FStats,CPos,SEEK_SET);
+	c = fgetc(FStats);
+	while (c !='|'){
+		c = fgetc(FStats);
+		i = CharToInt(c);
+		if (i>=0 && i<=9){
+			MHP[pos]=c;
+			MHP[++pos] = 0;
+		}
+	}
+	i = ftell(FStats);
+	RealMHP = atoi(MHP);
+	*PosOut = i;
+	return RealMHP;
+>>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
 }
 
 
@@ -158,7 +185,7 @@ int loadDEF(FILE *FStats,int PosIn,int *PosOut){
  * Hari/Tanggal : Minggu, 6 November 2016*/
 
 
-int loadSP(FILE *FStats,int PosIn){
+int loadSP(FILE *FStats,int PosIn,int *PosOut){
 	char c,SP[9],CPos;
 	CPos=PosIn;
 	int i,pos=0,RealSP;
@@ -177,34 +204,118 @@ int loadSP(FILE *FStats,int PosIn){
 	RealSP = atoi(SP);	
 =======
 	RealSP = atoi(SP);
+<<<<<<< HEAD
 >>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
+=======
+	*PosOut = i;
+>>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
 	return RealSP;
 }
+
+int loadEXP(FILE *FStats,int PosIn,int *PosOut){
+	char c,EXP[9],CPos;
+	CPos=PosIn;
+	int i,pos=0,RealEXP;
+	fseek(FStats,CPos,SEEK_SET);
+	c = fgetc(FStats);
+	while (c !='|'){
+		c = fgetc(FStats);
+		i = CharToInt(c);
+		if (i>=0 && i<=9){
+			EXP[pos]=c;
+			EXP[++pos] = 0;
+		}
+	}
+	i = ftell(FStats);
+	RealEXP = atoi(EXP);
+	*PosOut = i;
+	return RealEXP;
+}
+
+/*String loadName(FILE *FStats,int PosIn,int *PosOut){
+	char c,CPos;
+	String Name;
+	StringCreate(Name)
+	CPos=PosIn;
+	int i,pos=0,RealEXP;
+	fseek(FStats,CPos,SEEK_SET);
+	c = fgetc(FStats);
+	while (c !='|'){
+		c = fgetc(FStats);
+		i = CharToInt(c);
+		if ((!(i>=0 && i<=9)) && c!=' '){
+			Name[pos]=c;
+			Name[++pos] = 0;
+		}
+	}
+	i = ftell(FStats);
+	*PosOut = i;
+	return Name;
+}*/
 
 /* Author
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Minggu, 6 November 2016*/
 
 
-void TulisStats(int HP, int STR, int DEF, int LVL, int SP){
-	FILE *FStats2 = fopen("./doc/playerstats.txt","w");
-	fprintf(FStats2,"HP: %d | STR: %d | DEF: %d | LVL: %d | SP: %d |",HP,STR,DEF,LVL,SP);
+void TulisStats(String filename, String name, int HP,int MaxHP, int STR, int DEF, int LVL, int SP, int EXP){
+	FILE *FStats2 = fopen(filename,"w");
+	fprintf(FStats2,"%s\nHP: %d | MAXHP: %d | STR: %d | DEF: %d | LVL: %d | SP: %d | EXP: %d",name, HP, MaxHP,STR,DEF,LVL,SP,EXP);
 	fclose(FStats2);
+<<<<<<< HEAD
 <<<<<<< HEAD
 	
 =======
 
 >>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
+=======
+}
 
+Player* LoadPlayerFromFile(String path) {
+	FILE *file = fopen(path, "r");
+	if (file) {
+		Player* player = (Player*) malloc(sizeof(Player));
+		player->name = StringCreate("");
+		StringFreadln(&player->name, file);
+
+		int pos = 0;
+		player->HP = loadHP(file, &pos);
+		player->MAXHP = loadMaxHP(file, pos, &pos);
+		player->STR = loadSTR(file, pos, &pos);
+		player->DEF = loadDEF(file, pos, &pos);
+		player->LVL = loadLVL(file, pos, &pos);
+		player->SP = loadSP(file, pos, &pos);
+		player->EXP = loadEXP(file, pos, &pos);
+		player->STRSKILL = 0;
+		player->DEFSKILL = 0;
+		return player;
+	} else
+		return NULL;
+}
+>>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
+
+Player* PlayerNew(String name) {
+	Player* player = (Player*) malloc(sizeof(Player));
+	player->name = name;
+	player->HP = 20;
+	player->MAXHP = 20;
+	player->STR = 1;
+	player->DEF = 1;
+	player->LVL = 1;
+	player->SP = 0;
+	player->EXP = 0;
+	player->STRSKILL = 0;
+	player->DEFSKILL = 0;
+
+	return player;
 }
 
 /* Author
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Minggu, 6 November 2016*/
 
-void NewGame(){
-	FILE *FStats;
-	TulisStats(1,1,1,1,0);
+void NewGame(String name, String filename){
+	TulisStats(filename,name,20,20,1,1,1,0,0);
 }
 
 /* Author
@@ -225,11 +336,11 @@ void NewGame(){
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Minggu, 6 November 2016*/
 
-void LevelUp(int HP, int STR, int DEF, int *LVL, int *SP){
-	FILE *FStats;
+void LevelUp(int HP,int MaxHP, int STR, int DEF, int *LVL, int *SP,int EXP){
 	int Level = (*LVL)+1;
 	int SPU	  = (*SP)+5;
-	TulisStats(HP,STR,DEF,Level,SPU);
+	MaxHP 	  = Level*20;
+	//TulisStats(HP,MaxHP,STR,DEF,Level,SPU,EXP);
 	*LVL 	=Level;
 	*SP		=SPU;
 <<<<<<< HEAD

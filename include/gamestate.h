@@ -7,7 +7,7 @@
 typedef struct {
     Terminal* terminal;
     Player* player;
-    Map* currentMap;
+    MapNode* currentMap;
     Point playerPosition;
     uint nMap;
 } GameState;
@@ -15,5 +15,7 @@ typedef struct {
 void GameStateDealoc(GameState* gamestate);
 
 GameState* GameStateNew();
+
+void GameStateSave(GameState* gameState);
 
 #endif

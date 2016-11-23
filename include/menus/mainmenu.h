@@ -3,6 +3,6 @@
 
 #include "gamestate.h"
 
-void MainMenuShow(GameState* terminal);
+int MainMenuShow(GameState* terminal);
 
 #endif

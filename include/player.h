@@ -45,6 +45,11 @@ int loadHP(FILE *FStats,int *PosOut);
   F.S. = Internal variable terisi oleh HP dari eksternal file, berupa integer*/
 >>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
+int loadMaxHP(FILE *FStats,int PosIn,int *PosOut);
+/*Merubah teks Maks HP dari file playerstats.txt menjadi internal variable
+  I.S. = Internal variable kosong
+  F.S. = Internal variable terisi oleh Maks HP dari eksternal file, berupa integer*/
+
 int loadSTR(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks STR dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong
@@ -68,7 +73,7 @@ int loadDEF(FILE *FStats,int PosIn,int *PosOut);
   I.S. = Internal variable kosong.
   F.S. = Internal variable terisi oleh DEF dari eksternal file, berupa integer*/
 
-int loadSP(FILE *FStats,int PosIn);
+int loadSP(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks SP(Skill Point) dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong.
 <<<<<<< HEAD
@@ -77,29 +82,38 @@ int loadSP(FILE *FStats,int PosIn);
   F.S. = Internal variable terisi oleh SP dari eksternal file, berupa integer*/
 >>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
+int loadEXP(FILE *FStats,int PosIn,int *PosOut);
+
 int CharToInt(char cc);
 /*Mengkonversi char menjadi int
   I.S. = Char 0,1,2,..,9.
   F.S. = Integer 0,1,..,9.*/
 
-void TulisStats(int HP, int STR, int DEF, int LVL, int SP);
+void TulisStats(String filename, String name, int HP,int MaxHP, int STR, int DEF, int LVL, int SP, int EXP);
 /*Menuliskan stats ke file eksternal, seperti save, tapi buat statesnya
   I.S. = Stats yang lama
   F.S. = Stats yang baru, ditulis dengan mode write*/
 
-void NewGame();
+Player* LoadPlayerFromFile(String path);
+
+Player* PlayerNew(String name);
+
+void NewGame(String name, String filename);
 /*Menuliskan stats ke file eksternal untuk memulai game baru
   I.S. = File sembarang
   F.S. = File berisikan stats baru: Nama dan semua stats jadi 0*/
 
-void LevelUp(int HP, int STR, int DEF, int *LVL, int *SP);
+void LevelUp(int HP,int MaxHP, int STR, int DEF, int *LVL, int *SP,int EXP);
 /*Menuliskan stats ke file eksternal saat naik level
   I.S. = File sembarang
   F.S. = File berisikan stats baru: Level naik 1, Stats naik  , SP naik*/
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 #endif
 =======
+=======
+>>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
 #endif
 >>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41

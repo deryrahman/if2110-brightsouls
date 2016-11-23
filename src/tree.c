@@ -113,7 +113,6 @@ void TreePrintActivated(Tree P, int curr){
 }
 
 uint SkillTotalAttack(Tree P){
-	if (P==Nil){}
 	if (TreeStatus(P)==true){
 		if ((TreeLeft(P) == Nil || !TreeStatus(TreeLeft(P))) && (TreeRight(P) == Nil || !TreeStatus(TreeRight(P)))){
 			return TreeRoot(P).attack;
@@ -121,10 +120,10 @@ uint SkillTotalAttack(Tree P){
 			return TreeRoot(P).attack+SkillTotalAttack(TreeLeft(P))+SkillTotalAttack(TreeRight(P));
 		}
 	}
+	return 0;
 }
 
 uint SkillTotalDeffense(Tree P){
-	if (P==Nil){}
 	if (TreeStatus(P)==true){
 		if ((TreeLeft(P) == Nil || !TreeStatus(TreeLeft(P))) && (TreeRight(P) == Nil || !TreeStatus(TreeRight(P)))){
 			return TreeRoot(P).deffense;
@@ -132,6 +131,7 @@ uint SkillTotalDeffense(Tree P){
 			return TreeRoot(P).deffense+SkillTotalDeffense(TreeLeft(P))+SkillTotalDeffense(TreeRight(P));
 		}
 	}
+	return 0;
 }
 
 void SkillActivatedGenerate(Tree *P, int EXP){

@@ -32,6 +32,14 @@ typedef char* String;
 String StringCreate(char* lit);
 
 /*
+ * StringFromUint
+ * Membuat string dari uint n
+ * uint n : bilangan yang akan dirubah menjadi string
+ * return : representasi string dari n
+ */
+String StringFromUint(uint n);
+
+/*
  * StringResize
  * mengubah ukuran container string. Jika nilai container kurang dari panjang string
    maka string akan terpotong dan panjangnya menyesuaikan.

@@ -23,6 +23,22 @@ void UIDrawBox(Terminal terminal, uint x, uint y, uint width, uint height, Pixel
     }
 }
 
+void UIDrawHLine(Terminal terminal, uint x, uint y, uint width, Pixel left, Pixel right, Pixel side) {
+    int i;
+    for (i = x; i < x + width; i++)
+        TerminalSet(terminal, i, y, side);
+    TerminalSet(terminal, x, y, left);
+    TerminalSet(terminal, x + width - 1, y, right);
+}
+
+void UIDrawVLine(Terminal terminal, uint x, uint y, uint height, Pixel top, Pixel bottom, Pixel side) {
+    int i;
+    for (i = y; i < y + height; i++)
+        TerminalSet(terminal, x, i, side);
+    TerminalSet(terminal, x, y, top);
+    TerminalSet(terminal, x, y + height - 1, bottom);
+}
+
 void UIDrawBoxChar(Terminal terminal, uint x, uint y, uint width, uint height, Pixel character) {
     UIDrawBox(terminal, x, y, width, height, character, character, character, character, character, character, character, character);
 }

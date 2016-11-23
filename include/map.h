@@ -30,12 +30,13 @@ typedef struct {
     Point startCenter;
 } Map;
 
-typedef struct {
+typedef struct tMapNode {
+    uint id;
     Map map;
-    Map *right;
-    Map *left;
-    Map *top;
-    Map *bottom;
+    struct tMapNode *right;
+    struct tMapNode *left;
+    struct tMapNode *top;
+    struct tMapNode *bottom;
 } MapNode;
 
 uint MapWidth(Map map);
@@ -45,6 +46,8 @@ void MapMakeEmpty(Map *map);
 void MapMake(Map *map, uint width, uint height);
 
 void MapFillFromFile(Map *map, FILE *file);
+
+String MapGraphToString(MapNode map);
 
 Map MapCreateEmpty();
 Map MapCreate(uint width, uint height);

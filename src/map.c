@@ -3,6 +3,7 @@
 #include "graphics/terminal.h"
 #include "xstring.h"
 #include "integer.h"
+#include "listinteger.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -108,9 +109,9 @@ void MapFillFromFile(Map *map, FILE *file) {
             else if (StringEquals(key, StringCreate("startTop")))
                 bStartTop = true, map->startTop = PointCreate(value,0);
             else if (StringEquals(key, StringCreate("startLeft")))
-                bStartLeft = true, map->startLeft = PointCreate(value,0);
+                bStartLeft = true, map->startLeft = PointCreate(0,value);
             else if (StringEquals(key, StringCreate("startBottom")))
-                bStartBottom = true, map->startBottom = PointCreate(0,value);
+                bStartBottom = true, map->startBottom = PointCreate(value,0);
             else if (StringEquals(key, StringCreate("startCenter")))
                 bStartCenter = true, map->startCenter = PointCreate(value,value2);
 
@@ -123,6 +124,95 @@ void MapFillFromFile(Map *map, FILE *file) {
         (map->startBottom).y = map->height; (map->startBottom).x = map->width - (map->startBottom).x;
         (map->startLeft).x = 1; (map->startLeft).y = map->height - (map->startLeft).y;
     }
+}
+
+String MapToString(MapNode map) {
+    String str = StringCreate("");
+    StringAppendString(&str, StringCreate("width="));
+    StringAppendString(&str, StringFromUint(map.map.width));
+    StringAppendChar(&str, '\n');
+
+    StringAppendString(&str, StringCreate("height="));
+    StringAppendString(&str, StringFromUint(map.map.width));
+    StringAppendChar(&str, '\n');
+
+    StringAppendString(&str, StringCreate("startRight="));
+    StringAppendString(&str, StringFromUint(map.map.startRight.y));
+    StringAppendChar(&str, '\n');
+
+    StringAppendString(&str, StringCreate("startBottom="));
+    StringAppendString(&str, StringFromUint(map.map.width - map.map.startBottom.x));
+    StringAppendChar(&str, '\n');
+
+    StringAppendString(&str, StringCreate("startLeft="));
+    StringAppendString(&str, StringFromUint(map.map.height - map.map.startLeft.y));
+    StringAppendChar(&str, '\n');
+
+    StringAppendString(&str, StringCreate("startTop="));
+    StringAppendString(&str, StringFromUint(map.map.startTop.x));
+    StringAppendChar(&str, '\n');
+
+    uint i;
+    for (i = 0; i < map.map.height; i++) {
+        uint j;
+        for (j = 0; j < map.map.width; j++) {
+            wchar w = L' ';
+            if (MapGet(map.map, j+1, i+1) == MAP_FREE)
+                w = TERMINAL_FREE;
+            else if (MapGet(map.map, j+1, i+1) == MAP_WALL)
+                w = TERMINAL_WALL;
+            else if (MapGet(map.map, j+1, i+1) == MAP_ENEMY)
+                w = TERMINAL_ENEMY;
+            else if (MapGet(map.map, j+1, i+1) == MAP_HEAL)
+                w = TERMINAL_HEAL;
+            else if (MapGet(map.map, j+1, i+1) == MAP_PLAYER)
+                w = TERMINAL_PLAYER;
+            StringAppendChar(&str, w);
+        }
+        StringAppendChar(&str,'\n');
+    }
+    StringAppendChar(&str, '\n');
+
+    StringAppendString(&str, StringCreate("id="));
+    StringAppendString(&str, StringFromUint(map.id));
+    StringAppendChar(&str, '\n');
+
+    if (map.left != NULL)
+        StringAppendString(&str, StringCreate("left=")), StringAppendString(&str, StringFromUint(map.left->id)), StringAppendChar(&str, '\n');
+    if (map.right != NULL)
+        StringAppendString(&str, StringCreate("right=")), StringAppendString(&str, StringFromUint(map.right->id)), StringAppendChar(&str, '\n');
+    if (map.top != NULL)
+        StringAppendString(&str, StringCreate("top=")), StringAppendString(&str, StringFromUint(map.top->id)), StringAppendChar(&str, '\n');
+    if (map.bottom != NULL)
+        StringAppendString(&str, StringCreate("bottom=")), StringAppendString(&str, StringFromUint(map.bottom->id)), StringAppendChar(&str, '\n');
+
+    return str;
+}
+
+String MapGraphToStringRec(MapNode map, ListInteger* visited) {
+    if (LISearch(*visited, map.id))
+        return StringCreate("");
+
+    String str = MapToString(map);
+    LIInsVFirst(visited, map.id);
+
+    if (map.top != NULL) {
+        StringAppendString(&str, MapGraphToStringRec(*(map.top), visited));
+    } if (map.right != NULL) {
+        StringAppendString(&str, MapGraphToStringRec(*(map.right), visited));
+    } if (map.bottom != NULL) {
+        StringAppendString(&str, MapGraphToStringRec(*(map.bottom), visited));
+    } if (map.left != NULL) {
+        StringAppendString(&str, MapGraphToStringRec(*(map.left), visited));
+    }
+
+    return str;
+}
+
+String MapGraphToString(MapNode map) {
+    ListInteger memo;
+    LICreateEmpty(&memo);
+    return MapGraphToStringRec(map, &memo);
 }
 
 Map MapCreateEmpty() {
