@@ -3,7 +3,7 @@
 #include "player.h"
 #include "xstring.h"
 #include "graphics/terminal.h"
-#include "wchar.h"
+#include "graphics/ui.h"
 
 void CreditShow (GameState* gameState) {
 	Player* player = gameState->player;
@@ -23,13 +23,16 @@ void CreditShow (GameState* gameState) {
 	        fclose(file);
 	    }
 
-	 	String str = StringCreate("Your HP : %d", );
+	 	String str = StringCreate("Your HP : ");
+	 	StringAppendString(&str,StringFromUint(player->HP));
 	 	UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 14, PixelStyleCreateDefault(), str);
 		
-		str = StringCreate("Your Defense : %d", );
+		str = StringCreate("Your Defense : %d");
+		StringAppendString(&str,StringFromUint(player->DEF));
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 16, PixelStyleCreateDefault(), str);
 
-	    str = StringCreate("Your Strength : %d", );
+	    str = StringCreate("Your Strength : %d");
+	    StringAppendString(&str,StringFromUint(player->STR));
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 18, PixelStyleCreateDefault(), str);
 
 	    str = StringCreate("We heard that you are a great player, so let's fight again!");
