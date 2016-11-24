@@ -37,6 +37,13 @@ String StringFromUint(uint n) {
 	return hasil;
 }
 
+uint StringToUint(String str) {
+	uint n = 0;
+	int i = 0; for (; i < StringLength(str); i++)
+		n = 10*n + (uint) (str[i] - '0');
+	return n;
+}
+
 /*
  * Implementasi resize pada string.h
  * Tanggal : Minggu, 11 September 2016

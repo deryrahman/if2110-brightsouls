@@ -17,5 +17,6 @@ void GameStateDealoc(GameState* gamestate);
 GameState* GameStateNew();
 
 void GameStateSave(GameState* gameState);
+void GameStateLoad(GameState* gameState);
 
 #endif

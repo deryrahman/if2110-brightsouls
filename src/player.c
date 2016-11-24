@@ -2,11 +2,7 @@
  * Author
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Sabtu, 5 November 2016
-<<<<<<< HEAD
  * Nama File	: player.c 
-=======
- * Nama File	: player.c
->>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
  */
 
 #include <stdio.h>
@@ -205,7 +201,7 @@ int loadEXP(FILE *FStats,int PosIn,int *PosOut){
 	int i,pos=0,RealEXP;
 	fseek(FStats,CPos,SEEK_SET);
 	c = fgetc(FStats);
-	while (c !='|'){
+	while (c !='|' && c != '\n' && c != '\r' && c != 0 && c != EOF){
 		c = fgetc(FStats);
 		i = CharToInt(c);
 		if (i>=0 && i<=9){

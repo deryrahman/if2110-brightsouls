@@ -11,6 +11,64 @@
 #include <locale.h>
 #include <fcntl.h>
 #include <time.h>
+#include <termios.h>
+
+void TerminalClearScreen() {
+    system("clear");
+}
+
+void TerminalGotoXY(uint x, uint y) {
+    wprintf(L"%c[%d;%df", 0x1b, y, x);
+}
+
+int TerminalWaitKey() {
+    struct termios savedState, newState;
+
+    if (-1 == tcgetattr(STDIN_FILENO, &savedState)) return EOF;
+    newState = savedState;
+
+    newState.c_lflag &= ~(ECHO | ICANON);
+    newState.c_cc[VMIN] = 1;
+
+    if (-1 == tcsetattr(STDIN_FILENO, TCSANOW, &newState)) return EOF;
+    int h = getchar();
+    if (-1 == tcsetattr(STDIN_FILENO, TCSANOW, &savedState)) return EOF;
+
+    return h;
+}
+
+String TerminalReadTextbox(Terminal terminal, uint x, uint y, uint maxlength) {
+    uint i = 0;
+
+    char* buff = (char*) malloc(sizeof(char)*maxlength);
+    Pixel cursor = PixelCreate(RESET,WHITE,WHITE,'k');
+    Pixel *blank = (Pixel*) malloc(sizeof(Pixel)*maxlength);
+    for (i = 0; i < maxlength; i++) blank[i] = TerminalGet(terminal, x+i, y);
+
+    TerminalSet(terminal, x, y, cursor);
+    TerminalRender(terminal);
+
+    buff[0] = 0;
+    i = 0;
+    char c = (char) TerminalWaitKey();
+    while (c != EOF && c != '\r' && c != '\n' && c != 0) {
+        if (c == 127 && i > 0) {
+            TerminalSet(terminal, x + i, y, blank[i]);
+            buff[--i] = 0;
+            TerminalSet(terminal, x + i, y, cursor);
+        } else if (c != 127 && i < maxlength) {
+            Pixel tmp = blank[i]; tmp.info = c;
+            TerminalSet(terminal, x + i, y, tmp);
+            buff[i] = c;
+            buff[++i] = 0;
+            TerminalSet(terminal, x + i, y, cursor);
+        }
+        TerminalRender(terminal);
+        c = TerminalWaitKey();
+    }
+    
+    return StringCreate(buff);
+}
 
 uint TerminalGetActualWidth() {
     struct winsize w;
@@ -49,6 +107,8 @@ void TerminalMake(Terminal* terminal, uint width, uint height) {
     terminal->width = width;
     terminal->height = height;
 
+    terminal->backBuffer = (TerminalBuffer) malloc(width * height * sizeof(Pixel));
+    int i; for (i = 0; i < width * height; i++) terminal->backBuffer[i].info = 0;
     terminal->buffer = (TerminalBuffer) malloc(width * height * sizeof(Pixel));
     TerminalClear(*terminal);
 }
@@ -77,6 +137,8 @@ void TerminalSet(Terminal terminal, uint x, uint y, Pixel pixel) {
     if (x >= 0 && x < TerminalGetWidth(terminal) && y >= 0 && y < TerminalGetHeight(terminal) ) {
         TerminalBuffer buffer = TerminalGetBuffer(terminal);
         buffer[y * TerminalGetWidth(terminal) + x] = pixel;
+        if (buffer[y * TerminalGetWidth(terminal) + x].info == ' ')
+            buffer[y * TerminalGetWidth(terminal) + x].info = 0;
     }
 }
 
@@ -89,14 +151,28 @@ void TerminalClear(Terminal terminal) {
 }
 
 void TerminalRender(Terminal terminal) {
-    system("clear");
     TerminalBuffer buffer = TerminalGetBuffer(terminal);
+
     int i,j;
     for (i = 0; i < TerminalGetHeight(terminal); i++) {
-        for (j = 0; j < TerminalGetWidth(terminal); j++)
-            PixelPrint(buffer[i*TerminalGetWidth(terminal) + j]);
-        wprintf(L"\n");
+        for (j = 0; j < TerminalGetWidth(terminal); j++) {
+                Pixel new = buffer[i*TerminalGetWidth(terminal) + j];
+                Pixel old = terminal.backBuffer[i*TerminalGetWidth(terminal) + j];
+                if (new.info != old.info || new.style.foreground != old.style.foreground ||
+                    new.style.background != old.style.background || new.style.attribute != old.style.attribute) {
+                    TerminalGotoXY(j, i);
+                    PixelPrint(new);
+                }
+            }
     }
+    TerminalGotoXY(1,TerminalGetHeight(terminal)-1);
+    for (i = 0; i < TerminalGetWidth(terminal); i++)
+        PixelPrint(PixelCreateDefault(0));
+    TerminalGotoXY(1,TerminalGetHeight(terminal)-1);
+
+    for (i = 0; i < TerminalGetHeight(terminal); i++)
+        for (j = 0; j < TerminalGetWidth(terminal); j++)
+            terminal.backBuffer[i*TerminalGetWidth(terminal) + j] = buffer[i*TerminalGetWidth(terminal) + j];
 }
 
 void TerminalDealoc(Terminal* terminal) {
