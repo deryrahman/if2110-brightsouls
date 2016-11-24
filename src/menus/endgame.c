@@ -13,7 +13,7 @@ void EndGameShow (GameState* gameState) {
 
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 
-    if (player->HP > 0) {
+    if ((player->HP) > 0) {
 	    /* Membaca file yang berisi text untuk kasus menang */
 	    FILE *file = fopen("res/win.img","r");
 	    Image mainmenuImage;
@@ -27,11 +27,11 @@ void EndGameShow (GameState* gameState) {
 	 	StringAppendString(&str,StringFromUint(player->HP));
 	 	UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 14, PixelStyleCreateDefault(), str);
 		
-		str = StringCreate("Your Defense : %d");
+		str = StringCreate("Your Defense : ");
 		StringAppendString(&str,StringFromUint(player->DEF));
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 16, PixelStyleCreateDefault(), str);
 
-	    str = StringCreate("Your Strength : %d");
+	    str = StringCreate("Your Strength : ");
 	    StringAppendString(&str,StringFromUint(player->STR));
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 18, PixelStyleCreateDefault(), str);
 
