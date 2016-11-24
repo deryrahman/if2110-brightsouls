@@ -10,7 +10,7 @@ void NewGameShow(GameState* gameState) {
     Terminal* terminal = gameState->terminal;
     TerminalClear(*terminal);
 
-    UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 22, PixelStyleCreateDefault(), MULTILINE);
+    UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal)-2, PixelStyleCreateDefault(), MULTILINE);
 
     /* Membaca file yang berisi logo game */
     FILE *file = fopen("res/brightsouls.img","r");
@@ -33,14 +33,13 @@ void NewGameShow(GameState* gameState) {
     fclose(file);
     */
 
-    String str = StringCreate("Please enter your name:");
+    String str = StringCreate("Please enter your name (Maksimal 20 karakter):");
     UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 8, PixelStyleCreateDefault(), str);
 
     TerminalRender(*terminal);
 
     /* Menuliskan username ke file eksternal */
-    String name = StringCreate("");
-    StringReadln(&name);
+    String name = TerminalReadTextbox(*terminal, TerminalGetCenterX(*terminal,20), ImageHeight(mainmenuImage) + 10, 20);
     if(StringSize(name) == 0) NewGameShow(gameState);
     else{
         gameState->player = PlayerNew(name);

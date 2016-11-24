@@ -218,7 +218,7 @@ int loadEXP(FILE *FStats,int PosIn,int *PosOut){
 	int i,pos=0,RealEXP;
 	fseek(FStats,CPos,SEEK_SET);
 	c = fgetc(FStats);
-	while (c !='|'){
+	while (c !='|' && c != '\n' && c != '\r' && c != 0 && c != EOF){
 		c = fgetc(FStats);
 		i = CharToInt(c);
 		if (i>=0 && i<=9){

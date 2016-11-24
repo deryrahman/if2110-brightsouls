@@ -11,8 +11,14 @@ typedef Pixel* TerminalBuffer;
 typedef struct {
     uint width;
     uint height;
+    TerminalBuffer backBuffer;
     TerminalBuffer buffer;
 } Terminal;
+
+int TerminalWaitKey();
+void TerminalClearScreen();
+void TerminalGotoXY(uint x, uint y);
+String TerminalReadTextbox(Terminal terminal, uint x, uint y, uint maxlength);
 
 uint TerminalGetActualWidth();
 uint TerminalGetActualHeight();
