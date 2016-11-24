@@ -12,11 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "xstring.h"
-<<<<<<< HEAD
-#include "./include/player.h"
-=======
 #include "player.h"
->>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
+#include "player.h"
 
 
 /* Author
@@ -69,13 +66,6 @@ int loadHP(FILE *FStats,int *PosOut){
 	RealHP = atoi(HP);
 	*PosOut = i;
 	return RealHP;
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
-=======
 }
 
 /* Author
@@ -100,7 +90,6 @@ int loadMaxHP(FILE *FStats,int PosIn,int *PosOut){
 	RealMHP = atoi(MHP);
 	*PosOut = i;
 	return RealMHP;
->>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
 }
 
 
@@ -200,17 +189,15 @@ int loadSP(FILE *FStats,int PosIn,int *PosOut){
 		}
 	}
 	i = ftell(FStats);
-<<<<<<< HEAD
 	RealSP = atoi(SP);	
-=======
-	RealSP = atoi(SP);
-<<<<<<< HEAD
->>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
-=======
 	*PosOut = i;
->>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
 	return RealSP;
 }
+
+
+/* Author
+ * Nama			: Aulia Ichsan RIfkyano
+ * Hari/Tanggal : Minggu, 6 November 2016*/
 
 int loadEXP(FILE *FStats,int PosIn,int *PosOut){
 	char c,EXP[9],CPos;
@@ -232,43 +219,16 @@ int loadEXP(FILE *FStats,int PosIn,int *PosOut){
 	return RealEXP;
 }
 
-/*String loadName(FILE *FStats,int PosIn,int *PosOut){
-	char c,CPos;
-	String Name;
-	StringCreate(Name)
-	CPos=PosIn;
-	int i,pos=0,RealEXP;
-	fseek(FStats,CPos,SEEK_SET);
-	c = fgetc(FStats);
-	while (c !='|'){
-		c = fgetc(FStats);
-		i = CharToInt(c);
-		if ((!(i>=0 && i<=9)) && c!=' '){
-			Name[pos]=c;
-			Name[++pos] = 0;
-		}
-	}
-	i = ftell(FStats);
-	*PosOut = i;
-	return Name;
-}*/
 
 /* Author
  * Nama			: Aulia Ichsan RIfkyano
- * Hari/Tanggal : Minggu, 6 November 2016*/
+ * Hari/Tanggal : Minggu, 6 November 2016
+ * Edited		: Kamis, 24 November 2016*/
 
-
-void TulisStats(String filename, String name, int HP,int MaxHP, int STR, int DEF, int LVL, int SP, int EXP){
-	FILE *FStats2 = fopen(filename,"w");
-	fprintf(FStats2,"%s\nHP: %d | MAXHP: %d | STR: %d | DEF: %d | LVL: %d | SP: %d | EXP: %d",name, HP, MaxHP,STR,DEF,LVL,SP,EXP);
-	fclose(FStats2);
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
-=======
+void TulisStats(String filename, Player* player){
+	FILE *FStats = fopen(filename,"w");
+	fprintf(FStats,"%s\nHP: %d | MAXHP: %d | STR: %d | DEF: %d | LVL: %d | SP: %d | EXP: %d",(*player).name, (*player).HP, (*player).MAXHP,(*player).STR,(*player).DEF,(*player).LVL,(*player).SP,(*player).EXP);
+	fclose(FStats);
 }
 
 Player* LoadPlayerFromFile(String path) {
@@ -292,13 +252,12 @@ Player* LoadPlayerFromFile(String path) {
 	} else
 		return NULL;
 }
->>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
 
 Player* PlayerNew(String name) {
 	Player* player = (Player*) malloc(sizeof(Player));
 	player->name = name;
-	player->HP = 20;
-	player->MAXHP = 20;
+	player->HP = 10;
+	player->MAXHP = 10;
 	player->STR = 1;
 	player->DEF = 1;
 	player->LVL = 1;
@@ -309,42 +268,20 @@ Player* PlayerNew(String name) {
 
 	return player;
 }
-
 /* Author
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Minggu, 6 November 2016*/
 
-void NewGame(String name, String filename){
-	TulisStats(filename,name,20,20,1,1,1,0,0);
+void LevelUp(String filename, Player* player){
+	(*player).LVL 	+=1;
+	(*player).SP 	+=5;
+	(*player).MAXHP = (*player).LVL*10;
+	TulisStats(filename, player);
 }
 
-/* Author
- * Nama			: Aulia Ichsan RIfkyano
- * Hari/Tanggal : Minggu, 6 November 2016*/
-
-/*void loadNama(FILE *FStats,String *Nama, int *Pos){
-	char c[20],cc;
-	int i=0,len;
-<<<<<<< HEAD
-	
-=======
-
->>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
-}*/
-
-/* Author
- * Nama			: Aulia Ichsan RIfkyano
- * Hari/Tanggal : Minggu, 6 November 2016*/
-
-void LevelUp(int HP,int MaxHP, int STR, int DEF, int *LVL, int *SP,int EXP){
-	int Level = (*LVL)+1;
-	int SPU	  = (*SP)+5;
-	MaxHP 	  = Level*20;
-	//TulisStats(HP,MaxHP,STR,DEF,Level,SPU,EXP);
-	*LVL 	=Level;
-	*SP		=SPU;
-<<<<<<< HEAD
+void PlayerGetPotion(Player* player){
+	(*player).HP += (5+rand() % 5);
+	if ((*player).HP > (*player).MAXHP){
+		(*player).HP = (*player).MAXHP;
+	}
 }
-=======
-}
->>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41

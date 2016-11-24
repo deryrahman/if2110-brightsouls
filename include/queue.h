@@ -34,10 +34,7 @@ void QueueCreateEmpty (Queue * Q, int Max);
 void QueueDeAlokasi(Queue * Q);
 void QueueAdd (Queue * Q, QueueInfoType X);
 void QueueDel (Queue * Q, QueueInfoType * X);
-<<<<<<< HEAD
-=======
 void QueueDelLast(Queue * Q, QueueInfoType * X);
->>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 void QueueCopy (Queue Q, Queue *Qout);
 
 #endif
