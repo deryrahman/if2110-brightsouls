@@ -37,6 +37,39 @@ int TerminalWaitKey() {
     return h;
 }
 
+String TerminalReadTextbox(Terminal terminal, uint x, uint y, uint maxlength) {
+    uint i = 0;
+
+    char* buff = (char*) malloc(sizeof(char)*maxlength);
+    Pixel cursor = PixelCreate(RESET,WHITE,WHITE,'k');
+    Pixel *blank = (Pixel*) malloc(sizeof(Pixel)*maxlength);
+    for (i = 0; i < maxlength; i++) blank[i] = TerminalGet(terminal, x+i, y);
+
+    TerminalSet(terminal, x, y, cursor);
+    TerminalRender(terminal);
+
+    buff[0] = 0;
+    i = 0;
+    char c = (char) TerminalWaitKey();
+    while (c != EOF && c != '\r' && c != '\n' && c != 0) {
+        if (c == 127 && i > 0) {
+            TerminalSet(terminal, x + i, y, blank[i]);
+            buff[--i] = 0;
+            TerminalSet(terminal, x + i, y, cursor);
+        } else if (c != 127 && i < maxlength) {
+            Pixel tmp = blank[i]; tmp.info = c;
+            TerminalSet(terminal, x + i, y, tmp);
+            buff[i] = c;
+            buff[++i] = 0;
+            TerminalSet(terminal, x + i, y, cursor);
+        }
+        TerminalRender(terminal);
+        c = TerminalWaitKey();
+    }
+    
+    return StringCreate(buff);
+}
+
 uint TerminalGetActualWidth() {
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);

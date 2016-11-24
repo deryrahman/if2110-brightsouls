@@ -18,6 +18,7 @@ typedef struct {
 int TerminalWaitKey();
 void TerminalClearScreen();
 void TerminalGotoXY(uint x, uint y);
+String TerminalReadTextbox(Terminal terminal, uint x, uint y, uint maxlength);
 
 uint TerminalGetActualWidth();
 uint TerminalGetActualHeight();

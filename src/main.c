@@ -18,6 +18,12 @@ int main(int argc, char** argv){
 	TerminalClearScreen();
 	GameState *gameState = GameStateNew(&terminal, NULL, NULL);
 
+	/*char c = TerminalWaitKey();
+	while (1) {
+		wprintf(L">> %d %c", (int) c, c);
+		c = TerminalWaitKey();
+	}*/
+
 	SplashScreenShow(gameState);
 
 	while (1) {

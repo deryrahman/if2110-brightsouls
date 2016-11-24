@@ -201,7 +201,7 @@ void MapMenuShow(GameState *gameState) {
                 int result = BattleMenuShow(gameState, enemy);
                 if (result == 0) beforeMove = MAP_ENEMY;
             } else if (afterMove == MAP_HEAL)
-                gameState->player->HP += max(gameState->player->HPMAX, 5 + rand()%5);
+                gameState->player->HP = min(gameState->player->MAXHP, gameState->player->MAXHP + 5 + rand()%5);
 
             if (gameState->player->HP <= 0)
                 return;
