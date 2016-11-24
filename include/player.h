@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+#ifndef player_H
+#define player_H
+#include <stdio.h>
+
+
+struct player{
+  int HP;
+=======
 #ifndef _H_PLAYER
 #define _H_PLAYER
 
@@ -11,13 +20,18 @@ typedef struct {
   int MAXHP;
   int STRSKILL;
   int DEFSKILL;
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
   int STR;
   int DEF;
   int LVL;
   int SP;
+<<<<<<< HEAD
+};
+=======
 } Player;
 
 typedef Player Enemy;
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
 //void loadNama(FILE *FStats,String *Nama, int *Pos);
 /*Merubah teks nama menjadi variable nama di program*/
@@ -25,7 +39,11 @@ typedef Player Enemy;
 int loadHP(FILE *FStats,int *PosOut);
 /*Merubah teks HP dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong
+<<<<<<< HEAD
+  F.S. = Internal variable terisi oleh HP dari eksternal file, berupa integer*/ 
+=======
   F.S. = Internal variable terisi oleh HP dari eksternal file, berupa integer*/
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
 int loadMaxHP(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks Maks HP dari file playerstats.txt menjadi internal variable
@@ -35,12 +53,20 @@ int loadMaxHP(FILE *FStats,int PosIn,int *PosOut);
 int loadSTR(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks STR dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong
+<<<<<<< HEAD
+  F.S. = Internal variable terisi oleh STR dari eksternal file, berupa integer*/ 
+=======
   F.S. = Internal variable terisi oleh STR dari eksternal file, berupa integer*/
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
 int loadLVL(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks LVL dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong.
+<<<<<<< HEAD
+  F.S. = Internal variable terisi oleh LVL dari eksternal file, berupa integer*/ 
+=======
   F.S. = Internal variable terisi oleh LVL dari eksternal file, berupa integer*/
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
 int loadDEF(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks DEF dari file playerstats.txt menjadi internal variable
@@ -50,7 +76,11 @@ int loadDEF(FILE *FStats,int PosIn,int *PosOut);
 int loadSP(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks SP(Skill Point) dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong.
+<<<<<<< HEAD
+  F.S. = Internal variable terisi oleh SP dari eksternal file, berupa integer*/  
+=======
   F.S. = Internal variable terisi oleh SP dari eksternal file, berupa integer*/
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
 int loadEXP(FILE *FStats,int PosIn,int *PosOut);
 
@@ -78,4 +108,12 @@ void LevelUp(int HP,int MaxHP, int STR, int DEF, int *LVL, int *SP,int EXP);
   I.S. = File sembarang
   F.S. = File berisikan stats baru: Level naik 1, Stats naik  , SP naik*/
 
+<<<<<<< HEAD
+
+<<<<<<< HEAD
 #endif
+=======
+=======
+>>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
+#endif
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41

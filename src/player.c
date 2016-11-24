@@ -2,13 +2,21 @@
  * Author
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Sabtu, 5 November 2016
+<<<<<<< HEAD
+ * Nama File	: player.c 
+=======
  * Nama File	: player.c
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "xstring.h"
+<<<<<<< HEAD
+#include "./include/player.h"
+=======
 #include "player.h"
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 
 
 /* Author
@@ -61,6 +69,13 @@ int loadHP(FILE *FStats,int *PosOut){
 	RealHP = atoi(HP);
 	*PosOut = i;
 	return RealHP;
+<<<<<<< HEAD
+<<<<<<< HEAD
+	
+=======
+
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
+=======
 }
 
 /* Author
@@ -85,6 +100,7 @@ int loadMaxHP(FILE *FStats,int PosIn,int *PosOut){
 	RealMHP = atoi(MHP);
 	*PosOut = i;
 	return RealMHP;
+>>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
 }
 
 
@@ -184,8 +200,15 @@ int loadSP(FILE *FStats,int PosIn,int *PosOut){
 		}
 	}
 	i = ftell(FStats);
+<<<<<<< HEAD
+	RealSP = atoi(SP);	
+=======
 	RealSP = atoi(SP);
+<<<<<<< HEAD
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
+=======
 	*PosOut = i;
+>>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
 	return RealSP;
 }
 
@@ -239,6 +262,13 @@ void TulisStats(String filename, String name, int HP,int MaxHP, int STR, int DEF
 	FILE *FStats2 = fopen(filename,"w");
 	fprintf(FStats2,"%s\nHP: %d | MAXHP: %d | STR: %d | DEF: %d | LVL: %d | SP: %d | EXP: %d",name, HP, MaxHP,STR,DEF,LVL,SP,EXP);
 	fclose(FStats2);
+<<<<<<< HEAD
+<<<<<<< HEAD
+	
+=======
+
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
+=======
 }
 
 Player* LoadPlayerFromFile(String path) {
@@ -262,6 +292,7 @@ Player* LoadPlayerFromFile(String path) {
 	} else
 		return NULL;
 }
+>>>>>>> 9c0453ae8af707ae05cfb2b402d75f0c62c41692
 
 Player* PlayerNew(String name) {
 	Player* player = (Player*) malloc(sizeof(Player));
@@ -294,7 +325,11 @@ void NewGame(String name, String filename){
 /*void loadNama(FILE *FStats,String *Nama, int *Pos){
 	char c[20],cc;
 	int i=0,len;
+<<<<<<< HEAD
+	
+=======
 
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
 }*/
 
 /* Author
@@ -308,4 +343,8 @@ void LevelUp(int HP,int MaxHP, int STR, int DEF, int *LVL, int *SP,int EXP){
 	//TulisStats(HP,MaxHP,STR,DEF,Level,SPU,EXP);
 	*LVL 	=Level;
 	*SP		=SPU;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 08c138b79199cc9ed7b706d634cb9cae34b87b41
