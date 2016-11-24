@@ -65,7 +65,6 @@ void QueueDel(Queue * Q, QueueInfoType * X){
 		QueueHead(*Q)++;
 	}
 }
-
 void QueueDelLast(Queue * Q, QueueInfoType * X){
 	*X = QueueInfoTail(*Q);
 	if (QueueHead(*Q)==QueueTail(*Q)) {
@@ -76,7 +75,6 @@ void QueueDelLast(Queue * Q, QueueInfoType * X){
 		QueueTail(*Q)--;
 	}
 }
-
 void QueueCopy (Queue Q, Queue *Qout){
 	QueueInfoType Xq;
 	while(!QueueIsEmpty(Q)){

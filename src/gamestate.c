@@ -19,9 +19,7 @@ GameState* GameStateNew(Terminal* terminal, Player* player, MapNode* mapNode) {
 }
 
 void GameStateSave(GameState* gameState) {
-    TulisStats("savefile/player", gameState->player->name, gameState->player->HP, gameState->player->MAXHP,
-        gameState->player->STR, gameState->player->DEF, gameState->player->LVL, gameState->player->SP, gameState->player->EXP);
-
+    TulisStats("savefile/player", gameState->player);
     String mapSave = MapGraphToString(*gameState->currentMap);
     FILE *file = fopen("savefile/map","w");
     fprintf(file, "%s.", mapSave);
