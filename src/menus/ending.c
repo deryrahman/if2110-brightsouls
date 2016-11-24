@@ -1,16 +1,19 @@
-#include <stdio.h>
+#include "menus/ending.h"
+#include "gamestate.h"
+#include "player.h"
+#include "xstring.h"
 #include "graphics/terminal.h"
-#include "graphics/pixel.h"
-#include "graphics/ui.h"
+#include "wchar.h"
 
-int main (int argc, char const *argv[]) {
+void CreditShow (GameState* gameState) {
+	Player* player = gameState->player;
 
 	Terminal* terminal = gameState->terminal;
     TerminalClear(*terminal);
 
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 
-    if (kasus menang) {
+    if (player->HP > 0) {
 	    /* Membaca file yang berisi text untuk kasus menang */
 	    FILE *file = fopen("res/win.img","r");
 	    Image mainmenuImage;
@@ -52,6 +55,7 @@ int main (int argc, char const *argv[]) {
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 18, PixelStyleCreateDefault(), str);
     }
 
-  return 0;
+    str = StringCreate("");
+    StringReadln(&str);
 }
 
