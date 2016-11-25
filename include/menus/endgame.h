@@ -3,6 +3,6 @@
 
 #include "gamestate.h"
 
-void EndGameShow(GameState* gameState);
+void EndGameShow(GameState* gameState, boolean win);
 
 #endif

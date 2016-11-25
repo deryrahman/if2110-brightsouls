@@ -26,6 +26,8 @@ String StringCreate(char* lit) {
 }
 
 String StringFromUint(uint n) {
+	if (n == 0)
+		return StringCreate("0");
 	String tmp = StringCreate("");
 	while (n > 0) {
 		StringAppendChar(&tmp, (char) ((n % 10) +'0'));

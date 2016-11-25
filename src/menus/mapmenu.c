@@ -22,6 +22,8 @@ String getCommand() {
                 case 66 : StringAppendString(&result, StringCreate("GD")); break;
             }
     } else {
+        if (k == '\n')
+            return StringCreate("");
         wprintf(L"%c", k);
         StringAppendChar(&result, k);
         String new = StringCreate("");
@@ -34,11 +36,15 @@ String getCommand() {
 
 MapNode* getRandomMap() {
     static uint id = 0;
-    String mapFile[1];
+    String mapFile[5];
     mapFile[0] = StringCreate("res/map1.map");
+    mapFile[1] = StringCreate("res/map2.map");
+    mapFile[2] = StringCreate("res/map3.map");
+    mapFile[3] = StringCreate("res/map4.map");
+    mapFile[4] = StringCreate("res/map5.map");
 
     srand(time(0));
-    uint i = rand() % 1;
+    uint i = rand() % 5;
 
     Map* map = (Map*) malloc (sizeof (Map));
     MapMakeEmpty(map);
@@ -61,11 +67,17 @@ Enemy* getRandomEnemy() {
     return LoadPlayerFromFile(enemyFile[rand()%3]);
 }
 
-void showMapMenuInformation(GameState *gameState) {
+void showMapMenuInformation(GameState *gameState, String status) {
     TerminalClear(*(gameState->terminal));
 
-    MapPutOnTerminal(gameState->currentMap->map, *(gameState->terminal),  TerminalGetCenterX(*(gameState->terminal), gameState->currentMap->map.width) , 2);
-    UIDrawBoxLine(*gameState->terminal, TerminalGetCenterX(*gameState->terminal, gameState->currentMap->map.width) - 2, 1,
+    String tmp = StringCreate("You are on the map ");
+    StringAppendString(&tmp, StringFromUint(gameState->currentMap->id));
+    UIDrawText(*(gameState->terminal), TerminalGetCenterX(*gameState->terminal,StringLength(tmp)), 5, PixelStyleCreateDefault(), tmp);
+
+    MapPutOnTerminal(gameState->currentMap->map, *(gameState->terminal),
+        TerminalGetCenterX(*(gameState->terminal), 2*gameState->currentMap->map.width) , TerminalGetCenterY(*gameState->terminal,gameState->currentMap->map.width));
+    UIDrawBoxLine(*gameState->terminal,
+        TerminalGetCenterX(*gameState->terminal, 2*gameState->currentMap->map.width) - 2, TerminalGetCenterY(*gameState->terminal,gameState->currentMap->map.height)-1,
         2 * (gameState->currentMap->map.width) +4, gameState->currentMap->map.height+2,
         PixelStyleCreateDefault(), THICKLINE);
 
@@ -79,6 +91,9 @@ void showMapMenuInformation(GameState *gameState) {
         PixelCreateDefault(0x251b), PixelCreateDefault(0x2517),
         PixelCreateDefault(0x2501), PixelCreateDefault(0x2503),
         PixelCreateDefault(0x2501), PixelCreateDefault(0x2503));
+
+    if (status)
+        UIDrawText(*(gameState->terminal), TerminalGetCenterX(*gameState->terminal,StringLength(status)), TerminalGetHeight(*gameState->terminal) - 5, PixelStyleCreateDefault(), status);
 
     UIDrawText(*(gameState->terminal), 20, 5, PixelStyleCreateDefault(), StringCreate("Player Information"));
     UIDrawVLine(*(gameState->terminal), 18, 7, 17, PixelCreateDefault(0x2533), PixelCreateDefault(0x253b), PixelCreateDefault(0x2503));
@@ -104,7 +119,7 @@ void showMapMenuInformation(GameState *gameState) {
     TerminalRender(*(gameState->terminal));
 }
 
-void MapMenuShow(GameState *gameState) {
+int MapMenuShow(GameState *gameState) {
     if (!gameState->currentMap) {
         gameState->currentMap = getRandomMap();
         gameState->nMap = 1;
@@ -115,8 +130,9 @@ void MapMenuShow(GameState *gameState) {
     String command = StringCreate("");
     boolean game_loop = true;
     uint beforeMove = MAP_FREE;
+    String status = NULL;
     while (game_loop) {
-        showMapMenuInformation(gameState);
+        showMapMenuInformation(gameState, status);
 
         command = getCommand();
 
@@ -131,8 +147,11 @@ void MapMenuShow(GameState *gameState) {
             move = true, mx = 1, my = 0;
         else if (StringEquals(command, StringCreate("GL")))
             move = true, mx = -1, my = 0;
-        else if (StringEquals(command, StringCreate("SAVE")))
+        else if (StringEquals(command, StringCreate("SAVE"))) {
             GameStateSave(gameState);
+            status = StringCreate("Game saved!");
+        } else if (StringEquals(command, StringCreate("EXIT")))
+            return 0;
 
         uint afterMove = MAP_FREE;
         beforeMove = MAP_FREE;
@@ -151,7 +170,7 @@ void MapMenuShow(GameState *gameState) {
 
             if (nx == 0) {
                 if (gameState->currentMap->left == NULL && gameState->nMap < 25)
-                    gameState->currentMap->left = getRandomMap();
+                    gameState->currentMap->left = getRandomMap(), gameState->nMap++;
                 if (gameState->currentMap->left != NULL) {
                     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, beforeMove);
                     MapNode* tmp = gameState->currentMap;
@@ -162,7 +181,7 @@ void MapMenuShow(GameState *gameState) {
                 }
             } else if (ny == 0) {
                 if (gameState->currentMap->top == NULL && gameState->nMap < 25)
-                    gameState->currentMap->top = getRandomMap();
+                    gameState->currentMap->top = getRandomMap(), gameState->nMap++;
                 if (gameState->currentMap->top != NULL) {
                     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, beforeMove);
                     MapNode* tmp = gameState->currentMap;
@@ -173,7 +192,7 @@ void MapMenuShow(GameState *gameState) {
                 }
             } else if (ny > gameState->currentMap->map.height) {
                 if (gameState->currentMap->bottom == NULL && gameState->nMap < 25)
-                    gameState->currentMap->bottom = getRandomMap();
+                    gameState->currentMap->bottom = getRandomMap(), gameState->nMap++;
                 if (gameState->currentMap->bottom != NULL) {
                     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, beforeMove);
                     MapNode* tmp = gameState->currentMap;
@@ -184,7 +203,7 @@ void MapMenuShow(GameState *gameState) {
                 }
             } else if (nx > gameState->currentMap->map.width) {
                 if (gameState->currentMap->right == NULL && gameState->nMap < 25)
-                    gameState->currentMap->right = getRandomMap();
+                    gameState->currentMap->right = getRandomMap(), gameState->nMap++;
                 if (gameState->currentMap->right != NULL) {
                     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, beforeMove);
                     MapNode* tmp = gameState->currentMap;
@@ -196,15 +215,34 @@ void MapMenuShow(GameState *gameState) {
             }
 
             beforeMove = MAP_FREE;
+            status = NULL;
             if (afterMove == MAP_ENEMY) {
                 Enemy* enemy = getRandomEnemy();
+
+                status = StringCreate("You are about to fight an enemy, his name is ");
+                StringAppendString(&status, enemy->name);
+                showMapMenuInformation(gameState, status);
+                TerminalWaitKey();
+
                 int result = BattleMenuShow(gameState, enemy);
                 if (result == 0) beforeMove = MAP_ENEMY;
-            } else if (afterMove == MAP_HEAL)
-                gameState->player->HP = min(gameState->player->MAXHP, gameState->player->MAXHP + 5 + rand()%5);
 
-            if (gameState->player->HP <= 0)
-                return;
+                if (result == 0)
+                    status = StringCreate("It's a draw");
+                else if (result == 1)
+                    status = StringCreate("You win!");
+                else
+                    game_loop = false;
+            } else if (afterMove == MAP_HEAL) {
+                PlayerGetPotion(gameState->player);
+                status = StringCreate("You got a medicine, your HP now is ");
+                StringAppendString(&status, StringFromUint(gameState->player->HP));
+            }
         }
     }
+
+    if (gameState->player->HP <= 0)
+        return -1;
+    else
+        return 1;
 }

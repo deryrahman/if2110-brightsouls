@@ -3,6 +3,6 @@
 
 #include "gamestate.h"
 
-void MapMenuShow(GameState *gameState);
+int MapMenuShow(GameState *gameState);
 
 #endif

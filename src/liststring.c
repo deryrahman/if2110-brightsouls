@@ -12,10 +12,10 @@
 #include <stdio.h>
 
 /*
- * IsEmpty
+ * LSIsEmpty
  * Mengirim true jika list kosong
  */
-boolean IsEmpty (List L) {
+boolean LSIsEmpty (StringList L) {
 	return First(L) == Nil;
 }
 
@@ -24,7 +24,7 @@ boolean IsEmpty (List L) {
  * I.S. sembarang
  * F.S. Terbentuk list kosong
  */
-void CreateEmpty (List *L) {
+void LSCreateEmpty (StringList *L) {
 	First(*L) = Nil;
 }
 
@@ -35,8 +35,8 @@ void CreateEmpty (List *L) {
  * menghasilkan P, maka Info(P)=X, Next(P)=Nil
  * Jika alokasi gagal, mengirimkan Nil
  */
-address Alokasi (infotype X) {
-	address p = (address) malloc(sizeof(ElmtList));
+Stringaddress LSAlokasi (String X) {
+	Stringaddress p = (Stringaddress) malloc(sizeof(StringElmtList));
 	if (p != Nil) {
 		Info(p) = X;
 		Next(p) = Nil;
@@ -50,7 +50,7 @@ address Alokasi (infotype X) {
  * F.S. P dikembalikan ke sistem
  * Melakukan dealokasi/pengembalian address P
  */
-void Dealokasi (address *P) {
+void LSDealokasi (Stringaddress *P) {
 	free(*P);
 }
 
@@ -60,9 +60,9 @@ void Dealokasi (address *P) {
  * Jika ada, mengirimkan address elemen tersebut.
  * Jika tidak ada, mengirimkan Nil
  */
-address Search (List L, infotype X) {
-	address p = First(L);
-	address i = Nil;
+Stringaddress LSSearch (StringList L, String X) {
+	Stringaddress p = First(L);
+	Stringaddress i = Nil;
 	while (i == Nil && p != Nil) {
 		if (Info(p) == X)
 			i = p;
@@ -76,8 +76,8 @@ address Search (List L, infotype X) {
  * Mencari apakah ada elemen list yang beralamat P
  * Mengirimkan true jika ada, false jika tidak ada
  */
-boolean FSearch (List L, address P) {
-	address i = First(L);
+boolean LSFSearch (StringList L, Stringaddress P) {
+	Stringaddress i = First(L);
 	boolean found = false;
 	while (!found && i != Nil) {
 		if (i == P)
@@ -97,9 +97,9 @@ boolean FSearch (List L, address P) {
  * Search dengan spesifikasi seperti ini menghindari
  * traversal ulang jika setelah Search akan dilakukan operasi lain
  */
-address SearchPrec (List L, infotype X) {
-	address i = First(L);
-	address bi = Nil;
+Stringaddress LSSearchPrec (StringList L, String X) {
+	Stringaddress i = First(L);
+	Stringaddress bi = Nil;
 	boolean found = false;
 	while (!found && i != Nil)
 		if (Info(i) == X)
@@ -117,8 +117,8 @@ address SearchPrec (List L, infotype X) {
  * F.S. Melakukan alokasi sebuah elemen dan
  * menambahkan elemen pertama dengan nilai X jika alokasi berhasil
  */
-void InsVFirst (List *L, infotype X) {
-	address p = Alokasi(X);
+void LSInsVFirst (StringList *L, String X) {
+	Stringaddress p = LSAlokasi(X);
 	if (p != Nil) {
 		Next(p) = First(*L);
 		First(*L) = p;
@@ -132,18 +132,18 @@ void InsVFirst (List *L, infotype X) {
  * menambahkan elemen list di akhir: elemen terakhir yang baru
  * bernilai X jika alokasi berhasil. Jika alokasi gagal: I.S.= F.S.
  */
-void InsVLast (List *L, infotype X) {
-	address last = Nil;
-	address i = First(*L);
+void LSInsVLast (StringList *L, String X) {
+	Stringaddress last = Nil;
+	Stringaddress i = First(*L);
 	while (i != Nil) {
 		last = i;
 		i = Next(i);
 	}
 
 	if (last == Nil)
-		First(*L) = Alokasi(X);
+		First(*L) = LSAlokasi(X);
 	else
-		Next(last) = Alokasi(X);
+		Next(last) = LSAlokasi(X);
 }
 
 /*
@@ -152,11 +152,11 @@ void InsVLast (List *L, infotype X) {
  * F.S. Elemen pertama list dihapus: nilai info disimpan pada X
  *      dan alamat elemen pertama di-dealokasi
  */
-void DelVFirst (List *L, infotype *X) {
-	address first = First(*L);
+void LSDelVFirst (StringList *L, String *X) {
+	Stringaddress first = First(*L);
 	First(*L) = Next(first);
 	*X = Info(first);
-	Dealokasi(&first);
+	LSDealokasi(&first);
 }
 
 /*
@@ -165,10 +165,10 @@ void DelVFirst (List *L, infotype *X) {
  * F.S. Elemen terakhir list dihapus: nilai info disimpan pada X
  *      dan alamat elemen terakhir di-dealokasi
  */
-void DelVLast (List *L, infotype *X) {
-	address last = Nil;
-	address blast = Nil;
-	address i = First(*L);
+void LSDelVLast (StringList *L, String *X) {
+	Stringaddress last = Nil;
+	Stringaddress blast = Nil;
+	Stringaddress i = First(*L);
 	while (i != Nil) {
 		blast = last;
 		last = i;
@@ -181,15 +181,15 @@ void DelVLast (List *L, infotype *X) {
 		First(*L) = Nil;
 
 	*X = Info(last);
-	Dealokasi(&last);
+	LSDealokasi(&last);
 }
 
 /*
  * InsertFirst
  * I.S. Sembarang, P sudah dialokasi
- * F.S. Menambahkan elemen ber-address P sebagai elemen pertama
+ * F.S. Menambahkan elemen ber-Stringaddress P sebagai elemen pertama
  */
-void InsertFirst (List *L, address P) {
+void LSInsertFirst (StringList *L, Stringaddress P) {
 	Next(P) = First(*L);
 	First(*L) = P;
 }
@@ -200,7 +200,7 @@ void InsertFirst (List *L, address P) {
  *      P sudah dialokasi
  * F.S. Insert P sebagai elemen sesudah elemen beralamat Prec
  */
-void InsertAfter (List *L, address P, address Prec) {
+void LSInsertAfter (StringList *L, Stringaddress P, Stringaddress Prec) {
 	Next(P) = Next(Prec);
 	Next(Prec) = P;
 }
@@ -210,9 +210,9 @@ void InsertAfter (List *L, address P, address Prec) {
  * I.S. Sembarang, P sudah dialokasi
  * F.S. P ditambahkan sebagai elemen terakhir yang baru
  */
-void InsertLast (List *L, address P) {
-	address last = Nil;
-	address i = First(*L);
+void LSInsertLast (StringList *L, Stringaddress P) {
+	Stringaddress last = Nil;
+	Stringaddress i = First(*L);
 	while (i != Nil) {
 		last = i;
 		i = Next(i);
@@ -232,8 +232,8 @@ void InsertLast (List *L, address P) {
  *      Elemen list berkurang satu (mungkin menjadi kosong)
  * First element yg baru adalah suksesor elemen pertama yang lama
  */
-void DelFirst (List *L, address *P) {
-	address first = First(*L);
+void LSDelFirst (StringList *L, Stringaddress *P) {
+	Stringaddress first = First(*L);
 	First(*L) = Next(first);
 	*P = first;
 }
@@ -246,17 +246,17 @@ void DelFirst (List *L, address *P) {
  * 		Jika tidak ada elemen list dengan Info(P)=X, maka list tetap
  * 		List mungkin menjadi kosong karena penghapusan
  */
-void DelP (List *L, infotype X) {
-	address bi = Nil;
-	address i = First(*L);
+void LSDelP (StringList *L, String X) {
+	Stringaddress bi = Nil;
+	Stringaddress i = First(*L);
 	while (i != Nil)
 		if (Info(i) == X) {
 			if (bi != Nil)
 				Next(bi) = Next(i);
 			else
 				First(*L) = Next(i);
-			address tmp = Next(i);
-			Dealokasi(&i);
+			Stringaddress tmp = Next(i);
+			LSDealokasi(&i);
 			i = tmp;
 		} else {
 			bi = i;
@@ -272,10 +272,10 @@ void DelP (List *L, infotype X) {
  * Last element baru adalah predesesor elemen pertama yg lama,
  * jika ada
  */
-void DelLast (List *L, address *P) {
-	address blast = Nil;
-	address last = Nil;
-	address i = First(*L);
+void LSDelLast (StringList *L, Stringaddress *P) {
+	Stringaddress blast = Nil;
+	Stringaddress last = Nil;
+	Stringaddress i = First(*L);
 	while (i != Nil) {
 		blast = last;
 		last = i;
@@ -295,7 +295,7 @@ void DelLast (List *L, address *P) {
  * F.S. Menghapus Next(Prec):
  *      Pdel adalah alamat elemen list yang dihapus
  */
-void DelAfter (List *L, address *Pdel, address Prec) {
+void LSDelAfter (StringList *L, Stringaddress *Pdel, Stringaddress Prec) {
 	*Pdel = Next(Prec);
 	if (*Pdel != Nil)
 		Next(Prec) = Next(*Pdel);
@@ -305,9 +305,9 @@ void DelAfter (List *L, address *Pdel, address Prec) {
  * NbElmt
  * Mengirimkan banyaknya elemen list; mengirimkan 0 jika list kosong
  */
-int NbElmt (List L) {
+int LSNbElmt (StringList L) {
 	int c = 0;
-	address i = First(L);
+	Stringaddress i = First(L);
 	while (i != Nil) {
 		c++;
 		i = Next(i);
@@ -319,11 +319,11 @@ int NbElmt (List L) {
  * DelAll
  * Delete semua elemen list dan alamat elemen di-dealokasi
  */
-void DelAll (List *L) {
-	address i = First(*L);
+void LSDelAll (StringList *L) {
+	Stringaddress i = First(*L);
 	while (i != Nil) {
-		address tmp = Next(i);
-		Dealokasi(&i);
+		Stringaddress tmp = Next(i);
+		LSDealokasi(&i);
 		i = tmp;
 	}
 	First(*L) = Nil;
@@ -336,10 +336,10 @@ void DelAll (List *L) {
  * Elemen terakhir menjadi elemen pertama, dan seterusnya.
  * Membalik elemen list, tanpa melakukan alokasi/dealokasi.
  */
-void InversList (List *L) {
-	address i = First(*L);
-	address j = Nil;
-	address k = Nil;
+void LSInversList (StringList *L) {
+	Stringaddress i = First(*L);
+	Stringaddress j = Nil;
+	Stringaddress k = Nil;
 	while (i != Nil) {
 		if (j != Nil)
 			Next(j) = k;
@@ -359,14 +359,14 @@ void InversList (List *L) {
  * Jika alokasi gagal, hasilnya list kosong
  * dan semua elemen yang terlanjur di-alokasi, harus didealokasi
  */
-List FInversList (List L) {
+StringList LSFInversList (StringList L) {
 	boolean gagal = false;
-	List baru;
-	CreateEmpty(&baru);
+	StringList baru;
+	LSCreateEmpty(&baru);
 
-	address i = First(L);
+	Stringaddress i = First(L);
 	while (!gagal && i != Nil) {
-		address aloc = Alokasi(Info(i));
+		Stringaddress aloc = LSAlokasi(Info(i));
 		if (aloc == Nil)
 			gagal = true;
 
@@ -378,7 +378,7 @@ List FInversList (List L) {
 	}
 
 	if (gagal)
-		DelAll(&baru);
+		LSDelAll(&baru);
 
 	return baru;
 }
@@ -389,7 +389,7 @@ List FInversList (List L) {
  * L1 dan L2 "menunjuk" kepada list yang sama.
  * Tidak ada alokasi/dealokasi elemen
  */
-void CopyList (List *L1, List *L2) {
+void LSCopyList (StringList *L1, StringList *L2) {
 	First(*L2) = First(*L1);
 }
 
@@ -400,15 +400,15 @@ void CopyList (List *L1, List *L2) {
  * Jika ada alokasi gagal, hasilnya list kosong dan
  * semua elemen yang terlanjur di-alokasi, harus didealokasi
  */
-List FCopyList (List L) {
+StringList LSFCopyList (StringList L) {
 	boolean gagal = false;
-	List baru;
-	CreateEmpty(&baru);
-	address last = First(baru);
+	StringList baru;
+	LSCreateEmpty(&baru);
+	Stringaddress last = First(baru);
 
-	address i = First(L);
+	Stringaddress i = First(L);
 	while (!gagal && i != Nil) {
-		address aloc = Alokasi(Info(i));
+		Stringaddress aloc = LSAlokasi(Info(i));
 		if (aloc == Nil)
 			gagal = true;
 
@@ -426,7 +426,7 @@ List FCopyList (List L) {
 	}
 
 	if (gagal)
-		DelAll(&baru);
+		LSDelAll(&baru);
 
 	return baru;
 }
@@ -439,8 +439,8 @@ List FCopyList (List L) {
  * dengan melakukan alokasi elemen.
  * Lout adalah list kosong jika ada alokasi elemen yang gagal
  */
-void CpAlokList (List Lin, List *Lout) {
-	*Lout = FCopyList(Lin);
+void LSCpAlokList (StringList Lin, StringList *Lout) {
+	*Lout = LSFCopyList(Lin);
 }
 
 /*
@@ -455,19 +455,19 @@ void CpAlokList (List Lin, List *Lout) {
  * Jika ada alokasi yang gagal, maka L3 harus bernilai Nil
  * dan semua elemen yang pernah dialokasi didealokasi
  */
-void Konkat (List L1, List L2, List * L3) {
+void LSKonkat (StringList L1, StringList L2, StringList * L3) {
 	boolean gagal = false;
-	CreateEmpty(L3);
-	address last = First(*L3);
+	LSCreateEmpty(L3);
+	Stringaddress last = First(*L3);
 
-	address i = First(L1);
+	Stringaddress i = First(L1);
 	boolean still_l1 = true;
 	if (i == Nil) {
 		i = First(L2);
 		still_l1 = false;
 	}
 	while (!gagal && i != Nil) {
-		address aloc = Alokasi(Info(i));
+		Stringaddress aloc = LSAlokasi(Info(i));
 		if (aloc == Nil)
 			gagal = true;
 
@@ -489,7 +489,7 @@ void Konkat (List L1, List L2, List * L3) {
 	}
 
 	if (gagal)
-		DelAll(L3);
+		LSDelAll(L3);
 }
 
 /*
@@ -501,13 +501,13 @@ void Konkat (List L1, List L2, List * L3) {
  * dan L1 serta L2 menjadi list kosong.
  * Tidak ada alokasi/dealokasi pada prosedur ini
  */
-void Konkat1 (List *L1, List *L2, List *L3) {
-	if (IsEmpty(*L1))
+void LSKonkat1 (StringList *L1, StringList *L2, StringList *L3) {
+	if (LSIsEmpty(*L1))
 		First(*L3) = First(*L2);
 	else {
 		First(*L3) = First(*L1);
-		address last = Nil;
-		address i = First(*L1);
+		Stringaddress last = Nil;
+		Stringaddress i = First(*L1);
 		while (i != Nil) {
 			last = i;
 			i = Next(i);
@@ -526,19 +526,19 @@ void Konkat1 (List *L1, List *L2, List *L3) {
  * L1 berisi separuh elemen L dan L2 berisi sisa elemen L
  * Jika elemen L ganjil, maka separuh adalah NbElmt(L) div 2
  */
-void PecahList (List *L1, List *L2, List L) {
-	int separuh = NbElmt(L) / 2;
+void LSPecahList (StringList *L1, StringList *L2, StringList L) {
+	int separuh = LSNbElmt(L) / 2;
 	int counter = 0;
 
-	CreateEmpty(L1);
-	CreateEmpty(L2);
-	address last = First(*L1);
+	LSCreateEmpty(L1);
+	LSCreateEmpty(L2);
+	Stringaddress last = First(*L1);
 
-	address i = First(L);
+	Stringaddress i = First(L);
 	while (i != Nil) {
 		counter++;
 
-		address aloc = Alokasi(Info(i));
+		Stringaddress aloc = LSAlokasi(Info(i));
 
 		if (last == Nil) {
 			last = counter > separuh ? (First(*L2) = aloc) : (First(*L1) = aloc);

@@ -9,6 +9,7 @@ SOURCE=bin/xstring.o \
 	bin/tree.o \
 	bin/gamestate.o \
 	bin/listinteger.o \
+	bin/liststring.o \
 	bin/graphics/terminal.o \
 	bin/graphics/pixel.o \
 	bin/graphics/ui.o \

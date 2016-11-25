@@ -5,7 +5,7 @@
 #include "graphics/terminal.h"
 #include "graphics/ui.h"
 
-void EndGameShow (GameState* gameState) {
+void EndGameShow (GameState* gameState, boolean win) {
 	Player* player = gameState->player;
 
 	Terminal* terminal = gameState->terminal;
@@ -13,7 +13,7 @@ void EndGameShow (GameState* gameState) {
 
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 
-    if ((player->HP) > 0) {
+    if (win) {
 	    /* Membaca file yang berisi text untuk kasus menang */
 	    FILE *file = fopen("res/win.img","r");
 	    Image mainmenuImage;
@@ -26,7 +26,7 @@ void EndGameShow (GameState* gameState) {
 	 	String str = StringCreate("Your HP : ");
 	 	StringAppendString(&str,StringFromUint(player->HP));
 	 	UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 14, PixelStyleCreateDefault(), str);
-		
+
 		str = StringCreate("Your Defense : ");
 		StringAppendString(&str,StringFromUint(player->DEF));
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 16, PixelStyleCreateDefault(), str);
@@ -61,4 +61,9 @@ void EndGameShow (GameState* gameState) {
     TerminalRender(*terminal);
     String str = StringCreate("");
     StringReadln(&str);
+
+	FILE* save = fopen("savefile/username","w");
+	if (save) fclose(save), remove("savefile/username");
+	save = fopen("savefile/map","w");
+	if (save) fclose(save), remove("savefile/map");
 }
