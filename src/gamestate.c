@@ -26,9 +26,15 @@ void GameStateSave(GameState* gameState) {
     fclose(file);
 }
 
-void GameStateLoad(GameState* gameState) {
+boolean GameStateLoad(GameState* gameState) {
     gameState->player = LoadPlayerFromFile("savefile/player");
     gameState->currentMap = MapLoadNodeFromFile("savefile/map");
+
+    if (gameState->player == NULL || gameState->currentMap == NULL) {
+        gameState->player = NULL;
+        gameState->currentMap = NULL;
+        return false;
+    }
 
     Map map = gameState->currentMap->map;
     int i,j;
@@ -40,4 +46,6 @@ void GameStateLoad(GameState* gameState) {
                 gameState->playerPosition.y = i;
                 found = true;
             }
+
+    return true;
 }
