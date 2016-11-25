@@ -54,7 +54,7 @@ void EndGameShow (GameState* gameState, boolean win) {
 	    str = StringCreate("We wish you have an even brighter soul");
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 16, PixelStyleCreate(RESET,BLACK, BLUE), str);
 
-	    str = StringCreate("And of course you can do the reincarnation to play again!");
+	    str = StringCreate("And of course you can do the reincarnation to play New Game!");
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 18, PixelStyleCreate(RESET,BLACK, YELLOW), str);
 
 	    str = StringCreate("See you & better luck next time!");
