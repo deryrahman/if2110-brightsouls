@@ -1,0 +1,1 @@
+gcc -o main_skill main_skill.c ../src/menus/menu_skill.c ../src/tree.c ../src/skill.c 
