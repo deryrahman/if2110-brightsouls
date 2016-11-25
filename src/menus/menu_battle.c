@@ -23,7 +23,6 @@ void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, i
 void CommandInput(GameState* gameState, Enemy* enemy, Queue *QPlayer, QueueInfoType *Xq);
 String CommandInputShow(Queue QPlayer);
 int CommandBattle(Queue QPlayer, Queue QMusuh);
-// void CommandBox(GameState* gameState, Enemy* enemy, Queue QMusuh, Queue QPlayer, int *irand, int info, int round);
 String EnemyCMD(int *irand, Queue QMusuh);
 void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,int *irand, uint ronde, Enemy* enemy);
 
@@ -46,17 +45,18 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 		Random2Number(irand);
 		// Bikin queue untuk input user
 		QueueCreateEmpty(&QPlayer,4);
+		info=0;
     	while(!QueueIsFull(QPlayer)){
 		    CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy);
 			StringReadln(&str);
 			while (str[0]!='A' && str[0]!='B' && str[0]!='F'){
-		    CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy);
+		    	CommandDisplay(gameState, QPlayer, QMusuh, 15, irand, ronde, enemy);
 				StringReadln(&str);
 			}
 			QueueAdd(&QPlayer,str[0]);
 		    CommandDisplay(gameState, QPlayer, QMusuh, 12, irand, ronde, enemy);
 			StringReadln(&cmd);
-			while(cmd[0] != 'E' && cmd[0] != 'C'){
+			while(cmd[0] != 'E' && cmd[0] != '\0'){
 				CommandDisplay(gameState, QPlayer, QMusuh, 13, irand, ronde, enemy);
 				StringReadln(&cmd);
 			}
@@ -79,13 +79,27 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 				break;
 		}
 		ronde++;
-		CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy);
-		StringReadln(&str);
+		if(player->HP<=0 || enemy->HP<=0){
+			break;
+		} else {
+			CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy);
+			StringReadln(&str);
+		}
 	} while (ronde<ronde_max && player->HP>0 && enemy->HP>0);
 
- 	if (player->HP <= 0) return -1;
-	else if (enemy->HP <= 0) return 1;
-	return 0;
+	int hasil = 0; // 0 draw, 1 menang, -1 kalah
+	if(player->HP<=0){
+		hasil = -1;
+		CommandDisplay(gameState, QPlayer, QMusuh, 9, irand, ronde, enemy);
+	} else if (enemy->HP<=0){
+		hasil = 1;
+		CommandDisplay(gameState, QPlayer, QMusuh, 8, irand, ronde, enemy);
+	} else {
+		CommandDisplay(gameState, QPlayer, QMusuh, 10, irand, ronde, enemy);
+	}
+	StringReadln(&str);
+
+	return hasil;
 }
 
 
@@ -128,42 +142,47 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 5, PixelStyleCreateDefault(), MULTILINE);
     UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(attributeEnemy)), 4, PixelStyleCreateDefault(), attributeEnemy);
 
-    // panel
-    String line1,line2;
-    switch (info) {
-		case 1 : line1=StringCreate("DRAW"); line2=StringCreate(""); break;
-		case 2 : line1=StringCreate("PLAYER Attack! But it's blocked."); line2=StringCreate("HP ENEMY : +"); StringAppendString(&line2,StringFromUint(enemy->DEF/2)); break;
-		case 3 : line1=StringCreate("PLAYER Attack! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint(player->STR+player->STRSKILL)); break;
-		case 4 : line1=StringCreate("ENEMY Attack! But it's blocked."); line2=StringCreate("HP PLAYER : +"); StringAppendString(&line2,StringFromUint((player->DEF+player->DEFSKILL)/2)); break;
-		case 5 : line1=StringCreate("ENEMY Flank! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR*2)); break;
-		case 6 : line1=StringCreate("ENEMY Attack! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR*2));break;
-		case 7 : line1=StringCreate("USER Flank! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint((player->STR+player->STRSKILL)*2)); break;
-		case 8 : line1=StringCreate("CONGRATULATION!"); line2=StringCreate("You Win!"); break;
-		case 9 : line1=StringCreate("GAME OVER!"); line2=StringCreate("Please restart game, or load previous saved game");break;
-		case 10 : line1=StringCreate("DRAW!"); line2=StringCreate("Try again"); break;
-		case 11 : line1=StringCreate("NEXT ROUND!"); line2=StringCreate(""); break;
-		case 12 : line1=StringCreate("Press 'E' to remove previous command or"); line2=StringCreate("'C' to continue.."); break;
-		case 13 : line1=StringCreate("WRONG INPUT! Press 'E' to remove previous command or"); line2=StringCreate("'C' to continue.."); break;
-		case 14 : line1=StringCreate("Remove last command"); line2=StringCreate(""); break;
-		case 15 : line1=StringCreate("WRONG INPUT!"); line2=StringCreate("Available action A, B, F"); break;
-		default : line1=StringCreate("PREPARE YOURSELF, ENEMY IS WATCHING YOU!"); line2=StringCreate("Please insert command.."); break;
-	}
+		    // panel
+		    String line1,line2;
+		    switch (info) {
+				case 1 : line1=StringCreate("DRAW"); line2=StringCreate(""); break;
+				case 2 : line1=StringCreate("PLAYER Attack! But it's blocked."); line2=StringCreate("HP ENEMY : +"); StringAppendString(&line2,StringFromUint(enemy->DEF/2)); break;
+				case 3 : line1=StringCreate("PLAYER Attack! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint(player->STR+player->STRSKILL)); break;
+				case 4 : line1=StringCreate("ENEMY Attack! But it's blocked."); line2=StringCreate("HP PLAYER : +"); StringAppendString(&line2,StringFromUint((player->DEF+player->DEFSKILL)/2)); break;
+				case 5 : line1=StringCreate("ENEMY Flank! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR*2)); break;
+				case 6 : line1=StringCreate("ENEMY Attack! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR*2));break;
+				case 7 : line1=StringCreate("USER Flank! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint((player->STR+player->STRSKILL)*2)); break;
+				case 8 : line1=StringCreate("CONGRATULATION!"); line2=StringCreate("You Win!"); break;
+				case 9 : line1=StringCreate("GAME OVER!"); line2=StringCreate("Please restart game, or load previous saved game");break;
+				case 10 : line1=StringCreate("DRAW!"); line2=StringCreate("Try again"); break;
+				case 11 : line1=StringCreate("NEXT ROUND!"); line2=StringCreate(""); break;
+				case 12 : line1=StringCreate("Press 'E' to remove previous command or"); line2=StringCreate("press anykey to continue.."); break;
+				case 13 : line1=StringCreate("WRONG INPUT!"); line2=StringCreate("Press 'E' to remove previous command or press anykey to continue.."); break;
+				case 14 : line1=StringCreate("Remove last command"); line2=StringCreate(""); break;
+				case 15 : line1=StringCreate("WRONG INPUT!"); line2=StringCreate("Available action A, B, F"); break;
+				default : line1=StringCreate("PREPARE YOURSELF, ENEMY IS WATCHING YOU!"); line2=StringCreate("Please insert command.."); break;
+			}
 
-	if(QueueIsFull(QPlayer)){
-    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 13, PixelStyleCreateDefault(), MULTILINE);
-		UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line1)), 7, PixelStyleCreateDefault(), line1);
-		UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line2)), 9, PixelStyleCreateDefault(), line2);
-		String line3=StringCreate("NEXT ROUND! Press any key to continue..");
-		UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line3)), 11, PixelStyleCreateDefault(), line3);
-    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 15, PixelStyleCreateDefault(), MULTILINE);
-		UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(CommandInputShow(QPlayer))), 14, PixelStyleCreateDefault(), CommandInputShow(QPlayer));
-	} else {
-    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 11, PixelStyleCreateDefault(), MULTILINE);
-		UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line1)), 7, PixelStyleCreateDefault(), line1);
-		UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line2)), 9, PixelStyleCreateDefault(), line2);
-    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 13, PixelStyleCreateDefault(), MULTILINE);
-		UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(CommandInputShow(QPlayer))), 12, PixelStyleCreateDefault(), CommandInputShow(QPlayer));
-	}
+			if(QueueIsFull(QPlayer) && info!=12 && info!=13){
+		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 13, PixelStyleCreateDefault(), MULTILINE);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line1)), 7, PixelStyleCreateDefault(), line1);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line2)), 9, PixelStyleCreateDefault(), line2);
+				String line3;
+				if(info==8 || info==9 || info==10){
+					line3=StringCreate("Press any key to continue..");
+				} else {
+					line3=StringCreate("NEXT ROUND! Press any key to continue..");
+				}
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line3)), 11, PixelStyleCreateDefault(), line3);
+		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 15, PixelStyleCreateDefault(), MULTILINE);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(CommandInputShow(QPlayer))), 14, PixelStyleCreateDefault(), CommandInputShow(QPlayer));
+			} else {
+		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 11, PixelStyleCreateDefault(), MULTILINE);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line1)), 7, PixelStyleCreateDefault(), line1);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line2)), 9, PixelStyleCreateDefault(), line2);
+		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 13, PixelStyleCreateDefault(), MULTILINE);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(CommandInputShow(QPlayer))), 12, PixelStyleCreateDefault(), CommandInputShow(QPlayer));
+			}
 
     TerminalRender(*terminal);
 }
