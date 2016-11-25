@@ -156,7 +156,7 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
 				case 9 : line1=StringCreate("GAME OVER!"); line2=StringCreate("Please restart game, or load previous saved game");break;
 				case 10 : line1=StringCreate("DRAW!"); line2=StringCreate("Try again"); break;
 				case 11 : line1=StringCreate("NEXT ROUND!"); line2=StringCreate(""); break;
-				case 12 : line1=StringCreate("Press 'E' to remove previous command or"); line2=StringCreate("'C' to continue.."); break;
+				case 12 : line1=StringCreate("Press 'E' to remove previous command or"); line2=StringCreate("press anykey to continue.."); break;
 				case 13 : line1=StringCreate("WRONG INPUT!"); line2=StringCreate("Press 'E' to remove previous command or press anykey to continue.."); break;
 				case 14 : line1=StringCreate("Remove last command"); line2=StringCreate(""); break;
 				case 15 : line1=StringCreate("WRONG INPUT!"); line2=StringCreate("Available action A, B, F"); break;
