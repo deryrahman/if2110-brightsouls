@@ -36,26 +36,26 @@ void SplashScreenShow(GameState* gameState) {
         UIDrawImage(*terminal, 4, 3, mainmenuImage);
         fclose(fileI);
     }
-    str = StringCreate("Please do remember that every command that you type MUST end with enter.");
+    str = StringCreate("> Please do remember that every command that you type MUST end with enter.");
     UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 6, PixelStyleCreateDefault(), str);
 
-    str = StringCreate("You can choose the menu options by pressing the up, down, left, or right button in your keyboard.");
+    str = StringCreate("> You can choose the menu options by pressing the up, down, left, or right button in your keyboard.");
     UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 8, PixelStyleCreateDefault(), str);
 
-    str = StringCreate("When you are looking for you enemy or medicine, you can press the up, down, left, or right button too to move.");
+    str = StringCreate("> When you are looking for you enemy or medicine, you can press the up, down, left, or right button too to move.");
     UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 10, PixelStyleCreateDefault(), str);
 
-    str = StringCreate("When you are in the battle mode, you can type 'A' to attack, 'B' to defense, or 'F' to flank.");
+    str = StringCreate("> When you are in the battle mode, you can type 'A' to attack, 'B' to defense, or 'F' to flank.");
     UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 12, PixelStyleCreateDefault(), str);
 
-    str = StringCreate("Should you not be sure you can continue the game or not, you can save it by typing 'Load'");
+    str = StringCreate("> If you are not sure whether you can continue the game or not, you can save it by typing 'Load Game'");
     UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 14, PixelStyleCreateDefault(), str);
 
     str = StringCreate("Now, you are ready to play!");
-    UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 16, PixelStyleCreateDefault(), str);
+    UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 18, PixelStyleCreateDefault(), str);
 
     str = StringCreate("Press enter to continue...");
-    UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 18, PixelStyleCreateDefault(), str);
+    UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 20, PixelStyleCreateDefault(), str);
 
     TerminalRender(*terminal);
     str = StringCreate("");

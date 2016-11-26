@@ -13,7 +13,7 @@ void EndGameShow (GameState* gameState, boolean win) {
 
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 
-    if (win) {
+    if (!win) {
 	    /* Membaca file yang berisi text untuk kasus menang */
 	    FILE *file = fopen("res/win.img","r");
 	    Image mainmenuImage;
@@ -25,7 +25,7 @@ void EndGameShow (GameState* gameState, boolean win) {
 
 	 	String str = StringCreate("Your HP : ");
 	 	StringAppendString(&str,StringFromUint(player->HP));
-	 	UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 14, PixelStyleCreateDefault(), str);
+	 	UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 14, PixelStyleCreate(RESET, BLACK, GREEN), str);
 
 		str = StringCreate("Your Defense : ");
 		StringAppendString(&str,StringFromUint(player->DEF));
@@ -35,8 +35,48 @@ void EndGameShow (GameState* gameState, boolean win) {
 	    StringAppendString(&str,StringFromUint(player->STR));
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 18, PixelStyleCreate(RESET,BLACK, YELLOW), str);
 
-	    str = StringCreate("We heard that you are a great player, so let's fight again!");
+	    str = StringCreate("YOU DA REAL MVP!");
 	    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(str)), ImageHeight(mainmenuImage) + 20, PixelStyleCreate(RESET,BLACK, GREEN), str);
+
+    	TerminalRender(*terminal);
+		str = StringCreate("");
+    	StringReadln(&str);
+
+
+	    Terminal *terminalCre = gameState->terminal;
+   		TerminalClear(*terminalCre);
+    	UIDrawBoxLine(*terminalCre, 1, 1, TerminalGetWidth(*terminalCre) - 2, TerminalGetHeight(*terminalCre) - 2, PixelStyleCreateDefault(), MULTILINE);
+
+
+	    FILE *fileCre = fopen("res/brightsouls.img","r");
+	    if(fileCre) {
+	        mainmenuImage = ImageCreateFromFile(fileCre, PixelStyleCreateDefault());
+	        UIDrawImage(*terminalCre, TerminalGetCenterX(*terminalCre, ImageWidth(mainmenuImage)), 5, mainmenuImage);
+	        fclose(fileCre);
+	    }
+
+	    str = StringCreate("Developed by Low-Profiled Team");
+	    UIDrawText(*terminalCre,TerminalGetCenterX(*terminalCre, StringLength(str)), ImageHeight(mainmenuImage) + 8, PixelStyleCreateDefault(), str);
+
+	    str = StringCreate("[Level Design]");
+	    UIDrawText(*terminalCre,TerminalGetCenterX(*terminalCre, StringLength(str)), ImageHeight(mainmenuImage) + 12, PixelStyleCreateDefault(), str);
+
+ 		str = StringCreate("Iano");
+	    UIDrawText(*terminalCre,TerminalGetCenterX(*terminalCre, StringLength(str)), ImageHeight(mainmenuImage) + 13, PixelStyleCreateDefault(), str);
+
+ 		str = StringCreate("Jauhar");
+	    UIDrawText(*terminalCre,TerminalGetCenterX(*terminalCre, StringLength(str)), ImageHeight(mainmenuImage) + 14, PixelStyleCreateDefault(), str);
+
+ 		str = StringCreate("[Storyline & Menu Design]");
+	    UIDrawText(*terminalCre,TerminalGetCenterX(*terminalCre, StringLength(str)), ImageHeight(mainmenuImage) + 16, PixelStyleCreateDefault(), str);
+
+ 		str = StringCreate("Yesa");
+	    UIDrawText(*terminalCre,TerminalGetCenterX(*terminalCre, StringLength(str)), ImageHeight(mainmenuImage) + 17, PixelStyleCreateDefault(), str);
+
+	    TerminalRender(*terminalCre);
+		str = StringCreate("");
+    	StringReadln(&str);
+
     }
     else {
 	    /* Membaca file yang berisi text untuk kasus kalah */
