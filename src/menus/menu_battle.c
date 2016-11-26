@@ -123,9 +123,12 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
     String attLVL=StringCreate(" | LVL : ");
     StringAppendString(&attributePlayer,attLVL);
     StringAppendString(&attributePlayer,StringFromUint(player->LVL));
-    String attHP=StringCreate(" | HP : ");
+    String attHP=StringCreate(" | HP/MAXHP : ");
     StringAppendString(&attributePlayer,attHP);
     StringAppendString(&attributePlayer,StringFromUint((uint) player->HP));
+    String attSLSH=StringCreate("/");
+    StringAppendString(&attributePlayer,attSLSH);
+    StringAppendString(&attributePlayer,StringFromUint((uint) player->MAXHP));
     String attSTR=StringCreate(" | STR : ");
     StringAppendString(&attributePlayer,attSTR);
     StringAppendString(&attributePlayer,StringFromUint(player->STR));
@@ -138,9 +141,11 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
 
     String attributeEnemy=StringCreate("ENEMY : ");
     StringAppendString(&attributeEnemy,enemy->name);
-    attHP=StringCreate(" | HP : ");
+    attHP=StringCreate(" | HP/MAXHP : ");
     StringAppendString(&attributeEnemy,attHP);
     StringAppendString(&attributeEnemy,StringFromUint((uint) enemy->HP));
+    StringAppendString(&attributeEnemy,attSLSH);
+    StringAppendString(&attributeEnemy,StringFromUint((uint) enemy->MAXHP));
     String attCMD=StringCreate(" | Command : ");
     StringAppendString(&attributeEnemy,attCMD);
     StringAppendString(&attributeEnemy,EnemyCMD(irand,QMusuh));
