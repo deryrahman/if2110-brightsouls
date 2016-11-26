@@ -10,25 +10,24 @@
 #include "queue.h"
 #include "xstring.h"
 #include <stdio.h>
-#include <wchar.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
 
-Queue RandomAction();
-void CetakQ(Queue Q);
-Stack QueueToStack(Queue Q);
+//Queue RandomAction();
+Queue StackToQueue(Stack S);
+Stack LoadActionFromFile(String path, int line);
 void Random2Number(int *irand);
 void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, int DEF, int EDEF, int *HP, int *EHP, int info);
-void CommandInput(GameState* gameState, Enemy* enemy, Queue *QPlayer, QueueInfoType *Xq);
-String CommandInputShow(Queue QPlayer);
-int CommandBattle(Queue QPlayer, Queue QMusuh);
-String EnemyCMD(int *irand, Queue QMusuh);
 void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,int *irand, uint ronde, Enemy* enemy);
+int CommandBattle(Queue QPlayer, Queue QMusuh);
+String CommandInputShow(Queue QPlayer);
+String EnemyCMD(int *irand, Queue QMusuh);
 
 int BattleMenuShow (GameState* gameState, Enemy* enemy){
 	Player* player = gameState->player;
 
+	Stack SMusuh;
 	QueueInfoType Xq;
 	Queue QPlayer;
 	Queue QMusuh;
@@ -38,10 +37,17 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 	String str = StringCreate("");
 	String cmd = StringCreate("");
 	String Jmp=StringCreate("JUMP");
+	String path[2];
+	path[0]=StringCreate("res/random1.action");
+	path[1]=StringCreate("res/random2.action");
+	int i=rand()%2;
 
 	do{
 		// Bikin queue pergerakan musuh
-		QMusuh = RandomAction();
+		srand(time(NULL));
+		int line=rand() % 10;
+		SMusuh=LoadActionFromFile(path[i], line);
+		QMusuh = StackToQueue(SMusuh);
 		// Ambil 2 elemen dalam stack secara random untuk hidden tampilan aksi musuh
 		Random2Number(irand);
 		// Bikin queue untuk input user
@@ -197,6 +203,7 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
     TerminalRender(*terminal);
 }
 
+/*
 Queue RandomAction(){
 	Queue Q;
 	QueueInfoType Xq;
@@ -214,24 +221,37 @@ Queue RandomAction(){
 	}
 	return Q;
 }
+*/
 
-void CetakQ(Queue Q){
-	while(!QueueIsEmpty(Q)){
-		char Xq;
-		QueueDel(&Q,&Xq);
-		wprintf(L"%c", Xq);
+Queue StackToQueue(Stack S){
+	Queue Q;
+	QueueInfoType Xq;
+	QueueCreateEmpty(&Q,4);
+	while(!StackIsEmpty(S)){
+		StackPop(&S,&Xq);
+		QueueAdd(&Q,Xq);
 	}
+	return Q;
 }
-
-Stack QueueToStack(Queue Q){
-	Stack S;
+Stack LoadActionFromFile(String path, int line) {
+	FILE *file = fopen(path, "r");
+	Stack Sout;
 	StackInfoType Xs;
-	StackCreateEmpty(&S);
-	while(!QueueIsEmpty(Q)){
-		QueueDel(&Q,&Xs);
-		StackPush(&S,Xs);
+	String S=StringCreate("");
+	StackCreateEmpty(&Sout);
+	if (file) {
+		while(line--){
+			StringFreadln(&S, file);
+		}
+		StringFreadln(&S, file);
+
+		int i=3;
+		do{
+			Xs=S[i];
+			StackPush(&Sout,Xs);
+		} while (i--);
 	}
-	return S;
+	return Sout;
 }
 
 void Random2Number(int *irand){
@@ -249,49 +269,20 @@ void Random2Number(int *irand){
 		irand[0]=SwapTemp;
 	}
 }
-String EnemyCMD(int *irand, Queue QMusuh){
-	String str=StringCreate("");
-	int i=0;
-	QueueInfoType Xq;
-	while(i<4){
-		QueueDel(&QMusuh,&Xq);
-		if(irand[0]==i || irand[1]==i){
-			StringAppendChar(&str,'#');
-		} else {
-			StringAppendChar(&str,Xq);
-		}
-		i++;
+
+void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, int DEF, int EDEF, int *HP, int *EHP, int info){
+	switch (info){
+		case 2 : *EHP+=(EDEF/2); break;
+		case 3 : *EHP-=(STR); break;
+		case 4 : *HP+=(DEF/2); break;
+		case 5 : *HP-=(ESTR*2); break;
+		case 6 : *HP-=(ESTR); break;
+		case 7 : *EHP-=(STR*2); break;
 	}
-	return str;
+	*EHP=(*EHP>enemy->MAXHP)?enemy->MAXHP:*EHP;
+	*HP=(*HP>gameState->player->MAXHP)?gameState->player->MAXHP:*HP;
 }
 
-void CommandInput(GameState* gameState, Enemy* enemy, Queue *QPlayer, QueueInfoType *Xq){
-	String cmd = StringCreate("");
-	wprintf(L"| ");
-	StringReadln(&cmd);
-	*Xq = cmd[0];
-	while (*Xq!='A' && *Xq!='B' && *Xq!='F'){
-		wprintf(L"| ");
-		wprintf(L"WRONG INPUT! ");
-		StringReadln(&cmd);
-		*Xq = cmd[0];
-	}
-	QueueAdd(QPlayer,*Xq);
-}
-String CommandInputShow(Queue QPlayer){
-	String str=StringCreate("Inserted Commands : ");
-	int count=4;
-	while(!QueueIsEmpty(QPlayer)){
-		char Xq;
-		QueueDel(&QPlayer,&Xq);
-		StringAppendChar(&str,Xq);
-		count--;
-	}
-	while(count--){
-		StringAppendChar(&str,'_');
-	}
-	return str;
-}
 int CommandBattle(Queue QPlayer, Queue QMusuh){
 	QueueInfoType X1,X2;
 	while(!QueueIsEmpty(QPlayer) && QueueNBElmt(QPlayer)!=1){
@@ -325,22 +316,34 @@ int CommandBattle(Queue QPlayer, Queue QMusuh){
 
 	return 0;
 }
-// void CommandBox(GameState* gameState, Enemy* enemy, Queue QMusuh, Queue QPlayer, int *irand, int info, int round){
-// 	system("clear");
-// 	CommandHeader(gameState, enemy, irand,QMusuh,round);
-// 	CommandPanel(gameState, enemy, info);
-// 	CommandInputShow(gameState, enemy, QPlayer);wprintf(L"\n");
-// }
 
-void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, int DEF, int EDEF, int *HP, int *EHP, int info){
-	switch (info){
-		case 2 : *EHP+=(EDEF/2); break;
-		case 3 : *EHP-=(STR); break;
-		case 4 : *HP+=(DEF/2); break;
-		case 5 : *HP-=(ESTR*2); break;
-		case 6 : *HP-=(ESTR); break;
-		case 7 : *EHP-=(STR*2); break;
+String EnemyCMD(int *irand, Queue QMusuh){
+	String str=StringCreate("");
+	int i=0;
+	QueueInfoType Xq;
+	while(i<4){
+		QueueDel(&QMusuh,&Xq);
+		if(irand[0]==i || irand[1]==i){
+			StringAppendChar(&str,'#');
+		} else {
+			StringAppendChar(&str,Xq);
+		}
+		i++;
 	}
-	*EHP=(*EHP>enemy->MAXHP)?enemy->MAXHP:*EHP;
-	*HP=(*HP>gameState->player->MAXHP)?gameState->player->MAXHP:*HP;
+	return str;
+}
+
+String CommandInputShow(Queue QPlayer){
+	String str=StringCreate("Inserted Commands : ");
+	int count=4;
+	while(!QueueIsEmpty(QPlayer)){
+		char Xq;
+		QueueDel(&QPlayer,&Xq);
+		StringAppendChar(&str,Xq);
+		count--;
+	}
+	while(count--){
+		StringAppendChar(&str,'_');
+	}
+	return str;
 }
