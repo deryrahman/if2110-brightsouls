@@ -37,6 +37,7 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 	uint ronde_max=10,ronde=1;
 	String str = StringCreate("");
 	String cmd = StringCreate("");
+	String Jmp=StringCreate("JUMP");
 
 	do{
 		// Bikin queue pergerakan musuh
@@ -49,9 +50,12 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
     	while(!QueueIsFull(QPlayer)){
 		    CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy);
 			StringReadln(&str);
-			while (str[0]!='A' && str[0]!='B' && str[0]!='F'){
+			while (str[0]!='A' && str[0]!='B' && str[0]!='F' && !StringEquals(Jmp,str)){
 		    	CommandDisplay(gameState, QPlayer, QMusuh, 15, irand, ronde, enemy);
 				StringReadln(&str);
+			}
+			if(StringEquals(Jmp,str)){
+				break;
 			}
 			QueueAdd(&QPlayer,str[0]);
 		    CommandDisplay(gameState, QPlayer, QMusuh, 12, irand, ronde, enemy);
@@ -79,7 +83,7 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 				break;
 		}
 		ronde++;
-		if(player->HP<=0 || enemy->HP<=0){
+		if(player->HP<=0 || enemy->HP<=0 || StringEquals(Jmp,str)){
 			break;
 		} else {
 			CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy);
@@ -91,7 +95,7 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 	if(player->HP<=0){
 		hasil = -1;
 		CommandDisplay(gameState, QPlayer, QMusuh, 9, irand, ronde, enemy);
-	} else if (enemy->HP<=0){
+	} else if (enemy->HP<=0 || StringEquals(Jmp,str)){
 		hasil = 1;
 		CommandDisplay(gameState, QPlayer, QMusuh, 8, irand, ronde, enemy);
 	} else {
@@ -136,11 +140,17 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
     StringAppendString(&attributeEnemy,EnemyCMD(irand,QMusuh));
 
     // header
-    UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 3, PixelStyleCreateDefault(), MULTILINE);
-    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(attributePlayer)), 2, PixelStyleCreateDefault(), attributePlayer);
+    int HPBar=(player->HP)*(TerminalGetWidth(*terminal) - 2)/(player->MAXHP);
+    int EHPBar=(enemy->HP)*(TerminalGetWidth(*terminal) - 2)/(enemy->MAXHP);
+    UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 3, PixelStyleCreateDefault(), THICKLINE);
+    UIDrawBoxLine(*terminal, 1, 2, HPBar, 1, PixelStyleCreate(RESET,WHITE,WHITE), THICKLINE);
+    UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 5, PixelStyleCreateDefault(), THICKLINE);
+    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(attributePlayer)), 4, PixelStyleCreateDefault(), attributePlayer);
 
-    UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 5, PixelStyleCreateDefault(), MULTILINE);
-    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(attributeEnemy)), 4, PixelStyleCreateDefault(), attributeEnemy);
+    UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 7, PixelStyleCreateDefault(), THICKLINE);
+    UIDrawBoxLine(*terminal, 1, 6, EHPBar, 1, PixelStyleCreate(RESET,WHITE,WHITE), THICKLINE);
+    UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 9, PixelStyleCreateDefault(), THICKLINE);
+    UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(attributeEnemy)), 8, PixelStyleCreateDefault(), attributeEnemy);
 
 		    // panel
 		    String line1,line2;
@@ -164,24 +174,24 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
 			}
 
 			if(QueueIsFull(QPlayer) && info!=12 && info!=13){
-		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 13, PixelStyleCreateDefault(), MULTILINE);
-				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line1)), 7, PixelStyleCreateDefault(), line1);
-				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line2)), 9, PixelStyleCreateDefault(), line2);
+		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 17, PixelStyleCreateDefault(), THICKLINE);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line1)), 11, PixelStyleCreateDefault(), line1);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line2)), 13, PixelStyleCreateDefault(), line2);
 				String line3;
 				if(info==8 || info==9 || info==10){
 					line3=StringCreate("Press any key to continue..");
 				} else {
 					line3=StringCreate("NEXT ROUND! Press any key to continue..");
 				}
-				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line3)), 11, PixelStyleCreateDefault(), line3);
-		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 15, PixelStyleCreateDefault(), MULTILINE);
-				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(CommandInputShow(QPlayer))), 14, PixelStyleCreateDefault(), CommandInputShow(QPlayer));
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line3)), 15, PixelStyleCreateDefault(), line3);
+		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 19, PixelStyleCreateDefault(), THICKLINE);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(CommandInputShow(QPlayer))), 18, PixelStyleCreateDefault(), CommandInputShow(QPlayer));
 			} else {
-		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 11, PixelStyleCreateDefault(), MULTILINE);
-				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line1)), 7, PixelStyleCreateDefault(), line1);
-				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line2)), 9, PixelStyleCreateDefault(), line2);
-		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 13, PixelStyleCreateDefault(), MULTILINE);
-				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(CommandInputShow(QPlayer))), 12, PixelStyleCreateDefault(), CommandInputShow(QPlayer));
+		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 15, PixelStyleCreateDefault(), THICKLINE);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line1)), 11, PixelStyleCreateDefault(), line1);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line2)), 13, PixelStyleCreateDefault(), line2);
+		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 17, PixelStyleCreateDefault(), THICKLINE);
+				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(CommandInputShow(QPlayer))), 16, PixelStyleCreateDefault(), CommandInputShow(QPlayer));
 			}
 
     TerminalRender(*terminal);

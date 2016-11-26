@@ -81,40 +81,34 @@ void showMapMenuInformation(GameState *gameState, String status) {
         2 * (gameState->currentMap->map.width) +4, gameState->currentMap->map.height+2,
         PixelStyleCreateDefault(), THICKLINE);
 
-    UIDrawBox(*(gameState->terminal), 3, 3, 50, 5,
-        PixelCreateDefault(0x250f), PixelCreateDefault(0x2513),
-        PixelCreateDefault(0x251b), PixelCreateDefault(0x2517),
-        PixelCreateDefault(0x2501), PixelCreateDefault(0x2503),
-        PixelCreateDefault(0x2501), PixelCreateDefault(0x2503));
-    UIDrawBox(*(gameState->terminal), 3, 7, 50, 17,
-        PixelCreateDefault(0x2523), PixelCreateDefault(0x252b),
-        PixelCreateDefault(0x251b), PixelCreateDefault(0x2517),
-        PixelCreateDefault(0x2501), PixelCreateDefault(0x2503),
-        PixelCreateDefault(0x2501), PixelCreateDefault(0x2503));
-
     if (status)
         UIDrawText(*(gameState->terminal), TerminalGetCenterX(*gameState->terminal,StringLength(status)), TerminalGetHeight(*gameState->terminal) - 5, PixelStyleCreateDefault(), status);
 
-    UIDrawText(*(gameState->terminal), 20, 5, PixelStyleCreateDefault(), StringCreate("Player Information"));
-    UIDrawVLine(*(gameState->terminal), 18, 7, 17, PixelCreateDefault(0x2533), PixelCreateDefault(0x253b), PixelCreateDefault(0x2503));
+    uint left = TerminalGetCenterX(*gameState->terminal,MapWidth(gameState->currentMap->map)) - 55;
+    uint top = TerminalGetCenterY(*gameState->terminal,MapHeight(gameState->currentMap->map));
 
-    UIDrawText(*(gameState->terminal), 5, 9, PixelStyleCreateDefault(), StringCreate("Player Name"));
-    UIDrawText(*(gameState->terminal), 20, 9, PixelStyleCreateDefault(), StringCreate(gameState->player->name));
-    UIDrawHLine(*(gameState->terminal), 3, 11, 50, PixelCreateDefault(0x2523), PixelCreateDefault(0x252b), PixelCreateDefault(0x2501));
-    TerminalSet(*(gameState->terminal), 18, 11, PixelCreateDefault(0x254b));
+    UIDrawVLine(*(gameState->terminal), left-2,top - 1, 13, PixelCreateDefault(0x250f),PixelCreateDefault(0x2517),PixelCreateDefault(0x2503));
+    UIDrawVLine(*(gameState->terminal), left+32,top - 1, 13, PixelCreateDefault(0x2513),PixelCreateDefault(0x251b),PixelCreateDefault(0x2503));
 
-    UIDrawText(*(gameState->terminal), 5, 13, PixelStyleCreateDefault(), StringCreate("Player HP"));
-    UIDrawText(*(gameState->terminal), 20, 13, PixelStyleCreateDefault(), StringFromUint(gameState->player->HP));
-    UIDrawHLine(*(gameState->terminal), 3, 15, 50, PixelCreateDefault(0x2523), PixelCreateDefault(0x252b), PixelCreateDefault(0x2501));
-    TerminalSet(*(gameState->terminal), 18, 15, PixelCreateDefault(0x254b));
+    UIDrawHLine(*(gameState->terminal), left-2,top - 1, 35, PixelCreateDefault(0x250f),PixelCreateDefault(0x2513),PixelCreateDefault(0x2501));
+    UIDrawText(*(gameState->terminal), left + 5, top + 1, PixelStyleCreateDefault(), StringCreate("Player Information"));
+    UIDrawHLine(*(gameState->terminal), left-2,top + 3, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
-    UIDrawText(*(gameState->terminal), 5, 17, PixelStyleCreateDefault(), StringCreate("Player STR"));
-    UIDrawText(*(gameState->terminal), 20, 17, PixelStyleCreateDefault(), StringFromUint(gameState->player->STR));
-    UIDrawHLine(*(gameState->terminal), 3, 19, 50, PixelCreateDefault(0x2523), PixelCreateDefault(0x252b), PixelCreateDefault(0x2501));
-    TerminalSet(*(gameState->terminal), 18, 19, PixelCreateDefault(0x254b));
+    UIDrawText(*(gameState->terminal), left, top + 4, PixelStyleCreateDefault(), StringCreate("Player Name"));
+    UIDrawText(*(gameState->terminal), left+13, top + 4, PixelStyleCreateDefault(), StringCreate(gameState->player->name));
+    UIDrawHLine(*(gameState->terminal), left-2,top + 5, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
-    UIDrawText(*(gameState->terminal), 5, 21, PixelStyleCreateDefault(), StringCreate("Player DEF"));
-    UIDrawText(*(gameState->terminal), 20, 21, PixelStyleCreateDefault(), StringFromUint(gameState->player->DEF));
+    UIDrawText(*(gameState->terminal), left, top + 6, PixelStyleCreateDefault(), StringCreate("Player HP"));
+    UIDrawText(*(gameState->terminal), left+13, top + 6, PixelStyleCreateDefault(), StringFromUint(gameState->player->HP));
+    UIDrawHLine(*(gameState->terminal), left-2,top + 7, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
+
+    UIDrawText(*(gameState->terminal), left, top + 8, PixelStyleCreateDefault(), StringCreate("Player STR"));
+    UIDrawText(*(gameState->terminal), left+13, top + 8, PixelStyleCreateDefault(), StringFromUint(gameState->player->STR));
+    UIDrawHLine(*(gameState->terminal), left-2,top + 9, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
+
+    UIDrawText(*(gameState->terminal), left, top + 10, PixelStyleCreateDefault(), StringCreate("Player DEF"));
+    UIDrawText(*(gameState->terminal), left+13, top + 10, PixelStyleCreateDefault(), StringFromUint(gameState->player->DEF));
+    UIDrawHLine(*(gameState->terminal), left-2,top + 11, 35, PixelCreateDefault(0x2517),PixelCreateDefault(0x251b),PixelCreateDefault(0x2501));
 
     TerminalRender(*(gameState->terminal));
 }
@@ -154,7 +148,6 @@ int MapMenuShow(GameState *gameState) {
             return 0;
 
         uint afterMove = MAP_FREE;
-        beforeMove = MAP_FREE;
         if (move) {
             uint nx = gameState->playerPosition.x + mx;
             uint ny = gameState->playerPosition.y + my;
