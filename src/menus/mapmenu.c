@@ -147,6 +147,8 @@ int MapMenuShow(GameState *gameState) {
             status = StringCreate("Game saved!");
         } else if (StringEquals(command, StringCreate("EXIT")))
             return 0;
+        else if(StringEquals(command, StringCreate("SKILL")))
+            SkillMenuShow(gameState);
 
         uint afterMove = MAP_FREE;
         if (move) {
