@@ -13,7 +13,7 @@ void EndGameShow (GameState* gameState, boolean win) {
 
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 
-    if (!win) {
+    if (win) {
 	    /* Membaca file yang berisi text untuk kasus menang */
 	    FILE *file = fopen("res/win.img","r");
 	    Image mainmenuImage;
