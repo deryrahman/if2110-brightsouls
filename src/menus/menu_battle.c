@@ -149,12 +149,25 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
     int HPBar=(player->HP)*(TerminalGetWidth(*terminal) - 2)/(player->MAXHP);
     int EHPBar=(enemy->HP)*(TerminalGetWidth(*terminal) - 2)/(enemy->MAXHP);
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 3, PixelStyleCreateDefault(), THICKLINE);
-    UIDrawBoxLine(*terminal, 1, 2, HPBar, 1, PixelStyleCreate(RESET,WHITE,WHITE), THICKLINE);
+    if (((float)(player->HP)/((float)(player->MAXHP)))>=0.7){
+    	UIDrawBoxLine(*terminal, 1, 2, HPBar, 1, PixelStyleCreate(RESET,GREEN,GREEN), THICKLINE);
+    } else if (((float)(player->HP)/((float)(player->MAXHP)))>0.3){
+    	UIDrawBoxLine(*terminal, 1, 2, HPBar, 1, PixelStyleCreate(RESET,YELLOW,YELLOW), THICKLINE);
+	} else {
+		UIDrawBoxLine(*terminal, 1, 2, HPBar, 1, PixelStyleCreate(RESET,RED,RED), THICKLINE);
+	}
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 5, PixelStyleCreateDefault(), THICKLINE);
     UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(attributePlayer)), 4, PixelStyleCreateDefault(), attributePlayer);
 
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 7, PixelStyleCreateDefault(), THICKLINE);
-    UIDrawBoxLine(*terminal, 1, 6, EHPBar, 1, PixelStyleCreate(RESET,WHITE,WHITE), THICKLINE);
+
+    if (((float)(enemy->HP)/((float)(enemy->MAXHP)))>=0.7){
+    	UIDrawBoxLine(*terminal, 1, 6, EHPBar, 1, PixelStyleCreate(RESET,GREEN,GREEN), THICKLINE);
+    } else if (((float)(enemy->HP)/((float)(enemy->MAXHP)))>0.3){
+    	UIDrawBoxLine(*terminal, 1, 6, EHPBar, 1, PixelStyleCreate(RESET,YELLOW,YELLOW), THICKLINE);
+	} else {
+		UIDrawBoxLine(*terminal, 1, 6, EHPBar, 1, PixelStyleCreate(RESET,RED,RED), THICKLINE);
+	}
     UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 9, PixelStyleCreateDefault(), THICKLINE);
     UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(attributeEnemy)), 8, PixelStyleCreateDefault(), attributeEnemy);
 
