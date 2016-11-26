@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "xstring.h"
 #include "player.h"
-#include "player.h"
+#include <math.h>
 
 
 /* Author
@@ -279,5 +279,11 @@ void PlayerGetPotion(Player* player){
 	(*player).HP += (5+rand() % 5);
 	if ((*player).HP > (*player).MAXHP){
 		(*player).HP = (*player).MAXHP;
+	}
+}
+
+boolean IsLevelUp(Player* player){
+	if (player->EXP >= pow(2,(*player).LVL)){
+		return true;
 	}
 }
