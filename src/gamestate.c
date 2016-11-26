@@ -28,7 +28,7 @@ void GameStateSave(GameState* gameState) {
 
 boolean GameStateLoad(GameState* gameState) {
     gameState->player = LoadPlayerFromFile("savefile/player");
-    gameState->currentMap = MapLoadNodeFromFile("savefile/map");
+    gameState->currentMap = MapLoadNodeFromFile("savefile/map", &(gameState->nMap));
 
     if (gameState->player == NULL || gameState->currentMap == NULL) {
         gameState->player = NULL;

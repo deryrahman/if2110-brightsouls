@@ -170,9 +170,9 @@ int StringFreadln(String *str, FILE *f) {
 	StringResize(str, 0);
 
 	char x;
-	for (x = 1; x != '\n' && x != '\r' && x != EOF;) {
+	for (x = 1; x != '\n' && x != '\r' && x != 0 && x != EOF;) {
 		x = (char) fgetc(f);
-		if (x != '\n' && x != '\r' && x != EOF)
+		if (x != '\n' && x != '\r' && x != 0 && x != EOF)
 			StringAppendChar(str, x);
 	}
 
