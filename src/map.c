@@ -65,7 +65,12 @@ void MapFillFromFile(Map *map, FILE *file) {
         String str = StringCreate("");
         uint y = 0;
         StringFreadln(&str, file);
-        while (StringLength(str) > 0 && !feof(file)) {
+        while (!feof(file)) {
+            if (StringLength(str) == 0) {
+                StringFreadln(&str, file);
+                continue;
+            }
+
             String key = StringCreate("");
             uint value = 0;
             uint value2 = 0;
@@ -133,7 +138,7 @@ void MapFillFromFile(Map *map, FILE *file) {
     }
 }
 
-MapNode* MapLoadNodeFromFile(String filename) {
+MapNode* MapLoadNodeFromFile(String filename, uint *count) {
     MapNode* arr = (MapNode*) malloc(26 * sizeof(MapNode));
     int i; for (i = 0; i < 26; i++) arr[i].left = arr[i].right = arr[i].top = arr[i].bottom = NULL;
     FILE* file = fopen(filename, "r");
@@ -145,6 +150,7 @@ MapNode* MapLoadNodeFromFile(String filename) {
     while (!feof(file)) {
         Map m = MapCreateEmpty();
         MapFillFromFile(&m, file);
+        if (count != NULL) *count += 1;
         String str = StringCreate("");
 
         StringFreadln(&str, file);
@@ -161,9 +167,13 @@ MapNode* MapLoadNodeFromFile(String filename) {
 
             val = StringToUint(value);
 
-            if (StringEquals(key, StringCreate("id")))
-                id = val, arr[val].map = m, ret_id = ret_id ? ret_id : id;
-            else if (StringEquals(key, StringCreate("left")))
+            if (StringEquals(key, StringCreate("id"))) {
+                id = val;
+                arr[val].id = id;
+                arr[val].map = m;
+                if (ret_id == 0)
+                    ret_id = id;
+            }else if (StringEquals(key, StringCreate("left")))
                 arr[id].left = &arr[val], arr[val].right = &arr[id];
             else if (StringEquals(key, StringCreate("right")))
                 arr[id].right = &arr[val], arr[val].left = &arr[id];
@@ -175,7 +185,7 @@ MapNode* MapLoadNodeFromFile(String filename) {
             StringFreadln(&str, file);
         }
     }
-    return (arr+ret_id);
+    return (&arr[ret_id]);
 }
 
 String MapToString(MapNode map) {
@@ -185,7 +195,7 @@ String MapToString(MapNode map) {
     StringAppendChar(&str, '\n');
 
     StringAppendString(&str, StringCreate("height="));
-    StringAppendString(&str, StringFromUint(map.map.width));
+    StringAppendString(&str, StringFromUint(map.map.height));
     StringAppendChar(&str, '\n');
 
     StringAppendString(&str, StringCreate("startRight="));
@@ -205,9 +215,9 @@ String MapToString(MapNode map) {
     StringAppendChar(&str, '\n');
 
     StringAppendString(&str, StringCreate("startCenter="));
-    StringAppendString(&str, StringFromUint(map.map.startTop.x));
+    StringAppendString(&str, StringFromUint(map.map.startCenter.x));
     StringAppendChar(&str, ',');
-    StringAppendString(&str, StringFromUint(map.map.startTop.y));
+    StringAppendString(&str, StringFromUint(map.map.startCenter.y));
     StringAppendChar(&str, '\n');
 
     uint i;
@@ -230,7 +240,7 @@ String MapToString(MapNode map) {
         StringAppendChar(&str,'\n');
     }
 
-    StringAppendString(&str, StringCreate("id="));
+    StringAppendString(&str, StringCreate(".\nid="));
     StringAppendString(&str, StringFromUint(map.id));
     StringAppendChar(&str, '\n');
 

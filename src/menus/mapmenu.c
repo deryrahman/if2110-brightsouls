@@ -75,10 +75,10 @@ void showMapMenuInformation(GameState *gameState, String status) {
     UIDrawText(*(gameState->terminal), TerminalGetCenterX(*gameState->terminal,StringLength(tmp)), 5, PixelStyleCreateDefault(), tmp);
 
     MapPutOnTerminal(gameState->currentMap->map, *(gameState->terminal),
-        TerminalGetCenterX(*(gameState->terminal), 2*gameState->currentMap->map.width) , TerminalGetCenterY(*gameState->terminal,gameState->currentMap->map.width));
+        TerminalGetCenterX(*(gameState->terminal), 2*gameState->currentMap->map.width) , TerminalGetCenterY(*gameState->terminal,gameState->currentMap->map.height));
     UIDrawBoxLine(*gameState->terminal,
-        TerminalGetCenterX(*gameState->terminal, 2*gameState->currentMap->map.width) - 2, TerminalGetCenterY(*gameState->terminal,gameState->currentMap->map.height)-1,
-        2 * (gameState->currentMap->map.width) +4, gameState->currentMap->map.height+2,
+        TerminalGetCenterX(*gameState->terminal, 2*gameState->currentMap->map.width) - 2, TerminalGetCenterY(*gameState->terminal,gameState->currentMap->map.height+2),
+        2 * (gameState->currentMap->map.width) +4, gameState->currentMap->map.height + 2,
         PixelStyleCreateDefault(), THICKLINE);
 
     if (status)
@@ -115,8 +115,9 @@ void showMapMenuInformation(GameState *gameState, String status) {
 
 int MapMenuShow(GameState *gameState) {
     if (!gameState->currentMap) {
+        gameState->nMap = 0;
         gameState->currentMap = getRandomMap();
-        gameState->nMap = 1;
+        gameState->currentMap->id = ++(gameState->nMap);
         gameState->playerPosition = gameState->currentMap->map.startCenter;
     }
     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, MAP_PLAYER);
