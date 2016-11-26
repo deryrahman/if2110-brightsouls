@@ -1,1 +1,0 @@
-HP: 1 | MAXHP:20 | STR: 1 | DEF: 1 | LVL: 1 | SP: 0 |
