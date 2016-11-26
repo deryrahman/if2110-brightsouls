@@ -287,3 +287,45 @@ boolean IsLevelUp(Player* player){
 		return true;
 	}
 }
+
+int EnemyRNGMaxHP(int level){
+	if (level == 1){
+	 	return 10;
+	 }else{
+	 	int RandHP = (rand() % 3);
+	 	if (RandHP == 0){
+	 		return (level-1)*10; 
+	 	}else if (RandHP == 1){
+	 		return level*10;
+	 	}else{
+	 		return (level+1)*10;
+	 	}
+	 }
+}
+
+int EnemyRNGStats(int level){
+	if (level == 1){
+	 	return 1;
+	 }else{
+	 	int RandHP = (rand() % 3);
+	 	if (RandHP == 0){
+	 		return level-1; 
+	 	}else if (RandHP == 1){
+	 		return level;
+	 	}else{
+	 		return level+1;
+	 	}
+	 }
+}
+
+void LoadMaxHPMusuh(Player* enemy){
+	 enemy->MAXHP = EnemyRNGMaxHP(enemy->LVL);
+}
+
+void LoadSTRMusuh(Player* enemy){
+	 enemy->STR = EnemyRNGStats(enemy->LVL);
+}
+
+void LoadDEFMusuh(Player* enemy){
+	 enemy->DEF = EnemyRNGStats(enemy->LVL);
+}

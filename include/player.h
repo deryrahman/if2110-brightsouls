@@ -87,4 +87,18 @@ void LevelUp(String filename, Player* player);
   F.S. = File berisikan stats baru: Level naik 1, Stats naik  , SP naik*/
 
 void PlayerGetPotion(Player* player);
+
+void LoadMaxHPMusuh(Player* enemy);
+
+boolean IsLevelUp(Player* player);
+
+int EnemyRNGMaxHP(int level);
+
+int EnemyRNGStats(int level);
+
+void LoadMaxHPMusuh(Player* enemy);
+
+void LoadSTRMusuh(Player* enemy);
+
+void LoadDEFMusuh(Player* enemy);
 #endif
