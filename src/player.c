@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "xstring.h"
 #include "player.h"
+#include "tree.h"
 #include <math.h>
 
 
@@ -242,8 +243,8 @@ Player* LoadPlayerFromFile(String path) {
 		player->LVL = loadLVL(file, pos, &pos);
 		player->SP = loadSP(file, pos, &pos);
 		player->EXP = loadEXP(file, pos, &pos);
-		player->STRSKILL = 0;
-		player->DEFSKILL = 0;
+		player->STRSKILL = loadSTRSKILL(player->EXP);
+		player->DEFSKILL = loadDEFSKILL(player->EXP);
 		return player;
 	} else
 		return NULL;
@@ -329,4 +330,16 @@ void LoadSTRMusuh(Enemy* enemy){
 
 void LoadDEFMusuh(Enemy* enemy){
 	 enemy->DEF = EnemyRNGStats(enemy->LVL);
+}
+
+int loadSTRSKILL(int EXP){
+	Tree P;
+	LoadSkill(&P,EXP);
+	return (int) SkillTotalAttack(P);
+}
+
+int loadDEFSKILL(int EXP){
+	Tree P;
+	LoadSkill(&P,EXP);
+	return (int) SkillTotalDeffense(P);
 }
