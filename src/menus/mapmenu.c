@@ -167,6 +167,20 @@ int MapMenuShow(GameState *gameState) {
             return 0;
         else if(StringEquals(command, StringCreate("SKILL")))
             SkillMenuShow(gameState);
+        else {
+            char* c = (char*) malloc(100);
+            int val;
+            sscanf(command, "%s %d", c, &val);
+            String cmd = StringCreate(c);
+            free(c);
+
+            if (StringEquals(cmd, StringCreate("HP")))
+                gameState->player->HP = max(0, min(gameState->player->MAXHP, (int) gameState->player->HP + val));
+            else if (StringEquals(cmd, StringCreate("EXP")))
+                gameState->player->EXP = max(0, (int) gameState->player->EXP + val);
+            else if (StringEquals(cmd, StringCreate("MAXHP")))
+                gameState->player->MAXHP = max(0, val);
+        }
 
         uint afterMove = MAP_FREE;
         if (move) {
@@ -244,22 +258,10 @@ int MapMenuShow(GameState *gameState) {
                 if (result == 0)
                     status = StringCreate("It's a draw");
                 else if (result == 1) {
-
                     status = StringCreate("You win! You get ");
                     StringAppendString(&status, StringFromUint(enemy->EXP));
                     StringAppendString(&status, StringCreate(" EXP"));
                     gameState->player->EXP += enemy->EXP;
-
-                    if (IsLevelUp(gameState->player))
-                        showMapMenuInformation(gameState, status), getCommand();
-
-                    while (IsLevelUp(gameState->player)) {
-                        LevelUp(gameState->player);
-                        String levelup_status = StringCreate("Your level is up, now your level is ");
-                        StringAppendString(&levelup_status, StringFromUint(gameState->player->LVL));
-                        showMapMenuInformation(gameState, levelup_status);
-                        getCommand();
-                    }
                 } else
                     game_loop = false;
             } else if (afterMove == MAP_HEAL) {
@@ -267,6 +269,16 @@ int MapMenuShow(GameState *gameState) {
                 status = StringCreate("You got a medicine, your HP now is ");
                 StringAppendString(&status, StringFromUint(gameState->player->HP));
             }
+        }
+
+        if (IsLevelUp(gameState->player))
+            showMapMenuInformation(gameState, status), getCommand();
+        while (IsLevelUp(gameState->player)) {
+            LevelUp(gameState->player);
+            String levelup_status = StringCreate("Your level is up, now your level is ");
+            StringAppendString(&levelup_status, StringFromUint(gameState->player->LVL));
+            showMapMenuInformation(gameState, levelup_status);
+            getCommand();
         }
     }
 
