@@ -283,40 +283,47 @@ void PlayerGetPotion(Player* player){
 }
 
 boolean IsLevelUp(Player* player){
-	if (player->EXP >= pow(2,(*player).LVL)){
+	// if (player->EXP >= pow(2,(*player).LVL)){
+	if (player->EXP >= 10*pow(3,(*player).LVL)){
 		return true;
 	} else
 		return false;
 }
 
 int EnemyRNGMaxHP(int level){
-	if (level == 1){
-	 	return 10;
-	 }else{
-	 	int RandHP = (rand() % 3);
-	 	if (RandHP == 0){
-	 		return (level-1)*10;
-	 	}else if (RandHP == 1){
-	 		return level*10;
-	 	}else{
-	 		return (level+1)*10;
-	 	}
-	 }
+	// if (level == 1){
+	//  	return 10;
+	//  }else{
+	//  	int RandHP = (rand() % 3);
+	//  	if (RandHP == 0){
+	//  		return (level-1)*10;
+	//  	}else if (RandHP == 1){
+	//  		return level*10;
+	//  	}else{
+	//  		return (level+1)*10;
+	//  	}
+	//  }
+	return 10+5*pow(3,(level-1));
 }
 
 int EnemyRNGStats(int level){
-	if (level == 1){
-	 	return 1;
-	 }else{
-	 	int RandHP = (rand() % 3);
-	 	if (RandHP == 0){
-	 		return level-1;
-	 	}else if (RandHP == 1){
-	 		return level;
-	 	}else{
-	 		return level+1;
-	 	}
-	 }
+	// if (level == 1){
+	//  	return 1;
+	//  }else{
+	//  	int RandHP = (rand() % 3);
+	//  	if (RandHP == 0){
+	//  		return level-1;
+	//  	}else if (RandHP == 1){
+	//  		return level;
+	//  	}else{
+	//  		return level+1;
+	//  	}
+	//  }
+	return (10+5*pow(3,(level-1)))/5;
+}
+
+void LoadEXPMusuh(Enemy* enemy){
+	enemy->EXP = max(10, 10*pow(2,(int)(enemy->LVL-1)));
 }
 
 void LoadMaxHPMusuh(Enemy* enemy){
@@ -325,9 +332,11 @@ void LoadMaxHPMusuh(Enemy* enemy){
 }
 
 void LoadSTRMusuh(Enemy* enemy){
-	 enemy->STR = EnemyRNGStats(enemy->LVL);
+	 // enemy->STR = EnemyRNGStats(enemy->LVL);
+	enemy->STR = enemy->EXP/5;
 }
 
 void LoadDEFMusuh(Enemy* enemy){
-	 enemy->DEF = EnemyRNGStats(enemy->LVL);
+	 // enemy->DEF = EnemyRNGStats(enemy->LVL);
+	enemy->STR = enemy->EXP/8;
 }

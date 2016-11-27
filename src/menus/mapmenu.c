@@ -5,6 +5,7 @@
 #include "gamestate.h"
 #include "map.h"
 #include "tree.h"
+#include "math.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -67,8 +68,10 @@ Enemy* getRandomEnemy(GameState* gameState) {
     enemyFile[2] = StringCreate("res/enemy3.enemy");
 
     Enemy* enemy = LoadPlayerFromFile(enemyFile[rand()%3]);
-    enemy->LVL = max(1, (int) (gameState->player->LVL + (rand()%5)-2));
-    enemy->EXP = max(5, (int) ((1<<(enemy->LVL)) + (rand()%(1<<(enemy->LVL - 1))) - (1<<(enemy->LVL-2))));
+    // enemy->LVL = max(1, (int) (gameState->player->LVL + (rand()%5)-2));
+    // enemy->EXP = max(5, (int) ((1<<(enemy->LVL)) + (rand()%(1<<(enemy->LVL - 1))) - (1<<(enemy->LVL-2))));
+    enemy->LVL = max(1, (int) (gameState->player->LVL-rand()%(gameState->player->LVL+1)));
+    LoadEXPMusuh(enemy);
     LoadMaxHPMusuh(enemy);
     LoadSTRMusuh(enemy);
     LoadDEFMusuh(enemy);
@@ -140,10 +143,10 @@ int MapMenuShow(GameState *gameState) {
         gameState->playerPosition = gameState->currentMap->map.startCenter;
     }
     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, MAP_PLAYER);
-    Tree P;
-    LoadSkill(&P,gameState->player->EXP);
-    gameState->player->STRSKILL+=SkillTotalAttack(P);
-    gameState->player->DEFSKILL+=SkillTotalDeffense(P);
+    // Tree P;
+    // LoadSkill(&P,gameState->player->EXP);
+    // gameState->player->STRSKILL+=SkillTotalAttack(P);
+    // gameState->player->DEFSKILL+=SkillTotalDeffense(P);
 
     String command = StringCreate("");
     boolean game_loop = true;
@@ -267,8 +270,17 @@ int MapMenuShow(GameState *gameState) {
                     StringAppendString(&status, StringFromUint(enemy->EXP));
                     StringAppendString(&status, StringCreate(" EXP"));
                     gameState->player->EXP += enemy->EXP;
-                    StringAppendString(&status, StringCreate(". Your level is up, now your level is "));
-                    StringAppendString(&status, StringFromUint(gameState->player->LVL));
+                    if (IsLevelUp(gameState->player)){
+                        Tree P;
+                        LoadSkill(&P,gameState->player->EXP);
+                        gameState->player->STRSKILL+=SkillTotalAttack(P);
+                        gameState->player->DEFSKILL+=SkillTotalDeffense(P);
+                        gameState->player->LVL++;
+                        gameState->player->STR = gameState->player->EXP/5;
+                        gameState->player->DEF = gameState->player->EXP/8;
+                        StringAppendString(&status, StringCreate(". Your level is up, now your level is "));
+                        StringAppendString(&status, StringFromUint(gameState->player->LVL));
+                    }
                 } else
                     game_loop = false;
             } else if (afterMove == MAP_HEAL) {
@@ -278,19 +290,19 @@ int MapMenuShow(GameState *gameState) {
             }
         }
 
-        if (IsLevelUp(gameState->player)){
-            Tree P;
-            LoadSkill(&P,gameState->player->EXP);
-            gameState->player->STRSKILL+=SkillTotalAttack(P);
-            gameState->player->DEFSKILL+=SkillTotalDeffense(P);
-        }
-        while (IsLevelUp(gameState->player)) {
-            LevelUp(gameState->player);
-            String levelup_status = StringCreate("Your level is up, now your level is ");
-            StringAppendString(&levelup_status, StringFromUint(gameState->player->LVL));
-            showMapMenuInformation(gameState,levelup_status);
-            StringReadln(NULL);
-        }
+        // if (IsLevelUp(gameState->player)){
+        //     Tree P;
+        //     LoadSkill(&P,gameState->player->EXP);
+        //     gameState->player->STRSKILL+=SkillTotalAttack(P);
+        //     gameState->player->DEFSKILL+=SkillTotalDeffense(P);
+        // }
+        // while (IsLevelUp(gameState->player)) {
+        //     LevelUp(gameState->player);
+        //     String levelup_status = StringCreate("Your level is up, now your level is ");
+        //     StringAppendString(&levelup_status, StringFromUint(gameState->player->LVL));
+        //     showMapMenuInformation(gameState,levelup_status);
+        //     StringReadln(NULL);
+        // }
     }
 
     if (gameState->player->HP <= 0)

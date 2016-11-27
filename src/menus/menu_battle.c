@@ -143,6 +143,8 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
     StringAppendString(&attributeEnemy,StringFromUint((uint) enemy->HP));
     StringAppendString(&attributeEnemy,StringCreate("/"));
     StringAppendString(&attributeEnemy,StringFromUint((uint) enemy->MAXHP));
+    StringAppendString(&attributeEnemy,StringCreate(" | EXP : "));
+    StringAppendString(&attributeEnemy,StringFromUint((uint) enemy->EXP));
     StringAppendString(&attributeEnemy,StringCreate(" | Command : "));
     StringAppendString(&attributeEnemy,EnemyCMD(irand,QMusuh));
 
