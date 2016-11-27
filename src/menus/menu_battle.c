@@ -19,12 +19,12 @@ Queue StackToQueue(Stack S);
 Stack LoadActionFromFile(String path, int line);
 void Random2Number(int *irand);
 void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, int DEF, int EDEF, int *HP, int *EHP, int info);
-void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,int *irand, uint ronde, Enemy* enemy);
+void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,int *irand, uint ronde, Enemy* enemy, boolean BOSS);
 int CommandBattle(Queue QPlayer, Queue QMusuh);
 String CommandInputShow(Queue QPlayer);
 String EnemyCMD(int *irand, Queue QMusuh);
 
-int BattleMenuShow (GameState* gameState, Enemy* enemy){
+int BattleMenuShow (GameState* gameState, Enemy* enemy, boolean BOSS){
 	Player* player = gameState->player;
 
 	Stack SMusuh;
@@ -34,6 +34,8 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 	int irand[2];
 	int info=0;
 	uint ronde_max=10,ronde=1;
+	if(BOSS)
+		ronde_max=20;
 	String str = StringCreate("");
 	String cmd = StringCreate("");
 	String Jmp=StringCreate("JUMP");
@@ -54,20 +56,20 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 		QueueCreateEmpty(&QPlayer,4);
 		info=0;
     	while(!QueueIsFull(QPlayer)){
-		    CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy);
+		    CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy, BOSS);
 			StringReadln(&str);
 			while (str[0]!='A' && str[0]!='B' && str[0]!='F' && !StringEquals(Jmp,str)){
-		    	CommandDisplay(gameState, QPlayer, QMusuh, 15, irand, ronde, enemy);
+		    	CommandDisplay(gameState, QPlayer, QMusuh, 15, irand, ronde, enemy, BOSS);
 				StringReadln(&str);
 			}
 			if(StringEquals(Jmp,str)){
 				break;
 			}
 			QueueAdd(&QPlayer,str[0]);
-		    CommandDisplay(gameState, QPlayer, QMusuh, 12, irand, ronde, enemy);
+		    CommandDisplay(gameState, QPlayer, QMusuh, 12, irand, ronde, enemy, BOSS);
 			StringReadln(&cmd);
 			while(cmd[0] != 'E' && cmd[0] != '\0'){
-				CommandDisplay(gameState, QPlayer, QMusuh, 13, irand, ronde, enemy);
+				CommandDisplay(gameState, QPlayer, QMusuh, 13, irand, ronde, enemy, BOSS);
 				StringReadln(&cmd);
 			}
 			if(cmd[0]=='E'){
@@ -92,7 +94,7 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 		if(player->HP<=0 || enemy->HP<=0 || StringEquals(Jmp,str)){
 			break;
 		} else {
-			CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde-1, enemy);
+			CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde-1, enemy,BOSS);
 			StringReadln(&str);
 		}
 	} while (ronde<=ronde_max && player->HP>0 && enemy->HP>0);
@@ -100,12 +102,12 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 	int hasil = 0; // 0 draw, 1 menang, -1 kalah
 	if(player->HP<=0){
 		hasil = -1;
-		CommandDisplay(gameState, QPlayer, QMusuh, 9, irand, ronde-1, enemy);
+		CommandDisplay(gameState, QPlayer, QMusuh, 9, irand, ronde-1, enemy, BOSS);
 	} else if (enemy->HP<=0 || StringEquals(Jmp,str)){
 		hasil = 1;
-		CommandDisplay(gameState, QPlayer, QMusuh, 8, irand, ronde-1, enemy);
+		CommandDisplay(gameState, QPlayer, QMusuh, 8, irand, ronde-1, enemy, BOSS);
 	} else {
-		CommandDisplay(gameState, QPlayer, QMusuh, 10, irand, ronde-1, enemy);
+		CommandDisplay(gameState, QPlayer, QMusuh, 10, irand, ronde-1, enemy, BOSS);
 	}
 	StringReadln(&str);
 
@@ -113,7 +115,7 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 }
 
 
-void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,int *irand, uint ronde, Enemy* enemy){
+void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,int *irand, uint ronde, Enemy* enemy, boolean BOSS){
 	Terminal* terminal = gameState->terminal;
 	Player* player = gameState->player;
 	TerminalClear(*terminal);
@@ -139,6 +141,8 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
 
     String attributeEnemy=StringCreate("ENEMY : ");
     StringAppendString(&attributeEnemy,enemy->name);
+    StringAppendString(&attributeEnemy,StringCreate(" | LVL : "));
+    StringAppendString(&attributeEnemy,StringFromUint(enemy->LVL));
     StringAppendString(&attributeEnemy,StringCreate(" | HP/MAXHP : "));
     StringAppendString(&attributeEnemy,StringFromUint((uint) enemy->HP));
     StringAppendString(&attributeEnemy,StringCreate("/"));
@@ -181,9 +185,9 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
 				case 2 : line1=StringCreate("PLAYER Attack! But it's blocked."); line2=StringCreate("HP ENEMY : +"); StringAppendString(&line2,StringFromUint(enemy->DEF/2)); break;
 				case 3 : line1=StringCreate("PLAYER Attack! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint(player->STR+player->STRSKILL)); break;
 				case 4 : line1=StringCreate("ENEMY Attack! But it's blocked."); line2=StringCreate("HP PLAYER : +"); StringAppendString(&line2,StringFromUint((player->DEF+player->DEFSKILL)/2)); break;
-				case 5 : line1=StringCreate("ENEMY Flank! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR*2)); break;
-				case 6 : line1=StringCreate("ENEMY Attack! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR*2));break;
-				case 7 : line1=StringCreate("USER Flank! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint((player->STR+player->STRSKILL)*2)); break;
+				case 5 : line1=StringCreate("ENEMY Flank! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR)); break;
+				case 6 : line1=StringCreate("ENEMY Attack! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR));break;
+				case 7 : line1=StringCreate("PLAYER Flank! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint((player->STR+player->STRSKILL))); break;
 				case 8 : line1=StringCreate("CONGRATULATION!"); line2=StringCreate("You Win!"); break;
 				case 9 : line1=StringCreate("GAME OVER!"); line2=StringCreate("Please restart game, or load previous saved game");break;
 				case 10 : line1=StringCreate("DRAW!"); line2=StringCreate("Try again"); break;
@@ -214,6 +218,63 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
 				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(line2)), 13, PixelStyleCreateDefault(), line2);
 		    	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, 17, PixelStyleCreateDefault(), THICKLINE);
 				UIDrawText(*terminal,TerminalGetCenterX(*terminal, StringLength(CommandInputShow(QPlayer))), 16, PixelStyleCreateDefault(), CommandInputShow(QPlayer));
+			}
+			if(BOSS){
+				if(enemy->LVL%3==0){
+			    	FILE *file = fopen("res/boss1.img","r");
+			    	Image mainmenuImage;
+				    if(file) {
+				        mainmenuImage = ImageCreateFromFile(file, PixelStyleCreateDefault());
+				        if (info== 5||info==6){
+				        	UIDrawImage(*terminal, TerminalGetCenterX(*terminal, ImageWidth(mainmenuImage)), 21, mainmenuImage);
+				        }
+				        else if (info== 3||info==7){
+				        } else{
+				        	UIDrawImage(*terminal, TerminalGetCenterX(*terminal, ImageWidth(mainmenuImage))+20, 21, mainmenuImage);
+				        }
+				        fclose(file);
+				    }
+				} else if (enemy->LVL%3==1){
+			    	FILE *file = fopen("res/boss2.img","r");
+			    	Image mainmenuImage;
+				    if(file) {
+				        mainmenuImage = ImageCreateFromFile(file, PixelStyleCreateDefault());
+				        if (info== 5||info==6){
+				        	UIDrawImage(*terminal, TerminalGetCenterX(*terminal, ImageWidth(mainmenuImage)), 21, mainmenuImage);
+				        }
+				        else if (info== 3||info==7){
+				        } else{
+				        	UIDrawImage(*terminal, TerminalGetCenterX(*terminal, ImageWidth(mainmenuImage))+20, 21, mainmenuImage);
+				        }
+				        fclose(file);
+				    }
+				} else {
+			    	FILE *file = fopen("res/boss3.img","r");
+			    	Image mainmenuImage;
+				    if(file) {
+				        mainmenuImage = ImageCreateFromFile(file, PixelStyleCreateDefault());
+				        if (info== 5||info==6){
+				        	UIDrawImage(*terminal, TerminalGetCenterX(*terminal, ImageWidth(mainmenuImage)), 21, mainmenuImage);
+				        }
+				        else if (info== 3||info==7){
+				        } else{
+				        	UIDrawImage(*terminal, TerminalGetCenterX(*terminal, ImageWidth(mainmenuImage))+20, 21, mainmenuImage);
+				        }
+				        fclose(file);
+				    }
+				} 
+			    FILE *file = fopen("res/you.img","r");
+			    	Image mainmenuImage;
+				    if(file) {
+				        mainmenuImage = ImageCreateFromFile(file, PixelStyleCreateDefault());
+						if (info== 3||info==7){
+				        	UIDrawImage(*terminal, TerminalGetCenterX(*terminal, ImageWidth(mainmenuImage)), 21, mainmenuImage);
+				    	} else if (info== 5||info==6){
+				    	} else {				    		
+				        	UIDrawImage(*terminal, TerminalGetCenterX(*terminal, ImageWidth(mainmenuImage))-ImageWidth(mainmenuImage), 21, mainmenuImage);
+				    	}
+				        fclose(file);
+				    }
 			}
 
     TerminalRender(*terminal);
@@ -291,9 +352,9 @@ void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, i
 		case 2 : *EHP+=(EDEF/2); break;
 		case 3 : *EHP-=(STR); break;
 		case 4 : *HP+=(DEF/2); break;
-		case 5 : *HP-=(ESTR*2); break;
+		case 5 : *HP-=(ESTR); break;
 		case 6 : *HP-=(ESTR); break;
-		case 7 : *EHP-=(STR*2); break;
+		case 7 : *EHP-=(STR); break;
 	}
 	*EHP=max(0,(*EHP>enemy->MAXHP)?enemy->MAXHP:*EHP);
 	*HP=max(0,(*HP>gameState->player->MAXHP)?gameState->player->MAXHP:*HP);

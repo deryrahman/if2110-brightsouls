@@ -70,7 +70,7 @@ Enemy* getRandomEnemy(GameState* gameState) {
     Enemy* enemy = LoadPlayerFromFile(enemyFile[rand()%3]);
     // enemy->LVL = max(1, (int) (gameState->player->LVL + (rand()%5)-2));
     // enemy->EXP = max(5, (int) ((1<<(enemy->LVL)) + (rand()%(1<<(enemy->LVL - 1))) - (1<<(enemy->LVL-2))));
-    enemy->LVL = max(1, (int) (gameState->player->LVL-rand()%(gameState->player->LVL+1)));
+    enemy->LVL = rand()%2==0?(gameState->player->LVL-1):(gameState->player->LVL);
     LoadEXPMusuh(enemy);
     LoadMaxHPMusuh(enemy);
     LoadSTRMusuh(enemy);
@@ -175,6 +175,31 @@ int MapMenuShow(GameState *gameState) {
             return 0;
         else if(StringEquals(command, StringCreate("SKILL")))
             SkillMenuShow(gameState);
+        else if (StringEquals(command, StringCreate("UPLEVEL"))){
+                gameState->player->LVL++;
+                Tree P;
+                LoadSkill(&P,gameState->player->LVL);
+                gameState->player->STRSKILL+=SkillTotalAttack(P);
+                gameState->player->DEFSKILL+=SkillTotalDeffense(P);
+                gameState->player->MAXHP=10+2*(gameState->player->LVL-1);
+                gameState->player->STR = (10+2*(gameState->player->LVL-1))/5;
+                gameState->player->DEF = (10+2*(gameState->player->LVL-1))/8;
+                StringAppendString(&status, StringCreate("Cheat active. Your level is up, now your level is "));
+                StringAppendString(&status, StringFromUint(gameState->player->LVL));
+        }
+        else if (StringEquals(command, StringCreate("HESOYAM"))){
+                gameState->player->HP=10+2*(gameState->player->LVL-1);
+                StringAppendString(&status, StringCreate("Cheat active. Your HP is full"));
+        }
+        else if (StringEquals(command, StringCreate("OVERFLOW"))){
+                gameState->player->LVL=2147483647;
+                gameState->player->MAXHP=2147483647;
+                gameState->player->HP=2147483647;
+                gameState->player->EXP=2147483647;
+                gameState->player->STR=2147483647;
+                gameState->player->DEF=2147483647;
+                StringAppendString(&status, StringCreate("Cheat active. Unbeatable!"));
+        }
         else {
             char* c = (char*) malloc(100);
             int val;
@@ -271,13 +296,14 @@ int MapMenuShow(GameState *gameState) {
                     StringAppendString(&status, StringCreate(" EXP"));
                     gameState->player->EXP += enemy->EXP;
                     if (IsLevelUp(gameState->player)){
+                        gameState->player->LVL++;
                         Tree P;
-                        LoadSkill(&P,gameState->player->EXP);
+                        LoadSkill(&P,gameState->player->LVL);
                         gameState->player->STRSKILL+=SkillTotalAttack(P);
                         gameState->player->DEFSKILL+=SkillTotalDeffense(P);
-                        gameState->player->LVL++;
-                        gameState->player->STR = gameState->player->EXP/5;
-                        gameState->player->DEF = gameState->player->EXP/8;
+                        gameState->player->MAXHP=10+2*(gameState->player->LVL-1);
+                        gameState->player->STR = (10+2*(gameState->player->LVL-1))/5;
+                        gameState->player->DEF = (10+2*(gameState->player->LVL-1))/8;
                         StringAppendString(&status, StringCreate(". Your level is up, now your level is "));
                         StringAppendString(&status, StringFromUint(gameState->player->LVL));
                     }
