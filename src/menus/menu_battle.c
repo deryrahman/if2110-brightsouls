@@ -95,7 +95,7 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 			CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy);
 			StringReadln(&str);
 		}
-	} while (ronde<ronde_max && player->HP>0 && enemy->HP>0);
+	} while (ronde<=ronde_max && player->HP>0 && enemy->HP>0);
 
 	int hasil = 0; // 0 draw, 1 menang, -1 kalah
 	if(player->HP<=0){
