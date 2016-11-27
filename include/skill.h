@@ -7,8 +7,10 @@ File	: skill.h
 */
 #ifndef _SKILL_H
 #define _SKILL_H
+
 #include "boolean.h"
 #include "integer.h"
+#include "tree.h"
 #include <stdlib.h>
 
 #define Nil NULL
@@ -28,4 +30,5 @@ typedef struct tSkill {
 
 Skill SkillCreate(uint X, uint Y, uint exp_req, uint urutan);
 void SkillMake(Skill *skill, uint X, uint Y, uint exp_req, uint urutan);
+
 #endif

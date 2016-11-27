@@ -2,6 +2,7 @@
 #include "graphics/terminal.h"
 #include "player.h"
 #include "map.h"
+#include "tree.h"
 #include <stdlib.h>
 
 void GameStateDealoc(GameState* gamestate) {
@@ -15,6 +16,7 @@ GameState* GameStateNew(Terminal* terminal, Player* player, MapNode* mapNode) {
     gameState->player = player;
     gameState->currentMap = mapNode;
     gameState->nMap = 0;
+    gameState->skillTree = SkillCreateDefaultTree();
     return gameState;
 }
 

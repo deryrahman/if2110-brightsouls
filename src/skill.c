@@ -7,7 +7,8 @@ File	: skill.h
 */
 
 #include <stdio.h>
-#include "../include/skill.h" // masih dijalankan terpisah dari main utama
+#include "tree.h"
+#include "skill.h" // masih dijalankan terpisah dari main utama
 
 Skill SkillCreate(uint X, uint Y, uint exp_req, uint urutan){
 	Skill P;

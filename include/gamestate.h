@@ -3,10 +3,12 @@
 
 #include "player.h"
 #include "map.h"
+#include "tree.h"
 
 typedef struct {
     Terminal* terminal;
     Player* player;
+    Tree skillTree;
     MapNode* currentMap;
     Point playerPosition;
     uint nMap;

@@ -77,7 +77,7 @@ void TreeAddRight(Tree P, Skill X, TreeAddress *Pr){
 		TreePrint(TreeRight(P),curr+1);
 	}
 }
-/*void TreePrintActivated(Tree P, int curr){
+void TreePrintActivated(Tree P, int curr){
 	if (P == Nil)
 		return;
 	if (TreeStatus(P)==true){
@@ -136,11 +136,21 @@ uint SkillTotalDeffense(Tree P){
 }
 
 void SkillActivatedGenerate(Tree *P, int EXP){
-	if (*P == Nil){}
-	else if (EXP<TreeRoot(*P).exp_req) {
-	} else {
+	if (P != Nil && *P != Nil && EXP >= TreeRoot(*P).exp_req) {
 		TreeStatus(*P)=true;
 		SkillActivatedGenerate(&TreeLeft(*P),EXP);
 		SkillActivatedGenerate(&TreeRight(*P),EXP);
 	}
+}
+
+Tree SkillCreateDefaultTree() {
+	Tree root = TreeAlloc(SkillCreate(10,5,10,0));
+	TreeAddress P,PChild;
+	TreeAddLeft(root,SkillCreate(10,5,20,1),&P);
+		TreeAddLeft(P,SkillCreate(20,5,40,3),&PChild);
+		TreeAddRight(P,SkillCreate(5,20,50,4),&PChild);
+	TreeAddRight(root,SkillCreate(5,10,30,2),&P);
+		TreeAddLeft(P,SkillCreate(15,10,60,5),&PChild);
+		TreeAddRight(P,SkillCreate(10,15,70,6),&PChild);
+	return root;
 }

@@ -4,6 +4,7 @@
 #include "graphics/terminal.h"
 #include "graphics/pixel.h"
 #include "graphics/ui.h"
+#include "skill.h"
 
 void gotoxy(int x, int y){
 		wprintf(L"%c[%d;%df", 0x1b, y, x);
@@ -93,25 +94,10 @@ void SkillMenuShow(GameState *gameState) {
 	TerminalClear(*terminal);
 
 	int menus_item_num;
-	int menu_item_first_y;
 	int menu_item_selected = 0;
 	menus_item_num = 7;
 
-	TreeAddress P,PChild;
-	Tree root=TreeAlloc(SkillCreate(10,5,10,0));
-	// Left
-	TreeAddLeft(root,SkillCreate(10,5,20,1),&P);
-		// Left Left
-		TreeAddLeft(P,SkillCreate(20,5,40,3),&PChild);
-		// Left Right
-		TreeAddRight(P,SkillCreate(5,20,50,4),&PChild);
-
-	// Right
-	TreeAddRight(root,SkillCreate(5,10,30,2),&P);
-		// Left Left
-		TreeAddLeft(P,SkillCreate(15,10,60,5),&PChild);
-		// Left Right
-		TreeAddRight(P,SkillCreate(10,15,70,6),&PChild);
+	Tree root=gameState->skillTree;
 
 	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 

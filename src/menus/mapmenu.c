@@ -271,9 +271,12 @@ int MapMenuShow(GameState *gameState) {
             }
         }
 
-        if (IsLevelUp(gameState->player))
+        if (IsLevelUp(gameState->player)) {
             showMapMenuInformation(gameState, status), getCommand();
-        while (IsLevelUp(gameState->player)) {
+            SkillActivatedGenerate(&(gameState->skillTree), gameState->player->EXP);
+            gameState->player->STRSKILL = SkillTotalAttack(gameState->skillTree);
+            gameState->player->DEFSKILL = SkillTotalDeffense(gameState->skillTree);
+        } while (IsLevelUp(gameState->player)) {
             LevelUp(gameState->player);
             String levelup_status = StringCreate("Your level is up, now your level is ");
             StringAppendString(&levelup_status, StringFromUint(gameState->player->LVL));

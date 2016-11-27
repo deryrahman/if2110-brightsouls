@@ -297,8 +297,8 @@ void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, i
 		case 6 : *HP-=(ESTR); break;
 		case 7 : *EHP-=(STR*2); break;
 	}
-	*EHP=(*EHP>enemy->MAXHP)?enemy->MAXHP:*EHP;
-	*HP=(*HP>gameState->player->MAXHP)?gameState->player->MAXHP:*HP;
+	*EHP=max(0,(*EHP>enemy->MAXHP)?enemy->MAXHP:*EHP);
+	*HP=max(0,(*HP>gameState->player->MAXHP)?gameState->player->MAXHP:*HP);
 }
 
 int CommandBattle(Queue QPlayer, Queue QMusuh){
