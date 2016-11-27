@@ -10,7 +10,7 @@ File	: tree.c
 #include "tree.h"
 
 Tree TreeCreate(){
-	return TreeAlloc(SkillCreate(0,0,0,0));
+	return TreeAlloc(SkillCreate(0,0,0,0,StringCreate("")));
 }
 TreeAddress TreeAlloc(Skill X){
 	TreeAddress P=(TreeAddress) malloc(sizeof(Node));
@@ -145,20 +145,20 @@ void SkillActivatedGenerate(Tree *P, int EXP){
 
 void SkillTreeDefault(Tree *Pt){
 	TreeAddress P,PChild;
-	Tree root=TreeAlloc(SkillCreate(10,5,10,0));
+	Tree root=TreeAlloc(SkillCreate(10,5,10,0, StringCreate("Rinnegan")));
 	// Left
-	TreeAddLeft(root,SkillCreate(10,5,20,1),&P);
+	TreeAddLeft(root,SkillCreate(10,5,20,1, StringCreate("Teigu")),&P);
 		// Left Left
-		TreeAddLeft(P,SkillCreate(20,5,40,3),&PChild);
+		TreeAddLeft(P,SkillCreate(20,5,40,3, StringCreate("Kagune")),&PChild);
 		// Left Right
-		TreeAddRight(P,SkillCreate(5,20,50,4),&PChild);
+		TreeAddRight(P,SkillCreate(5,20,50,4, StringCreate("Alchemy")),&PChild);
 
 	// Right
-	TreeAddRight(root,SkillCreate(5,10,30,2),&P);
+	TreeAddRight(root,SkillCreate(5,10,30,2, StringCreate("Titan Shift")),&P);
 		// Left Left
-		TreeAddLeft(P,SkillCreate(15,10,60,5),&PChild);
+		TreeAddLeft(P,SkillCreate(15,10,60,5, StringCreate("Death Note")),&PChild);
 		// Left Right
-		TreeAddRight(P,SkillCreate(10,15,70,6),&PChild);
+		TreeAddRight(P,SkillCreate(10,15,70,6, StringCreate("Super Saiyan")),&PChild);
 	*Pt=root;
 }
 
