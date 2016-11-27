@@ -7,10 +7,10 @@ File	: tree.c
 */
 
 #include <stdio.h>
-#include "tree.h" // masih dijalankan terpisah dari main utama
+#include "tree.h"
 
 Tree TreeCreate(){
-	return TreeAlloc(SkillCreate(0,0,0));
+	return TreeAlloc(SkillCreate(0,0,0,0));
 }
 TreeAddress TreeAlloc(Skill X){
 	TreeAddress P=(TreeAddress) malloc(sizeof(Node));
@@ -44,7 +44,8 @@ void TreeAddRight(Tree P, Skill X, TreeAddress *Pr){
 	TreeRight(P)=PRight;
 	*Pr=PRight;
 }
-void TreePrint(Tree P, int curr){
+
+/* void TreePrint(Tree P, int curr){
 	if(P==Nil){}
 	if ((TreeLeft(P) == Nil) || (TreeRight(P) == Nil)) {
 		for(int i=0;i<curr;i++){
@@ -76,7 +77,7 @@ void TreePrint(Tree P, int curr){
 		TreePrint(TreeRight(P),curr+1);
 	}
 }
-void TreePrintActivated(Tree P, int curr){
+/*void TreePrintActivated(Tree P, int curr){
 	if (P == Nil)
 		return;
 	if (TreeStatus(P)==true){
@@ -110,7 +111,7 @@ void TreePrintActivated(Tree P, int curr){
 			TreePrintActivated(TreeRight(P),curr+1);
 		}
 	}
-}
+}*/
 
 uint SkillTotalAttack(Tree P){
 	if (TreeStatus(P)==true){
