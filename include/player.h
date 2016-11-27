@@ -26,7 +26,7 @@ int loadHP(FILE *FStats,int *PosOut);
 /*Merubah teks HP dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong
 <<<<<<< HEAD
-  F.S. = Internal variable terisi oleh HP dari eksternal file, berupa integer*/ 
+  F.S. = Internal variable terisi oleh HP dari eksternal file, berupa integer*/
 
 
 int loadMaxHP(FILE *FStats,int PosIn,int *PosOut);
@@ -38,14 +38,14 @@ int loadSTR(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks STR dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong
 <<<<<<< HEAD
-  F.S. = Internal variable terisi oleh STR dari eksternal file, berupa integer*/ 
+  F.S. = Internal variable terisi oleh STR dari eksternal file, berupa integer*/
 
 
 int loadLVL(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks LVL dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong.
 <<<<<<< HEAD
-  F.S. = Internal variable terisi oleh LVL dari eksternal file, berupa integer*/ 
+  F.S. = Internal variable terisi oleh LVL dari eksternal file, berupa integer*/
 
 
 int loadDEF(FILE *FStats,int PosIn,int *PosOut);
@@ -57,7 +57,7 @@ int loadSP(FILE *FStats,int PosIn,int *PosOut);
 /*Merubah teks SP(Skill Point) dari file playerstats.txt menjadi internal variable
   I.S. = Internal variable kosong.
 <<<<<<< HEAD
-  F.S. = Internal variable terisi oleh SP dari eksternal file, berupa integer*/  
+  F.S. = Internal variable terisi oleh SP dari eksternal file, berupa integer*/
 
 
 int loadEXP(FILE *FStats,int PosIn,int *PosOut);
@@ -81,7 +81,7 @@ void NewGame(Player* player, String filename);
   I.S. = File sembarang
   F.S. = File berisikan stats baru: Nama dan semua stats jadi 0*/
 
-void LevelUp(String filename, Player* player);
+void LevelUp(Player* player);
 /*Menuliskan stats ke file eksternal saat naik level
   I.S. = File sembarang
   F.S. = File berisikan stats baru: Level naik 1, Stats naik  , SP naik*/

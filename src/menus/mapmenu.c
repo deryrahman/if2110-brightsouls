@@ -59,13 +59,20 @@ MapNode* getRandomMap() {
     return mn;
 }
 
-Enemy* getRandomEnemy() {
+Enemy* getRandomEnemy(GameState* gameState) {
     String enemyFile[3];
     enemyFile[0] = StringCreate("res/enemy1.enemy");
     enemyFile[1] = StringCreate("res/enemy2.enemy");
     enemyFile[2] = StringCreate("res/enemy3.enemy");
 
-    return LoadPlayerFromFile(enemyFile[rand()%3]);
+    Enemy* enemy = LoadPlayerFromFile(enemyFile[rand()%3]);
+    enemy->LVL = max(1, (int) (gameState->player->LVL + (rand()%5)-2));
+    enemy->EXP = max(5, (int) ((1<<(enemy->LVL)) + (rand()%(1<<(enemy->LVL - 1))) - (1<<(enemy->LVL-2))));
+    LoadMaxHPMusuh(enemy);
+    LoadSTRMusuh(enemy);
+    LoadDEFMusuh(enemy);
+
+    return enemy;
 }
 
 void showMapMenuInformation(GameState *gameState, String status) {
@@ -88,28 +95,38 @@ void showMapMenuInformation(GameState *gameState, String status) {
     uint left = TerminalGetCenterX(*gameState->terminal,MapWidth(gameState->currentMap->map)) - 50;
     uint top = TerminalGetCenterY(*gameState->terminal,MapHeight(gameState->currentMap->map));
 
-    UIDrawVLine(*(gameState->terminal), left-2,top - 1, 13, PixelCreateDefault(0x250f),PixelCreateDefault(0x2517),PixelCreateDefault(0x2503));
-    UIDrawVLine(*(gameState->terminal), left+32,top - 1, 13, PixelCreateDefault(0x2513),PixelCreateDefault(0x251b),PixelCreateDefault(0x2503));
+    UIDrawVLine(*(gameState->terminal), left-2,top - 1, 17, PixelCreateDefault(0x250f),PixelCreateDefault(0x2517),PixelCreateDefault(0x2503));
+    UIDrawVLine(*(gameState->terminal), left+32,top - 1, 17, PixelCreateDefault(0x2513),PixelCreateDefault(0x251b),PixelCreateDefault(0x2503));
 
     UIDrawHLine(*(gameState->terminal), left-2,top - 1, 35, PixelCreateDefault(0x250f),PixelCreateDefault(0x2513),PixelCreateDefault(0x2501));
     UIDrawText(*(gameState->terminal), left + 5, top + 1, PixelStyleCreateDefault(), StringCreate("Player Information"));
     UIDrawHLine(*(gameState->terminal), left-2,top + 3, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
-    UIDrawText(*(gameState->terminal), left, top + 4, PixelStyleCreateDefault(), StringCreate("Player Name"));
-    UIDrawText(*(gameState->terminal), left+13, top + 4, PixelStyleCreateDefault(), StringCreate(gameState->player->name));
-    UIDrawHLine(*(gameState->terminal), left-2,top + 5, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
+    top += 4;
+    UIDrawText(*(gameState->terminal), left, top, PixelStyleCreateDefault(), StringCreate("Player Name"));
+    UIDrawText(*(gameState->terminal), left+13, top, PixelStyleCreateDefault(), StringCreate(gameState->player->name));
+    UIDrawHLine(*(gameState->terminal), left-2, ++top, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
-    UIDrawText(*(gameState->terminal), left, top + 6, PixelStyleCreateDefault(), StringCreate("Player HP"));
-    UIDrawText(*(gameState->terminal), left+13, top + 6, PixelStyleCreateDefault(), StringFromUint(gameState->player->HP));
-    UIDrawHLine(*(gameState->terminal), left-2,top + 7, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
+    UIDrawText(*(gameState->terminal), left, ++top, PixelStyleCreateDefault(), StringCreate("Player Level"));
+    UIDrawText(*(gameState->terminal), left+13, top, PixelStyleCreateDefault(), StringFromUint(gameState->player->LVL));
+    UIDrawHLine(*(gameState->terminal), left-2,++top, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
-    UIDrawText(*(gameState->terminal), left, top + 8, PixelStyleCreateDefault(), StringCreate("Player STR"));
-    UIDrawText(*(gameState->terminal), left+13, top + 8, PixelStyleCreateDefault(), StringFromUint(gameState->player->STR));
-    UIDrawHLine(*(gameState->terminal), left-2,top + 9, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
+    UIDrawText(*(gameState->terminal), left, ++top, PixelStyleCreateDefault(), StringCreate("Player EXP"));
+    UIDrawText(*(gameState->terminal), left+13, top, PixelStyleCreateDefault(), StringFromUint(gameState->player->EXP));
+    UIDrawHLine(*(gameState->terminal), left-2,++top, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
-    UIDrawText(*(gameState->terminal), left, top + 10, PixelStyleCreateDefault(), StringCreate("Player DEF"));
-    UIDrawText(*(gameState->terminal), left+13, top + 10, PixelStyleCreateDefault(), StringFromUint(gameState->player->DEF));
-    UIDrawHLine(*(gameState->terminal), left-2,top + 11, 35, PixelCreateDefault(0x2517),PixelCreateDefault(0x251b),PixelCreateDefault(0x2501));
+    UIDrawText(*(gameState->terminal), left, ++top, PixelStyleCreateDefault(), StringCreate("Player HP"));
+    String hpstr = StringFromUint(gameState->player->HP); StringAppendChar(&hpstr,'/'); StringAppendString(&hpstr, StringFromUint(gameState->player->MAXHP));
+    UIDrawText(*(gameState->terminal), left+13, top, PixelStyleCreateDefault(), hpstr);
+    UIDrawHLine(*(gameState->terminal), left-2, ++top, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
+
+    UIDrawText(*(gameState->terminal), left, ++top, PixelStyleCreateDefault(), StringCreate("Player STR"));
+    UIDrawText(*(gameState->terminal), left+13, top, PixelStyleCreateDefault(), StringFromUint(gameState->player->STR));
+    UIDrawHLine(*(gameState->terminal), left-2, ++top, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
+
+    UIDrawText(*(gameState->terminal), left, ++top, PixelStyleCreateDefault(), StringCreate("Player DEF"));
+    UIDrawText(*(gameState->terminal), left+13, top, PixelStyleCreateDefault(), StringFromUint(gameState->player->DEF));
+    UIDrawHLine(*(gameState->terminal), left-2, ++top, 35, PixelCreateDefault(0x2517),PixelCreateDefault(0x251b),PixelCreateDefault(0x2501));
 
     TerminalRender(*(gameState->terminal));
 }
@@ -214,7 +231,7 @@ int MapMenuShow(GameState *gameState) {
             beforeMove = MAP_FREE;
             status = NULL;
             if (afterMove == MAP_ENEMY) {
-                Enemy* enemy = getRandomEnemy();
+                Enemy* enemy = getRandomEnemy(gameState);
 
                 status = StringCreate("You are about to fight an enemy, his name is ");
                 StringAppendString(&status, enemy->name);
@@ -226,9 +243,24 @@ int MapMenuShow(GameState *gameState) {
 
                 if (result == 0)
                     status = StringCreate("It's a draw");
-                else if (result == 1)
-                    status = StringCreate("You win!");
-                else
+                else if (result == 1) {
+
+                    status = StringCreate("You win! You get ");
+                    StringAppendString(&status, StringFromUint(enemy->EXP));
+                    StringAppendString(&status, StringCreate(" EXP"));
+                    gameState->player->EXP += enemy->EXP;
+
+                    if (IsLevelUp(gameState->player))
+                        showMapMenuInformation(gameState, status), getCommand();
+
+                    while (IsLevelUp(gameState->player)) {
+                        LevelUp(gameState->player);
+                        String levelup_status = StringCreate("Your level is up, now your level is ");
+                        StringAppendString(&levelup_status, StringFromUint(gameState->player->LVL));
+                        showMapMenuInformation(gameState, levelup_status);
+                        getCommand();
+                    }
+                } else
                     game_loop = false;
             } else if (afterMove == MAP_HEAL) {
                 PlayerGetPotion(gameState->player);
