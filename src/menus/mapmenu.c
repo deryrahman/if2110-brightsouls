@@ -263,6 +263,8 @@ int MapMenuShow(GameState *gameState) {
                     StringAppendString(&status, StringFromUint(enemy->EXP));
                     StringAppendString(&status, StringCreate(" EXP"));
                     gameState->player->EXP += enemy->EXP;
+                    StringAppendString(&status, StringCreate(". Your level is up, now your level is "));
+                    StringAppendString(&status, StringFromUint(gameState->player->LVL));
                 } else
                     game_loop = false;
             } else if (afterMove == MAP_HEAL) {
