@@ -102,7 +102,4 @@ void LoadSTRMusuh(Player* enemy);
 
 void LoadDEFMusuh(Player* enemy);
 
-int loadSTRSKILL(int EXP);
-int loadDEFSKILL(int EXP);
-
 #endif

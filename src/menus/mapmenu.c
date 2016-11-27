@@ -263,7 +263,12 @@ int MapMenuShow(GameState *gameState) {
                     StringAppendString(&status, StringFromUint(enemy->EXP));
                     StringAppendString(&status, StringCreate(" EXP"));
                     gameState->player->EXP += enemy->EXP;
-                    if (IsLevelUp(gameState->player))
+                    if (IsLevelUp(gameState->player)){
+                        Tree P;
+                        LoadSkill(&P,gameState->player->EXP);
+                        gameState->player->STRSKILL+=SkillTotalAttack(P);
+                        gameState->player->DEFSKILL+=SkillTotalDeffense(P);
+                    }
                     while (IsLevelUp(gameState->player)) {
                         LevelUp(gameState->player);
                     }
