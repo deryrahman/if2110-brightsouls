@@ -1,5 +1,3 @@
-/* Driver */
-
 #include <stdio.h>
 #include "menus/menu_skill.h"
 #include "tree.h"
@@ -64,23 +62,23 @@ int getMenuCommandd() {
     return -1;
 }
 
-void DrawTree(GameState *gameState, Tree P, int left, int top, boolean up, uint *i, int menu_item_selected){
+void DrawTree(GameState *gameState, Tree P, int left, int top, int distance, boolean up, boolean right, int menu_item_selected){
 		Terminal* terminal = gameState->terminal;
 		if(up) left = TerminalGetCenterX(*terminal, 0);
-		else left = TerminalGetCenterX(*terminal, 0.50*left);
-		PixelStyle style = PixelStyleCreateDefault();
-		if (*i == menu_item_selected) style = PixelStyleCreate(RESET, WHITE, BLACK); else style = PixelStyleCreateDefault();
+		else if(right) left = left + distance;
+		else left = left - distance;
+		PixelStyle style;
 		if(P == Nil);
 		else if(TreeLeft(P) == Nil || TreeRight(P) == Nil){
-				UIDrawText(*terminal, left, top, style, StringFromUint(TreeRoot(P).exp_req));
-				if(*i == menu_item_selected) TulisStat(gameState, P);
-				(*i)++;
+				if (Urutan(TreeRoot(P)) == menu_item_selected) style = PixelStyleCreate(RESET, WHITE, BLACK); else style = PixelStyleCreateDefault();
+				UIDrawText(*terminal, left, top, style, StringFromUint(TreeRoot(P).urutan));
+				if(Urutan(TreeRoot(P)) == menu_item_selected) TulisStat(gameState, P);
 		} else{
-				UIDrawText(*terminal, left, top, style, StringFromUint(TreeRoot(P).exp_req));
-				if(*i == menu_item_selected) TulisStat(gameState, P);
-				(*i)++;
-				DrawTree(gameState, TreeLeft(P), left, top+5, false, i, menu_item_selected);
-				DrawTree(gameState, TreeRight(P), -left, top+5, false, i, menu_item_selected);
+				if (Urutan(TreeRoot(P)) == menu_item_selected) style = PixelStyleCreate(RESET, WHITE, BLACK); else style = PixelStyleCreateDefault();
+				UIDrawText(*terminal, left, top, style, StringFromUint(TreeRoot(P).urutan));
+				if(Urutan(TreeRoot(P)) == menu_item_selected) TulisStat(gameState, P);
+				DrawTree(gameState, TreeLeft(P), left, top+5, 0.5*distance, false, false, menu_item_selected);
+				DrawTree(gameState, TreeRight(P), left, top+5, 0.5*distance, false, true, menu_item_selected);
 		}
 }
 
@@ -94,23 +92,23 @@ void SkillMenuShow(GameState *gameState) {
 	menus_item_num = 7;
 
 	TreeAddress P,PChild;
-	Tree root=TreeAlloc(SkillCreate(10,5,10));
+	Tree root=TreeAlloc(SkillCreate(10,5,10,0));
 	// Left
-	TreeAddLeft(root,SkillCreate(10,5,20),&P);
+	TreeAddLeft(root,SkillCreate(10,5,20,1),&P);
 		// Left Left
-		TreeAddLeft(P,SkillCreate(20,5,40),&PChild);
+		TreeAddLeft(P,SkillCreate(20,5,40,3),&PChild);
 		// Left Right
-		TreeAddRight(P,SkillCreate(5,20,50),&PChild);
+		TreeAddRight(P,SkillCreate(5,20,50,4),&PChild);
 
 	// Right
-	TreeAddRight(root,SkillCreate(5,10,30),&P);
+	TreeAddRight(root,SkillCreate(5,10,30,2),&P);
 		// Left Left
-		TreeAddLeft(P,SkillCreate(15,10,60),&PChild);
+		TreeAddLeft(P,SkillCreate(15,10,60,5),&PChild);
 		// Left Right
-		TreeAddRight(P,SkillCreate(10,15,70),&PChild);
+		TreeAddRight(P,SkillCreate(10,15,70,6),&PChild);
 
 	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
-	//DrawTree(gameState, root, 5, 5, true);
+
 	int k = -1;
 	do {
 			TerminalClear(*terminal);
@@ -127,20 +125,18 @@ void SkillMenuShow(GameState *gameState) {
 			if (k == 2) menu_item_selected++;
 			if (k == 1) menu_item_selected--;
 			menu_item_selected = (menu_item_selected + menus_item_num) % menus_item_num;
-			uint i;
-			i = 0;
-			DrawTree(gameState, root, 0, 11, true, &i, menu_item_selected);
+			DrawTree(gameState, root, 0, 11, 40, true, true, menu_item_selected);
 			TerminalRender(*terminal);
 			k = getMenuCommandd();
 	} while (k);
 
-	printf("\n");
+	/*printf("\n");
 	printf("SKILL :\n");
 	TreePrint(root,0);printf("\n\n");
 	printf("ACTIVATED SKILL :\n");
 	TreePrintActivated(root,0);printf("\n");
 	printf("TOTAL SKILL :\n");
-	printf("++%u\n++%u\n", SkillTotalAttack(root), SkillTotalDeffense(root));
+	printf("++%u\n++%u\n", SkillTotalAttack(root), SkillTotalDeffense(root));*/
 
 	TerminalRender(*terminal);
 }
