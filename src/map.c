@@ -133,8 +133,8 @@ void MapFillFromFile(Map *map, FILE *file) {
 
         (map->startTop).y = 1;
         (map->startRight).x = map->width;
-        (map->startBottom).y = map->height; (map->startBottom).x = map->width - (map->startBottom).x;
-        (map->startLeft).x = 1; (map->startLeft).y = map->height - (map->startLeft).y;
+        (map->startBottom).y = map->height; (map->startBottom).x = map->width - (map->startBottom).x + 1;
+        (map->startLeft).x = 1; (map->startLeft).y = map->height - (map->startLeft).y + 1;
     }
 }
 

@@ -2,7 +2,7 @@
  * Author
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Sabtu, 5 November 2016
- * Nama File	: player.c 
+ * Nama File	: player.c
  */
 
 #include <stdio.h>
@@ -185,7 +185,7 @@ int loadSP(FILE *FStats,int PosIn,int *PosOut){
 		}
 	}
 	i = ftell(FStats);
-	RealSP = atoi(SP);	
+	RealSP = atoi(SP);
 	*PosOut = i;
 	return RealSP;
 }
@@ -268,11 +268,10 @@ Player* PlayerNew(String name) {
  * Nama			: Aulia Ichsan RIfkyano
  * Hari/Tanggal : Minggu, 6 November 2016*/
 
-void LevelUp(String filename, Player* player){
+void LevelUp(Player* player){
 	(*player).LVL 	+=1;
 	(*player).SP 	+=5;
 	(*player).MAXHP = (*player).LVL*10;
-	TulisStats(filename, player);
 }
 
 void PlayerGetPotion(Player* player){
@@ -285,7 +284,8 @@ void PlayerGetPotion(Player* player){
 boolean IsLevelUp(Player* player){
 	if (player->EXP >= pow(2,(*player).LVL)){
 		return true;
-	}
+	} else
+		return false;
 }
 
 int EnemyRNGMaxHP(int level){
@@ -294,7 +294,7 @@ int EnemyRNGMaxHP(int level){
 	 }else{
 	 	int RandHP = (rand() % 3);
 	 	if (RandHP == 0){
-	 		return (level-1)*10; 
+	 		return (level-1)*10;
 	 	}else if (RandHP == 1){
 	 		return level*10;
 	 	}else{
@@ -309,7 +309,7 @@ int EnemyRNGStats(int level){
 	 }else{
 	 	int RandHP = (rand() % 3);
 	 	if (RandHP == 0){
-	 		return level-1; 
+	 		return level-1;
 	 	}else if (RandHP == 1){
 	 		return level;
 	 	}else{
@@ -318,14 +318,15 @@ int EnemyRNGStats(int level){
 	 }
 }
 
-void LoadMaxHPMusuh(Player* enemy){
+void LoadMaxHPMusuh(Enemy* enemy){
 	 enemy->MAXHP = EnemyRNGMaxHP(enemy->LVL);
+	 enemy->HP = enemy->MAXHP;
 }
 
-void LoadSTRMusuh(Player* enemy){
+void LoadSTRMusuh(Enemy* enemy){
 	 enemy->STR = EnemyRNGStats(enemy->LVL);
 }
 
-void LoadDEFMusuh(Player* enemy){
+void LoadDEFMusuh(Enemy* enemy){
 	 enemy->DEF = EnemyRNGStats(enemy->LVL);
 }

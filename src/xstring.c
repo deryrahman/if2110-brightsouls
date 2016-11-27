@@ -150,12 +150,12 @@ boolean StringEquals(String s1, String s2) {
  * Tanggal : Minggu, 11 September 2016
  */
 int StringReadln(String *str) {
-	StringResize(str, 0);
+	if (str != NULL) StringResize(str, 0);
 
 	char x;
 	for (x = 1; x != 0 && x != '\n' && x != '\r';) {
 		x = (char) getchar();
-		if (x != '\n' && x != '\r' && x != EOF)
+		if (x != '\n' && x != '\r' && x != EOF && str != NULL)
 			StringAppendChar(str, x);
 	}
 

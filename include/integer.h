@@ -3,7 +3,7 @@
 
 typedef unsigned int uint;
 
-#define max(A,B) (A > B ? A : B)
-#define min(A,B) (A < B ? A : B)
+#define max(A,B) ((A) > (B) ? (A) : (B))
+#define min(A,B) ((A) < (B) ? (A) : (B))
 
 #endif
