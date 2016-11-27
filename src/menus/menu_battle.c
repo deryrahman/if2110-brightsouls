@@ -120,34 +120,30 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
 
     String attributePlayer=StringCreate("PLAYER : ");
     StringAppendString(&attributePlayer,player->name);
-    String attLVL=StringCreate(" | LVL : ");
-    StringAppendString(&attributePlayer,attLVL);
+    StringAppendString(&attributePlayer,StringCreate(" | LVL : "));
     StringAppendString(&attributePlayer,StringFromUint(player->LVL));
-    String attHP=StringCreate(" | HP/MAXHP : ");
-    StringAppendString(&attributePlayer,attHP);
+    StringAppendString(&attributePlayer,StringCreate(" | HP/MAXHP : "));
     StringAppendString(&attributePlayer,StringFromUint((uint) player->HP));
-    String attSLSH=StringCreate("/");
-    StringAppendString(&attributePlayer,attSLSH);
+    StringAppendString(&attributePlayer,StringCreate("/"));
     StringAppendString(&attributePlayer,StringFromUint((uint) player->MAXHP));
-    String attSTR=StringCreate(" | STR : ");
-    StringAppendString(&attributePlayer,attSTR);
+    StringAppendString(&attributePlayer,StringCreate(" | STR : "));
     StringAppendString(&attributePlayer,StringFromUint(player->STR));
-    String attDEF=StringCreate(" | DEF : ");
-    StringAppendString(&attributePlayer,attDEF);
+    StringAppendString(&attributePlayer,StringCreate(" | DEF : "));
     StringAppendString(&attributePlayer,StringFromUint(player->DEF));
-    String attROUND=StringCreate(" | Round : ");
-    StringAppendString(&attributePlayer,attROUND);
+    StringAppendString(&attributePlayer,StringCreate(" | Round : "));
     StringAppendString(&attributePlayer,StringFromUint(ronde));
+    StringAppendString(&attributePlayer,StringCreate(" | STRSKILL : "));
+    StringAppendString(&attributePlayer,StringFromUint(player->STRSKILL));
+    StringAppendString(&attributePlayer,StringCreate(" | DEFSKILL : "));
+    StringAppendString(&attributePlayer,StringFromUint(player->DEFSKILL));
 
     String attributeEnemy=StringCreate("ENEMY : ");
     StringAppendString(&attributeEnemy,enemy->name);
-    attHP=StringCreate(" | HP/MAXHP : ");
-    StringAppendString(&attributeEnemy,attHP);
+    StringAppendString(&attributeEnemy,StringCreate(" | HP/MAXHP : "));
     StringAppendString(&attributeEnemy,StringFromUint((uint) enemy->HP));
-    StringAppendString(&attributeEnemy,attSLSH);
+    StringAppendString(&attributeEnemy,StringCreate("/"));
     StringAppendString(&attributeEnemy,StringFromUint((uint) enemy->MAXHP));
-    String attCMD=StringCreate(" | Command : ");
-    StringAppendString(&attributeEnemy,attCMD);
+    StringAppendString(&attributeEnemy,StringCreate(" | Command : "));
     StringAppendString(&attributeEnemy,EnemyCMD(irand,QMusuh));
 
     // header
