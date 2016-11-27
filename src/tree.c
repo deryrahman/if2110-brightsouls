@@ -147,18 +147,18 @@ void SkillTreeDefault(Tree *Pt){
 	TreeAddress P,PChild;
 	Tree root=TreeAlloc(SkillCreate(10,5,10,0, StringCreate("Rinnegan")));
 	// Left
-	TreeAddLeft(root,SkillCreate(10,5,20,1, StringCreate("Teigu")),&P);
+	TreeAddLeft(root,SkillCreate(10,5,40,1, StringCreate("Teigu")),&P);
 		// Left Left
-		TreeAddLeft(P,SkillCreate(20,5,40,3, StringCreate("Kagune")),&PChild);
+		TreeAddLeft(P,SkillCreate(20,5,640,3, StringCreate("Kagune")),&PChild);
 		// Left Right
-		TreeAddRight(P,SkillCreate(5,20,50,4, StringCreate("Alchemy")),&PChild);
+		TreeAddRight(P,SkillCreate(5,20,2560,4, StringCreate("Alchemy")),&PChild);
 
 	// Right
-	TreeAddRight(root,SkillCreate(5,10,30,2, StringCreate("Titan Shift")),&P);
+	TreeAddRight(root,SkillCreate(5,10,160,2, StringCreate("Titan Shift")),&P);
 		// Left Left
-		TreeAddLeft(P,SkillCreate(15,10,60,5, StringCreate("Death Note")),&PChild);
+		TreeAddLeft(P,SkillCreate(15,10,10240,5, StringCreate("Death Note")),&PChild);
 		// Left Right
-		TreeAddRight(P,SkillCreate(10,15,70,6, StringCreate("Super Saiyan")),&PChild);
+		TreeAddRight(P,SkillCreate(10,15,40960,6, StringCreate("Super Saiyan")),&PChild);
 	*Pt=root;
 }
 
