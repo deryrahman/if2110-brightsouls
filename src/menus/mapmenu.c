@@ -4,6 +4,7 @@
 #include "graphics/ui.h"
 #include "gamestate.h"
 #include "map.h"
+#include "tree.h"
 
 #include <stdlib.h>
 #include <time.h>

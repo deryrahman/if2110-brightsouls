@@ -144,3 +144,27 @@ void SkillActivatedGenerate(Tree *P, int EXP){
 		SkillActivatedGenerate(&TreeRight(*P),EXP);
 	}
 }
+
+void SkillTreeDefault(Tree *Pt){
+	TreeAddress P,PChild;
+	Tree root=TreeAlloc(SkillCreate(10,5,10,0));
+	// Left
+	TreeAddLeft(root,SkillCreate(10,5,20,1),&P);
+		// Left Left
+		TreeAddLeft(P,SkillCreate(20,5,40,3),&PChild);
+		// Left Right
+		TreeAddRight(P,SkillCreate(5,20,50,4),&PChild);
+
+	// Right
+	TreeAddRight(root,SkillCreate(5,10,30,2),&P);
+		// Left Left
+		TreeAddLeft(P,SkillCreate(15,10,60,5),&PChild);
+		// Left Right
+		TreeAddRight(P,SkillCreate(10,15,70,6),&PChild);
+	*Pt=root;
+}
+
+void LoadSkill(Tree *P, int EXP){
+	SkillTreeDefault(P);
+	SkillActivatedGenerate(P,EXP);
+}
