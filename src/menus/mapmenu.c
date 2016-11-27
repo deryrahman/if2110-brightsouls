@@ -6,6 +6,7 @@
 #include "map.h"
 #include "tree.h"
 #include "math.h"
+#include "player.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -37,8 +38,7 @@ String getCommand() {
     return result;
 }
 
-MapNode* getRandomMap() {
-    static uint id = 0;
+MapNode* getRandomMap(GameState* gameState) {
     String mapFile[5];
     mapFile[0] = StringCreate("res/map1.map");
     mapFile[1] = StringCreate("res/map2.map");
@@ -55,7 +55,7 @@ MapNode* getRandomMap() {
 
     MapNode* mn = (MapNode*) malloc(sizeof(MapNode));
     mn->map = *map;
-    mn->id = ++id;
+    mn->id = gameState->nMap + 1;
     mn->left = mn->right = mn->top = mn->bottom = NULL;
 
     return mn;
@@ -138,7 +138,7 @@ void showMapMenuInformation(GameState *gameState, String status) {
 int MapMenuShow(GameState *gameState) {
     if (!gameState->currentMap) {
         gameState->nMap = 0;
-        gameState->currentMap = getRandomMap();
+        gameState->currentMap = getRandomMap(gameState);
         gameState->currentMap->id = ++(gameState->nMap);
         gameState->playerPosition = gameState->currentMap->map.startCenter;
     }
@@ -206,7 +206,7 @@ int MapMenuShow(GameState *gameState) {
 
             if (nx == 0) {
                 if (gameState->currentMap->left == NULL && gameState->nMap < 25)
-                    gameState->currentMap->left = getRandomMap(), gameState->nMap++;
+                    gameState->currentMap->left = getRandomMap(gameState), gameState->nMap++;
                 if (gameState->currentMap->left != NULL) {
                     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, beforeMove);
                     MapNode* tmp = gameState->currentMap;
@@ -217,7 +217,7 @@ int MapMenuShow(GameState *gameState) {
                 }
             } else if (ny == 0) {
                 if (gameState->currentMap->top == NULL && gameState->nMap < 25)
-                    gameState->currentMap->top = getRandomMap(), gameState->nMap++;
+                    gameState->currentMap->top = getRandomMap(gameState), gameState->nMap++;
                 if (gameState->currentMap->top != NULL) {
                     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, beforeMove);
                     MapNode* tmp = gameState->currentMap;
@@ -228,7 +228,7 @@ int MapMenuShow(GameState *gameState) {
                 }
             } else if (ny > gameState->currentMap->map.height) {
                 if (gameState->currentMap->bottom == NULL && gameState->nMap < 25)
-                    gameState->currentMap->bottom = getRandomMap(), gameState->nMap++;
+                    gameState->currentMap->bottom = getRandomMap(gameState), gameState->nMap++;
                 if (gameState->currentMap->bottom != NULL) {
                     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, beforeMove);
                     MapNode* tmp = gameState->currentMap;
@@ -239,7 +239,7 @@ int MapMenuShow(GameState *gameState) {
                 }
             } else if (nx > gameState->currentMap->map.width) {
                 if (gameState->currentMap->right == NULL && gameState->nMap < 25)
-                    gameState->currentMap->right = getRandomMap(), gameState->nMap++;
+                    gameState->currentMap->right = getRandomMap(gameState), gameState->nMap++;
                 if (gameState->currentMap->right != NULL) {
                     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, beforeMove);
                     MapNode* tmp = gameState->currentMap;
@@ -270,17 +270,6 @@ int MapMenuShow(GameState *gameState) {
                     StringAppendString(&status, StringFromUint(enemy->EXP));
                     StringAppendString(&status, StringCreate(" EXP"));
                     gameState->player->EXP += enemy->EXP;
-                    if (IsLevelUp(gameState->player)){
-                        Tree P;
-                        LoadSkill(&P,gameState->player->EXP);
-                        gameState->player->STRSKILL+=SkillTotalAttack(P);
-                        gameState->player->DEFSKILL+=SkillTotalDeffense(P);
-                        gameState->player->LVL++;
-                        gameState->player->STR = gameState->player->EXP/5;
-                        gameState->player->DEF = gameState->player->EXP/8;
-                        StringAppendString(&status, StringCreate(". Your level is up, now your level is "));
-                        StringAppendString(&status, StringFromUint(gameState->player->LVL));
-                    }
                 } else
                     game_loop = false;
             } else if (afterMove == MAP_HEAL) {
@@ -290,19 +279,19 @@ int MapMenuShow(GameState *gameState) {
             }
         }
 
-        // if (IsLevelUp(gameState->player)){
-        //     Tree P;
-        //     LoadSkill(&P,gameState->player->EXP);
-        //     gameState->player->STRSKILL+=SkillTotalAttack(P);
-        //     gameState->player->DEFSKILL+=SkillTotalDeffense(P);
-        // }
-        // while (IsLevelUp(gameState->player)) {
-        //     LevelUp(gameState->player);
-        //     String levelup_status = StringCreate("Your level is up, now your level is ");
-        //     StringAppendString(&levelup_status, StringFromUint(gameState->player->LVL));
-        //     showMapMenuInformation(gameState,levelup_status);
-        //     StringReadln(NULL);
-        // }
+        if (IsLevelUp(gameState->player)){
+            Tree P;
+            LoadSkill(&P,gameState->player->EXP);
+            gameState->player->STRSKILL+=SkillTotalAttack(P);
+            gameState->player->DEFSKILL+=SkillTotalDeffense(P);
+        }
+        while (IsLevelUp(gameState->player)) {
+            LevelUp(gameState->player);
+            String levelup_status = StringCreate("Your level is up, now your level is ");
+            StringAppendString(&levelup_status, StringFromUint(gameState->player->LVL));
+            showMapMenuInformation(gameState,levelup_status);
+            StringReadln(NULL);
+        }
     }
 
     if (gameState->player->HP <= 0)
