@@ -101,4 +101,5 @@ void LoadMaxHPMusuh(Player* enemy);
 void LoadSTRMusuh(Player* enemy);
 
 void LoadDEFMusuh(Player* enemy);
+
 #endif

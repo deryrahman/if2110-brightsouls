@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "xstring.h"
 #include "player.h"
+#include "tree.h"
 #include <math.h>
 
 

@@ -16,7 +16,6 @@ GameState* GameStateNew(Terminal* terminal, Player* player, MapNode* mapNode) {
     gameState->player = player;
     gameState->currentMap = mapNode;
     gameState->nMap = 0;
-    gameState->skillTree = SkillCreateDefaultTree();
     return gameState;
 }
 

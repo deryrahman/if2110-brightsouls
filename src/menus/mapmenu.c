@@ -263,17 +263,6 @@ int MapMenuShow(GameState *gameState) {
                     StringAppendString(&status, StringFromUint(enemy->EXP));
                     StringAppendString(&status, StringCreate(" EXP"));
                     gameState->player->EXP += enemy->EXP;
-                    if (IsLevelUp(gameState->player)){
-                        Tree P;
-                        LoadSkill(&P,gameState->player->EXP);
-                        gameState->player->STRSKILL+=SkillTotalAttack(P);
-                        gameState->player->DEFSKILL+=SkillTotalDeffense(P);
-                    }
-                    while (IsLevelUp(gameState->player)) {
-                        LevelUp(gameState->player);
-                    }
-                    StringAppendString(&status, StringCreate(". Your level is up, now your level is "));
-                    StringAppendString(&status, StringFromUint(gameState->player->LVL));
                 } else
                     game_loop = false;
             } else if (afterMove == MAP_HEAL) {
@@ -281,6 +270,20 @@ int MapMenuShow(GameState *gameState) {
                 status = StringCreate("You got a medicine, your HP now is ");
                 StringAppendString(&status, StringFromUint(gameState->player->HP));
             }
+        }
+
+        if (IsLevelUp(gameState->player)){
+            Tree P;
+            LoadSkill(&P,gameState->player->EXP);
+            gameState->player->STRSKILL+=SkillTotalAttack(P);
+            gameState->player->DEFSKILL+=SkillTotalDeffense(P);
+        }
+        while (IsLevelUp(gameState->player)) {
+            LevelUp(gameState->player);
+            String levelup_status = StringCreate("Your level is up, now your level is ");
+            StringAppendString(&levelup_status, StringFromUint(gameState->player->LVL));
+            showMapMenuInformation(gameState,levelup_status);
+            StringReadln(NULL);
         }
     }
 
