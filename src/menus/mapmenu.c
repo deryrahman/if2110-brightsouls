@@ -1,5 +1,6 @@
 #include "menus/mapmenu.h"
 #include "menus/menu_battle.h"
+#include "menus/menu_skill.h"
 #include "graphics/ui.h"
 #include "gamestate.h"
 #include "map.h"
@@ -84,7 +85,7 @@ void showMapMenuInformation(GameState *gameState, String status) {
     if (status)
         UIDrawText(*(gameState->terminal), TerminalGetCenterX(*gameState->terminal,StringLength(status)), TerminalGetHeight(*gameState->terminal) - 5, PixelStyleCreateDefault(), status);
 
-    uint left = TerminalGetCenterX(*gameState->terminal,MapWidth(gameState->currentMap->map)) - 55;
+    uint left = TerminalGetCenterX(*gameState->terminal,MapWidth(gameState->currentMap->map)) - 50;
     uint top = TerminalGetCenterY(*gameState->terminal,MapHeight(gameState->currentMap->map));
 
     UIDrawVLine(*(gameState->terminal), left-2,top - 1, 13, PixelCreateDefault(0x250f),PixelCreateDefault(0x2517),PixelCreateDefault(0x2503));
