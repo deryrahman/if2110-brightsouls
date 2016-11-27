@@ -92,20 +92,20 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy){
 		if(player->HP<=0 || enemy->HP<=0 || StringEquals(Jmp,str)){
 			break;
 		} else {
-			CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde, enemy);
+			CommandDisplay(gameState, QPlayer, QMusuh, info, irand, ronde-1, enemy);
 			StringReadln(&str);
 		}
-	} while (ronde<ronde_max && player->HP>0 && enemy->HP>0);
+	} while (ronde<=ronde_max && player->HP>0 && enemy->HP>0);
 
 	int hasil = 0; // 0 draw, 1 menang, -1 kalah
 	if(player->HP<=0){
 		hasil = -1;
-		CommandDisplay(gameState, QPlayer, QMusuh, 9, irand, ronde, enemy);
+		CommandDisplay(gameState, QPlayer, QMusuh, 9, irand, ronde-1, enemy);
 	} else if (enemy->HP<=0 || StringEquals(Jmp,str)){
 		hasil = 1;
-		CommandDisplay(gameState, QPlayer, QMusuh, 8, irand, ronde, enemy);
+		CommandDisplay(gameState, QPlayer, QMusuh, 8, irand, ronde-1, enemy);
 	} else {
-		CommandDisplay(gameState, QPlayer, QMusuh, 10, irand, ronde, enemy);
+		CommandDisplay(gameState, QPlayer, QMusuh, 10, irand, ronde-1, enemy);
 	}
 	StringReadln(&str);
 

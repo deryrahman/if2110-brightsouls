@@ -91,13 +91,15 @@ void DrawTree(GameState *gameState, Tree P, int left, int top, int distance, boo
 
 void SkillMenuShow(GameState *gameState) {
 	Terminal* terminal = gameState->terminal;
+	Player* player = gameState->player;
 	TerminalClear(*terminal);
 
 	int menus_item_num;
 	int menu_item_selected = 0;
 	menus_item_num = 7;
 
-	Tree root=gameState->skillTree;
+	Tree root;
+	LoadSkill(&root,player->EXP);
 
 	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 
