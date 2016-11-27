@@ -266,8 +266,8 @@ int MapMenuShow(GameState *gameState) {
                     if (IsLevelUp(gameState->player)){
                         Tree P;
                         LoadSkill(&P,gameState->player->EXP);
-                        gameState->player->STRSKILL+=SkillTotalAttack(P);
-                        gameState->player->DEFSKILL+=SkillTotalDeffense(P);
+                        gameState->player->STRSKILL=SkillTotalAttack(P);
+                        gameState->player->DEFSKILL=SkillTotalDeffense(P);
                     }
                     while (IsLevelUp(gameState->player)) {
                         LevelUp(gameState->player);
