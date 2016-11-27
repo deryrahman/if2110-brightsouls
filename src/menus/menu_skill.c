@@ -5,6 +5,10 @@
 #include "graphics/pixel.h"
 #include "graphics/ui.h"
 
+void gotoxy(int x, int y){
+		wprintf(L"%c[%d;%df", 0x1b, y, x);
+}
+
 void TulisStat(GameState *gameState, Tree P){
 	uint left = TerminalGetCenterX(*gameState->terminal,0) - 25;
 	uint top = TerminalGetCenterY(*gameState->terminal,0) + 5;
@@ -76,6 +80,8 @@ void DrawTree(GameState *gameState, Tree P, int left, int top, int distance, boo
 		} else{
 				if (Urutan(TreeRoot(P)) == menu_item_selected) style = PixelStyleCreate(RESET, WHITE, BLACK); else style = PixelStyleCreateDefault();
 				UIDrawText(*terminal, left, top, style, StringFromUint(TreeRoot(P).urutan));
+				UIDrawHLine(*terminal, left-(0.5*distance-1), top+5, distance-1, PixelCreateDefault(0x2501),PixelCreateDefault(0x2501),PixelCreateDefault(0x2501));
+				UIDrawVLine(*terminal, left ,top+1, 5, PixelCreateDefault(0x2503),PixelCreateDefault(0x253b),PixelCreateDefault(0x2503));
 				if(Urutan(TreeRoot(P)) == menu_item_selected) TulisStat(gameState, P);
 				DrawTree(gameState, TreeLeft(P), left, top+5, 0.5*distance, false, false, menu_item_selected);
 				DrawTree(gameState, TreeRight(P), left, top+5, 0.5*distance, false, true, menu_item_selected);
@@ -112,7 +118,6 @@ void SkillMenuShow(GameState *gameState) {
 	int k = -1;
 	do {
 			TerminalClear(*terminal);
-
 			/* Membaca file yang berisi tulisan SKILLS */
 			FILE *file = fopen("res/skills.img","r");
 			Image mainmenuImage;
