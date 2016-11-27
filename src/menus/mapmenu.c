@@ -140,6 +140,10 @@ int MapMenuShow(GameState *gameState) {
         gameState->playerPosition = gameState->currentMap->map.startCenter;
     }
     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, MAP_PLAYER);
+    Tree P;
+    LoadSkill(&P,gameState->player->EXP);
+    gameState->player->STRSKILL+=SkillTotalAttack(P);
+    gameState->player->DEFSKILL+=SkillTotalDeffense(P);
 
     String command = StringCreate("");
     boolean game_loop = true;
