@@ -135,34 +135,34 @@ uint SkillTotalDeffense(Tree P){
 	return 0;
 }
 
-void SkillActivatedGenerate(Tree *P, int EXP){
-	if (P != Nil && *P != Nil && EXP >= TreeRoot(*P).exp_req) {
+void SkillActivatedGenerate(Tree *P, int LVL){
+	if (P != Nil && *P != Nil && LVL >= TreeRoot(*P).lvl_req) {
 		TreeStatus(*P)=true;
-		SkillActivatedGenerate(&TreeLeft(*P),EXP);
-		SkillActivatedGenerate(&TreeRight(*P),EXP);
+		SkillActivatedGenerate(&TreeLeft(*P),LVL);
+		SkillActivatedGenerate(&TreeRight(*P),LVL);
 	}
 }
 
 void SkillTreeDefault(Tree *Pt){
 	TreeAddress P,PChild;
-	Tree root=TreeAlloc(SkillCreate(10,5,10,0, StringCreate("Rinnegan")));
+	Tree root=TreeAlloc(SkillCreate(1,1,5,0, StringCreate("Rinnegan")));
 	// Left
-	TreeAddLeft(root,SkillCreate(10,5,40,1, StringCreate("Teigu")),&P);
+	TreeAddLeft(root,SkillCreate(3,1,10,1, StringCreate("Teigu")),&P);
 		// Left Left
-		TreeAddLeft(P,SkillCreate(20,5,640,3, StringCreate("Kagune")),&PChild);
+		TreeAddLeft(P,SkillCreate(4,2,20,3, StringCreate("Kagune")),&PChild);
 		// Left Right
-		TreeAddRight(P,SkillCreate(5,20,2560,4, StringCreate("Alchemy")),&PChild);
+		TreeAddRight(P,SkillCreate(2,4,30,4, StringCreate("Alchemy")),&PChild);
 
 	// Right
-	TreeAddRight(root,SkillCreate(5,10,160,2, StringCreate("Titan Shift")),&P);
+	TreeAddRight(root,SkillCreate(1,3,15,2, StringCreate("Titan Shift")),&P);
 		// Left Left
-		TreeAddLeft(P,SkillCreate(15,10,10240,5, StringCreate("Death Note")),&PChild);
+		TreeAddLeft(P,SkillCreate(3,3,40,5, StringCreate("Death Note")),&PChild);
 		// Left Right
-		TreeAddRight(P,SkillCreate(10,15,40960,6, StringCreate("Super Saiyan")),&PChild);
+		TreeAddRight(P,SkillCreate(3,3,50,6, StringCreate("Super Saiyan")),&PChild);
 	*Pt=root;
 }
 
-void LoadSkill(Tree *P, int EXP){
+void LoadSkill(Tree *P, int LVL){
 	SkillTreeDefault(P);
-	SkillActivatedGenerate(P,EXP);
+	SkillActivatedGenerate(P,LVL);
 }

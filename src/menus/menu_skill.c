@@ -17,8 +17,8 @@ void TulisStat(GameState *gameState, Tree P){
 	UIDrawText(*(gameState->terminal), left + 9, top + 1, PixelStyleCreateDefault(), StringCreate("Skill Details"));
 	UIDrawHLine(*(gameState->terminal), left-2,top + 3, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
-	UIDrawText(*(gameState->terminal), left, top + 4, PixelStyleCreateDefault(), StringCreate("Player`s MINIMUM EXP"));
-	UIDrawText(*(gameState->terminal), left+30, top + 4, PixelStyleCreateDefault(), StringFromUint(TreeRoot(P).exp_req));
+	UIDrawText(*(gameState->terminal), left, top + 4, PixelStyleCreateDefault(), StringCreate("Player`s MINIMUM Level"));
+	UIDrawText(*(gameState->terminal), left+30, top + 4, PixelStyleCreateDefault(), StringFromUint(TreeRoot(P).lvl_req));
 	UIDrawHLine(*(gameState->terminal), left-2,top + 5, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
 	UIDrawText(*(gameState->terminal), left, top + 6, PixelStyleCreateDefault(), StringCreate("Player`s ATTACK"));
@@ -112,7 +112,7 @@ void SkillMenuShow(GameState *gameState) {
 	int skills_item_selected = 0;
 
 	Tree root;
-	LoadSkill(&root,player->EXP);
+	LoadSkill(&root,player->LVL);
 
 	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 
