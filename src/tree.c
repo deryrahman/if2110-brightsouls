@@ -18,6 +18,7 @@ TreeAddress TreeAlloc(Skill X){
 		TreeRoot(P)=X;
 		TreeLeft(P)=Nil;
 		TreeRight(P)=Nil;
+		TreeStatus(P)=false;
 	}
 	return P;
 }
