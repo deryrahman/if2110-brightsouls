@@ -270,9 +270,14 @@ Player* PlayerNew(String name) {
  * Hari/Tanggal : Minggu, 6 November 2016*/
 
 void LevelUp(Player* player){
-	(*player).LVL 	+=1;
-	(*player).SP 	+=5;
-	(*player).MAXHP = (*player).LVL*10;
+	player->LVL++;
+	Tree P;
+	LoadSkill(&P,player->LVL);
+	player->STRSKILL += SkillTotalAttack(P);
+	player->DEFSKILL += SkillTotalDeffense(P);
+	player->MAXHP = 10+2*(player->LVL-1);
+	player->STR = (10+2*(player->LVL-1))/5;
+	player->DEF = (10+2*(player->LVL-1))/8;
 }
 
 void PlayerGetPotion(Player* player){
@@ -284,7 +289,7 @@ void PlayerGetPotion(Player* player){
 
 boolean IsLevelUp(Player* player){
 	// if (player->EXP >= pow(2,(*player).LVL)){
-	if (player->EXP >= 10*pow(3,(*player).LVL)){
+	if (player->EXP >= 10+10*pow((*player).LVL,3)){
 		return true;
 	} else
 		return false;
@@ -303,7 +308,7 @@ int EnemyRNGMaxHP(int level){
 	//  		return (level+1)*10;
 	//  	}
 	//  }
-	return 10+5*pow(3,(level-1));
+	return 10+8*(level-1);
 }
 
 int EnemyRNGStats(int level){
@@ -319,11 +324,11 @@ int EnemyRNGStats(int level){
 	//  		return level+1;
 	//  	}
 	//  }
-	return (10+5*pow(3,(level-1)))/5;
+	return 10+3*(level-1);
 }
 
 void LoadEXPMusuh(Enemy* enemy){
-	enemy->EXP = max(10, 10*pow(2,(int)(enemy->LVL-1)));
+	enemy->EXP = 10+10*pow((enemy->LVL-1),2);
 }
 
 void LoadMaxHPMusuh(Enemy* enemy){
@@ -332,11 +337,9 @@ void LoadMaxHPMusuh(Enemy* enemy){
 }
 
 void LoadSTRMusuh(Enemy* enemy){
-	 // enemy->STR = EnemyRNGStats(enemy->LVL);
-	enemy->STR = enemy->EXP/5;
+	 enemy->STR = EnemyRNGStats(enemy->LVL)/5;
 }
 
 void LoadDEFMusuh(Enemy* enemy){
-	 // enemy->DEF = EnemyRNGStats(enemy->LVL);
-	enemy->STR = enemy->EXP/8;
+	 enemy->DEF = EnemyRNGStats(enemy->LVL)/8;
 }
