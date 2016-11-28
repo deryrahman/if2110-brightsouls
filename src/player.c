@@ -289,7 +289,7 @@ void PlayerGetPotion(Player* player){
 
 boolean IsLevelUp(Player* player){
 	// if (player->EXP >= pow(2,(*player).LVL)){
-	if (player->EXP >= 10+10*pow((*player).LVL,3)){
+	if (player->EXP >= 10+10*pow((*player).LVL,2)){
 		return true;
 	} else
 		return false;
@@ -328,7 +328,7 @@ int EnemyRNGStats(int level){
 }
 
 void LoadEXPMusuh(Enemy* enemy){
-	enemy->EXP = 10+10*pow((enemy->LVL-1),2);
+	enemy->EXP = 10+10*pow((enemy->LVL-1),1.5);
 }
 
 void LoadMaxHPMusuh(Enemy* enemy){
