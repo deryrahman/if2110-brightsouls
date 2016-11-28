@@ -2,6 +2,7 @@
 #include "graphics/terminal.h"
 #include "player.h"
 #include "map.h"
+#include "tree.h"
 #include <stdlib.h>
 
 void GameStateDealoc(GameState* gamestate) {

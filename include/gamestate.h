@@ -3,6 +3,7 @@
 
 #include "player.h"
 #include "map.h"
+#include "tree.h"
 
 typedef struct {
     Terminal* terminal;

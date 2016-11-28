@@ -88,6 +88,8 @@ void LevelUp(Player* player);
 
 void PlayerGetPotion(Player* player);
 
+void LoadEXPMusuh(Enemy* enemy);
+
 void LoadMaxHPMusuh(Player* enemy);
 
 boolean IsLevelUp(Player* player);
@@ -101,4 +103,5 @@ void LoadMaxHPMusuh(Player* enemy);
 void LoadSTRMusuh(Player* enemy);
 
 void LoadDEFMusuh(Player* enemy);
+
 #endif

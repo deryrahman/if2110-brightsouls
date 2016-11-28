@@ -4,10 +4,7 @@
 #include "graphics/terminal.h"
 #include "graphics/pixel.h"
 #include "graphics/ui.h"
-
-void gotoxy(int x, int y){
-		wprintf(L"%c[%d;%df", 0x1b, y, x);
-}
+#include "skill.h"
 
 void TulisStat(GameState *gameState, Tree P){
 	uint left = TerminalGetCenterX(*gameState->terminal,0) - 25;
@@ -20,8 +17,8 @@ void TulisStat(GameState *gameState, Tree P){
 	UIDrawText(*(gameState->terminal), left + 9, top + 1, PixelStyleCreateDefault(), StringCreate("Skill Details"));
 	UIDrawHLine(*(gameState->terminal), left-2,top + 3, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
-	UIDrawText(*(gameState->terminal), left, top + 4, PixelStyleCreateDefault(), StringCreate("Player`s MINIMUM EXP"));
-	UIDrawText(*(gameState->terminal), left+30, top + 4, PixelStyleCreateDefault(), StringFromUint(TreeRoot(P).exp_req));
+	UIDrawText(*(gameState->terminal), left, top + 4, PixelStyleCreateDefault(), StringCreate("Player`s MINIMUM Level"));
+	UIDrawText(*(gameState->terminal), left+30, top + 4, PixelStyleCreateDefault(), StringFromUint(TreeRoot(P).lvl_req));
 	UIDrawHLine(*(gameState->terminal), left-2,top + 5, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
 	UIDrawText(*(gameState->terminal), left, top + 6, PixelStyleCreateDefault(), StringCreate("Player`s ATTACK"));
@@ -66,7 +63,7 @@ int getMenuCommandd() {
     return -1;
 }
 
-void DrawTree(GameState *gameState, Tree P, int left, int top, int distance, boolean up, boolean right, int menu_item_selected){
+void DrawTree(GameState *gameState, Tree P, int left, int top, int distance, boolean up, boolean right, int skills_item_selected){
 		Terminal* terminal = gameState->terminal;
 		if(up) left = TerminalGetCenterX(*terminal, 0);
 		else if(right) left = left + distance;
@@ -74,44 +71,48 @@ void DrawTree(GameState *gameState, Tree P, int left, int top, int distance, boo
 		PixelStyle style;
 		if(P == Nil);
 		else if(TreeLeft(P) == Nil || TreeRight(P) == Nil){
-				if (Urutan(TreeRoot(P)) == menu_item_selected) style = PixelStyleCreate(RESET, WHITE, BLACK); else style = PixelStyleCreateDefault();
-				UIDrawText(*terminal, left, top, style, StringFromUint(TreeRoot(P).urutan));
-				if(Urutan(TreeRoot(P)) == menu_item_selected) TulisStat(gameState, P);
+				if (Urutan(TreeRoot(P)) == skills_item_selected) style = PixelStyleCreate(RESET, WHITE, BLACK); else style = PixelStyleCreateDefault();
+				if(!right) UIDrawText(*terminal, left-1, top, style, StringCreate(TreeRoot(P).nama));
+				else if(right){
+						if(StringEquals(StringCreate(TreeRoot(P).nama), StringCreate("Alchemy")))
+								UIDrawText(*terminal, left-2, top, style, StringCreate(TreeRoot(P).nama));
+						if(StringEquals(StringCreate(TreeRoot(P).nama), StringCreate("Super Saiyan")))
+								UIDrawText(*terminal, left-7, top, style, StringCreate(TreeRoot(P).nama));
+				}
+				if(Urutan(TreeRoot(P)) == skills_item_selected) TulisStat(gameState, P);
 		} else{
-				if (Urutan(TreeRoot(P)) == menu_item_selected) style = PixelStyleCreate(RESET, WHITE, BLACK); else style = PixelStyleCreateDefault();
-				UIDrawText(*terminal, left, top, style, StringFromUint(TreeRoot(P).urutan));
-				UIDrawHLine(*terminal, left-(0.5*distance-1), top+5, distance-1, PixelCreateDefault(0x2501),PixelCreateDefault(0x2501),PixelCreateDefault(0x2501));
-				UIDrawVLine(*terminal, left ,top+1, 5, PixelCreateDefault(0x2503),PixelCreateDefault(0x253b),PixelCreateDefault(0x2503));
-				if(Urutan(TreeRoot(P)) == menu_item_selected) TulisStat(gameState, P);
-				DrawTree(gameState, TreeLeft(P), left, top+5, 0.5*distance, false, false, menu_item_selected);
-				DrawTree(gameState, TreeRight(P), left, top+5, 0.5*distance, false, true, menu_item_selected);
+				if (Urutan(TreeRoot(P)) == skills_item_selected) style = PixelStyleCreate(RESET, WHITE, BLACK); else style = PixelStyleCreateDefault();
+				if(up){
+						UIDrawText(*terminal, left-3, top, style, StringCreate(TreeRoot(P).nama));
+						UIDrawVLine(*terminal, left ,top+1, 6, PixelCreateDefault(0x2503),PixelCreateDefault(0x2517),PixelCreateDefault(0x2503));
+						UIDrawHLine(*terminal, left-(0.5*distance-1), top+6, distance, PixelCreateDefault(0x2501),PixelCreateDefault(0x2501),PixelCreateDefault(0x2501));
+				}
+				else if(right){
+						UIDrawText(*terminal, left-10, top, style, StringCreate(TreeRoot(P).nama));
+						UIDrawVLine(*terminal, left ,top+1, 6, PixelCreateDefault(0x2513),PixelCreateDefault(0x2517),PixelCreateDefault(0x2503));
+						UIDrawHLine(*terminal, left-(0.5*distance-1)-2, top+6, distance+6, PixelCreateDefault(0x2501),PixelCreateDefault(0x2501),PixelCreateDefault(0x2501));
+				}
+				else if(!right){
+						UIDrawText(*terminal, left, top, style, StringCreate(TreeRoot(P).nama));
+						UIDrawVLine(*terminal, left ,top+1, 6, PixelCreateDefault(0x250f),PixelCreateDefault(0x2517),PixelCreateDefault(0x2503));
+						UIDrawHLine(*terminal, left-(0.5*distance-1)-2, top+6, distance+6, PixelCreateDefault(0x2501),PixelCreateDefault(0x2501),PixelCreateDefault(0x2501));
+				}
+				if(Urutan(TreeRoot(P)) == skills_item_selected) TulisStat(gameState, P);
+				DrawTree(gameState, TreeLeft(P), left, top+5, 0.5*distance, false, false, skills_item_selected);
+				DrawTree(gameState, TreeRight(P), left, top+5, 0.5*distance, false, true, skills_item_selected);
 		}
 }
 
 void SkillMenuShow(GameState *gameState) {
 	Terminal* terminal = gameState->terminal;
+	Player* player = gameState->player;
 	TerminalClear(*terminal);
 
-	int menus_item_num;
-	int menu_item_first_y;
-	int menu_item_selected = 0;
-	menus_item_num = 7;
+	int skills_item_num = 7;
+	int skills_item_selected = 0;
 
-	TreeAddress P,PChild;
-	Tree root=TreeAlloc(SkillCreate(10,5,10,0));
-	// Left
-	TreeAddLeft(root,SkillCreate(10,5,20,1),&P);
-		// Left Left
-		TreeAddLeft(P,SkillCreate(20,5,40,3),&PChild);
-		// Left Right
-		TreeAddRight(P,SkillCreate(5,20,50,4),&PChild);
-
-	// Right
-	TreeAddRight(root,SkillCreate(5,10,30,2),&P);
-		// Left Left
-		TreeAddLeft(P,SkillCreate(15,10,60,5),&PChild);
-		// Left Right
-		TreeAddRight(P,SkillCreate(10,15,70,6),&PChild);
+	Tree root;
+	LoadSkill(&root,player->LVL);
 
 	UIDrawBoxLine(*terminal, 1, 1, TerminalGetWidth(*terminal) - 2, TerminalGetHeight(*terminal) - 2, PixelStyleCreateDefault(), MULTILINE);
 
@@ -127,21 +128,13 @@ void SkillMenuShow(GameState *gameState) {
 					fclose(file);
 			}
 
-			if (k == 2) menu_item_selected++;
-			if (k == 1) menu_item_selected--;
-			menu_item_selected = (menu_item_selected + menus_item_num) % menus_item_num;
-			DrawTree(gameState, root, 0, 11, 40, true, true, menu_item_selected);
+			if (k == 2) skills_item_selected++;
+			if (k == 1) skills_item_selected--;
+			skills_item_selected = (skills_item_selected + skills_item_num) % skills_item_num;
+			DrawTree(gameState, root, 0, 11, 40, true, true, skills_item_selected);
 			TerminalRender(*terminal);
 			k = getMenuCommandd();
 	} while (k);
-
-	/*printf("\n");
-	printf("SKILL :\n");
-	TreePrint(root,0);printf("\n\n");
-	printf("ACTIVATED SKILL :\n");
-	TreePrintActivated(root,0);printf("\n");
-	printf("TOTAL SKILL :\n");
-	printf("++%u\n++%u\n", SkillTotalAttack(root), SkillTotalDeffense(root));*/
 
 	TerminalRender(*terminal);
 }

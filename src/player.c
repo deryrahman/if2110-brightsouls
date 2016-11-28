@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "xstring.h"
 #include "player.h"
+#include "tree.h"
 #include <math.h>
 
 
@@ -269,9 +270,14 @@ Player* PlayerNew(String name) {
  * Hari/Tanggal : Minggu, 6 November 2016*/
 
 void LevelUp(Player* player){
-	(*player).LVL 	+=1;
-	(*player).SP 	+=5;
-	(*player).MAXHP = (*player).LVL*10;
+	player->LVL++;
+	Tree P;
+	LoadSkill(&P,player->LVL);
+	player->STRSKILL = SkillTotalAttack(P);
+	player->DEFSKILL = SkillTotalDeffense(P);
+	player->MAXHP = 10+2*(player->LVL-1);
+	player->STR = (10+2*(player->LVL-1))/5;
+	player->DEF = (10+2*(player->LVL-1))/8;
 }
 
 void PlayerGetPotion(Player* player){
@@ -282,40 +288,47 @@ void PlayerGetPotion(Player* player){
 }
 
 boolean IsLevelUp(Player* player){
-	if (player->EXP >= pow(2,(*player).LVL)){
+	// if (player->EXP >= pow(2,(*player).LVL)){
+	if (player->EXP >= 10+10*pow((*player).LVL,3)){
 		return true;
 	} else
 		return false;
 }
 
 int EnemyRNGMaxHP(int level){
-	if (level == 1){
-	 	return 10;
-	 }else{
-	 	int RandHP = (rand() % 3);
-	 	if (RandHP == 0){
-	 		return (level-1)*10;
-	 	}else if (RandHP == 1){
-	 		return level*10;
-	 	}else{
-	 		return (level+1)*10;
-	 	}
-	 }
+	// if (level == 1){
+	//  	return 10;
+	//  }else{
+	//  	int RandHP = (rand() % 3);
+	//  	if (RandHP == 0){
+	//  		return (level-1)*10;
+	//  	}else if (RandHP == 1){
+	//  		return level*10;
+	//  	}else{
+	//  		return (level+1)*10;
+	//  	}
+	//  }
+	return 10+20*(level-1);
 }
 
 int EnemyRNGStats(int level){
-	if (level == 1){
-	 	return 1;
-	 }else{
-	 	int RandHP = (rand() % 3);
-	 	if (RandHP == 0){
-	 		return level-1;
-	 	}else if (RandHP == 1){
-	 		return level;
-	 	}else{
-	 		return level+1;
-	 	}
-	 }
+	// if (level == 1){
+	//  	return 1;
+	//  }else{
+	//  	int RandHP = (rand() % 3);
+	//  	if (RandHP == 0){
+	//  		return level-1;
+	//  	}else if (RandHP == 1){
+	//  		return level;
+	//  	}else{
+	//  		return level+1;
+	//  	}
+	//  }
+	return 10+3*(level-1);
+}
+
+void LoadEXPMusuh(Enemy* enemy){
+	enemy->EXP = 10+10*pow((enemy->LVL-1),2);
 }
 
 void LoadMaxHPMusuh(Enemy* enemy){
@@ -324,9 +337,9 @@ void LoadMaxHPMusuh(Enemy* enemy){
 }
 
 void LoadSTRMusuh(Enemy* enemy){
-	 enemy->STR = EnemyRNGStats(enemy->LVL);
+	 enemy->STR = EnemyRNGStats(enemy->LVL)/5;
 }
 
 void LoadDEFMusuh(Enemy* enemy){
-	 enemy->DEF = EnemyRNGStats(enemy->LVL);
+	 enemy->DEF = EnemyRNGStats(enemy->LVL)/8;
 }

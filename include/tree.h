@@ -41,6 +41,8 @@ void TreePrint(Tree P, int curr);
 void TreePrintActivated(Tree P, int curr);
 uint SkillTotalAttack(Tree P);
 uint SkillTotalDeffense(Tree P);
-void SkillActivatedGenerate(Tree *P, int EXP);
+void SkillActivatedGenerate(Tree *P, int LVL);
+void SkillTreeDefault(Tree *Pt);
+void LoadSkill(Tree *P, int LVL);
 
 #endif

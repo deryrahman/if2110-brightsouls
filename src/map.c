@@ -147,10 +147,10 @@ MapNode* MapLoadNodeFromFile(String filename, uint *count) {
         return NULL;
 
     uint ret_id = 0;
+    if (count != NULL) *count = 0;
     while (!feof(file)) {
         Map m = MapCreateEmpty();
         MapFillFromFile(&m, file);
-        if (count != NULL) *count += 1;
         String str = StringCreate("");
 
         StringFreadln(&str, file);
@@ -173,6 +173,7 @@ MapNode* MapLoadNodeFromFile(String filename, uint *count) {
                 arr[val].map = m;
                 if (ret_id == 0)
                     ret_id = id;
+                if (count != NULL) *count += 1;
             }else if (StringEquals(key, StringCreate("left")))
                 arr[id].left = &arr[val], arr[val].right = &arr[id];
             else if (StringEquals(key, StringCreate("right")))
@@ -203,11 +204,11 @@ String MapToString(MapNode map) {
     StringAppendChar(&str, '\n');
 
     StringAppendString(&str, StringCreate("startBottom="));
-    StringAppendString(&str, StringFromUint(map.map.width - map.map.startBottom.x));
+    StringAppendString(&str, StringFromUint(map.map.width - map.map.startBottom.x + 1));
     StringAppendChar(&str, '\n');
 
     StringAppendString(&str, StringCreate("startLeft="));
-    StringAppendString(&str, StringFromUint(map.map.height - map.map.startLeft.y));
+    StringAppendString(&str, StringFromUint(map.map.height - map.map.startLeft.y + 1));
     StringAppendChar(&str, '\n');
 
     StringAppendString(&str, StringCreate("startTop="));

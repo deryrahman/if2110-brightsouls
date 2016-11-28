@@ -124,9 +124,4 @@ void EndGameShow (GameState* gameState, boolean win) {
     TerminalRender(*terminal);
     String str = StringCreate("");
     StringReadln(&str);
-
-	FILE* save = fopen("savefile/username","w");
-	if (save) fclose(save), remove("savefile/username");
-	save = fopen("savefile/map","w");
-	if (save) fclose(save), remove("savefile/map");
 }

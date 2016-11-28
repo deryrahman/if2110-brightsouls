@@ -6,7 +6,7 @@
 #include "stackt.h"
 #include "queue.h"
 
-int BattleMenuShow(GameState* gameState, Enemy* enemy);
+int BattleMenuShow(GameState* gameState, Enemy* enemy, boolean BOSS);
 /*
 Queue RandomAction();
 Stack QueueToStack(Queue Q);
