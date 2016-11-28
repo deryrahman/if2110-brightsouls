@@ -91,7 +91,9 @@ void EndGameShow (GameState* gameState, boolean win) {
 		str = StringCreate("Jauhar");
 	    UIDrawText(*terminalCre,TerminalGetCenterX(*terminalCre, StringLength(str)), ImageHeight(mainmenuImage) + 21, PixelStyleCreateDefault(), str);
 
-		str = StringCreate("Put copyright here");
+		str = StringCreate("Copyright "); 
+		StringAppendChar(&str, 0xa9);
+		StringAppendString(&str," by The Low-Profiled Team");
 	    UIDrawText(*terminalCre,TerminalGetCenterX(*terminalCre, StringLength(str)), ImageHeight(mainmenuImage) + 30, PixelStyleCreateDefault(), str);
 
 	    TerminalRender(*terminalCre);
