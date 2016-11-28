@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
     if (file_map1)
         MapFillFromFile(&map, file_map1);
 
-    MapPutOnTerminal(map, terminal, TerminalGetCenterX(terminal, MapWidth(map)), 10);
+    MapPutOnTerminal(map, terminal, 1, 1);
 
     TerminalRender(terminal);
 

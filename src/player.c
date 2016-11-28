@@ -308,7 +308,7 @@ int EnemyRNGMaxHP(int level){
 	//  		return (level+1)*10;
 	//  	}
 	//  }
-	return 10+20*(level-1);
+	return max(10, 10+20*(level-1));
 }
 
 int EnemyRNGStats(int level){

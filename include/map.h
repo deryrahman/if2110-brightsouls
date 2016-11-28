@@ -47,6 +47,7 @@ void MapMake(Map *map, uint width, uint height);
 
 void MapFillFromFile(Map *map, FILE *file);
 MapNode* MapLoadNodeFromFile(String file, uint *count);
+String MapToString(MapNode map);
 
 String MapGraphToString(MapNode map);
 

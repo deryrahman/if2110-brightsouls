@@ -48,7 +48,7 @@ void SplashScreenShow(GameState* gameState) {
     str = StringCreate("> When you are in the battle mode, you can type 'A' to attack, 'B' to defense, or 'F' to flank.");
     UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 12, PixelStyleCreateDefault(), str);
 
-    str = StringCreate("> If you are not sure whether you can continue the game or not, you can save it by typing 'Load Game'");
+    str = StringCreate("> If you are not sure whether you can continue the game or not, you can save it by typing 'SAVE GAME'");
     UIDrawText(*terminal,4, ImageHeight(mainmenuImage) + 14, PixelStyleCreateDefault(), str);
 
     str = StringCreate("Now, you are ready to play!");

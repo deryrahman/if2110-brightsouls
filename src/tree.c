@@ -45,13 +45,13 @@ void TreeAddRight(Tree P, Skill X, TreeAddress *Pr){
 	*Pr=PRight;
 }
 
-/* void TreePrint(Tree P, int curr){
+void TreePrint(Tree P, int curr){
 	if(P==Nil){}
 	if ((TreeLeft(P) == Nil) || (TreeRight(P) == Nil)) {
 		for(int i=0;i<curr;i++){
 			printf("|   ");
 		}
-		printf("|-------------------- Min EXP : %u\n", TreeRoot(P).exp_req);
+		printf("|-------------------- Min EXP : %u\n", TreeRoot(P).lvl_req);
 		for(int i=0;i<curr;i++){
 			printf("|   ");
 		}
@@ -64,7 +64,7 @@ void TreeAddRight(Tree P, Skill X, TreeAddress *Pr){
 		for(int i=0;i<curr;i++){
 			printf("|   ");
 		}
-		printf("|-------------------- Min EXP : %u\n", TreeRoot(P).exp_req);
+		printf("|-------------------- Min EXP : %u\n", TreeRoot(P).lvl_req);
 		for(int i=0;i<curr;i++){
 			printf("|   ");
 		}
@@ -77,6 +77,7 @@ void TreeAddRight(Tree P, Skill X, TreeAddress *Pr){
 		TreePrint(TreeRight(P),curr+1);
 	}
 }
+
 void TreePrintActivated(Tree P, int curr){
 	if (P == Nil)
 		return;
@@ -85,7 +86,7 @@ void TreePrintActivated(Tree P, int curr){
 			for(int i=0;i<curr;i++){
 				printf("|   ");
 			}
-			printf("|-------------------- Min EXP : %u\n", TreeRoot(P).exp_req);
+			printf("|-------------------- Min EXP : %u\n", TreeRoot(P).lvl_req);
 			for(int i=0;i<curr;i++){
 				printf("|   ");
 			}
@@ -98,7 +99,7 @@ void TreePrintActivated(Tree P, int curr){
 			for(int i=0;i<curr;i++){
 				printf("|   ");
 			}
-			printf("|-------------------- Min EXP : %u\n", TreeRoot(P).exp_req);
+			printf("|-------------------- Min EXP : %u\n", TreeRoot(P).lvl_req);
 			for(int i=0;i<curr;i++){
 				printf("|   ");
 			}
@@ -111,7 +112,7 @@ void TreePrintActivated(Tree P, int curr){
 			TreePrintActivated(TreeRight(P),curr+1);
 		}
 	}
-}*/
+}
 
 uint SkillTotalAttack(Tree P){
 	if (TreeStatus(P)==true){
