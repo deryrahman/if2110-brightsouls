@@ -328,7 +328,11 @@ int EnemyRNGStats(int level){
 }
 
 void LoadEXPMusuh(Enemy* enemy){
-	enemy->EXP = 10+10*pow((enemy->LVL-1),1.5);
+	if(enemy->LVL<=0){
+		enemy->EXP = 10;	
+	} else{
+		enemy->EXP = 10+10*pow((enemy->LVL-1),1.5);
+	}
 }
 
 void LoadMaxHPMusuh(Enemy* enemy){
