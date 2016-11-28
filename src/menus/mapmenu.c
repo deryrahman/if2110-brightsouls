@@ -70,7 +70,7 @@ Enemy* getRandomEnemy(GameState* gameState) {
     Enemy* enemy = LoadPlayerFromFile(enemyFile[rand()%3]);
     // enemy->LVL = max(1, (int) (gameState->player->LVL + (rand()%5)-2));
     // enemy->EXP = max(5, (int) ((1<<(enemy->LVL)) + (rand()%(1<<(enemy->LVL - 1))) - (1<<(enemy->LVL-2))));
-    enemy->LVL = max(1, rand()%2==0?((int)gameState->player->LVL-1):((int)gameState->player->LVL));
+    enemy->LVL = max(1, gameState->player->LVL - rand() % 2);
     LoadEXPMusuh(enemy);
     LoadMaxHPMusuh(enemy);
     LoadSTRMusuh(enemy);
@@ -174,6 +174,7 @@ int MapMenuShow(GameState *gameState) {
             SkillMenuShow(gameState);
         else if (StringEquals(command, StringCreate("UPLEVEL"))){
             LevelUp(gameState->player);
+            status = StringCreate("");
             StringAppendString(&status, StringCreate("Your level is up, now your level is "));
             StringAppendString(&status, StringFromUint(gameState->player->LVL));
         }
@@ -273,7 +274,7 @@ int MapMenuShow(GameState *gameState) {
             if (afterMove == MAP_ENEMY) {
                 Enemy* enemy = getRandomEnemy(gameState);
 
-                boolean boss = gameState->player->LVL >= 20 && rand();
+                boolean boss = gameState->player->LVL >= 50 && (rand() % 10 == 0);
 
                 if (boss)
                     showMapMenuInformation(gameState, StringCreate("Prepare yoursel, you are about to fight BOSS!!!"));
