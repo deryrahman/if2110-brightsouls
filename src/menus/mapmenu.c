@@ -70,7 +70,7 @@ Enemy* getRandomEnemy(GameState* gameState) {
     Enemy* enemy = LoadPlayerFromFile(enemyFile[rand()%3]);
     // enemy->LVL = max(1, (int) (gameState->player->LVL + (rand()%5)-2));
     // enemy->EXP = max(5, (int) ((1<<(enemy->LVL)) + (rand()%(1<<(enemy->LVL - 1))) - (1<<(enemy->LVL-2))));
-    enemy->LVL = rand()%2==0?(gameState->player->LVL-1):(gameState->player->LVL);
+    enemy->LVL = max(1, rand()%2==0?((int)gameState->player->LVL-1):((int)gameState->player->LVL));
     LoadEXPMusuh(enemy);
     LoadMaxHPMusuh(enemy);
     LoadSTRMusuh(enemy);
@@ -143,10 +143,6 @@ int MapMenuShow(GameState *gameState) {
         gameState->playerPosition = gameState->currentMap->map.startCenter;
     }
     MapSet(gameState->currentMap->map, gameState->playerPosition.x, gameState->playerPosition.y, MAP_PLAYER);
-    // Tree P;
-    // LoadSkill(&P,gameState->player->EXP);
-    // gameState->player->STRSKILL+=SkillTotalAttack(P);
-    // gameState->player->DEFSKILL+=SkillTotalDeffense(P);
 
     String command = StringCreate("");
     String old_command = NULL;
@@ -318,12 +314,6 @@ int MapMenuShow(GameState *gameState) {
             }
         }
 
-        if (IsLevelUp(gameState->player)){
-            // Tree P;
-            // LoadSkill(&P,gameState->player->EXP);
-            // gameState->player->STRSKILL+=SkillTotalAttack(P);
-            // gameState->player->DEFSKILL+=SkillTotalDeffense(P);
-        }
         while (IsLevelUp(gameState->player)) {
             LevelUp(gameState->player);
             String levelup_status = StringCreate("Your level is up, now your level is ");
