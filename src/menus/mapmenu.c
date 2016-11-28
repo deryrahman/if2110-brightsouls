@@ -149,13 +149,14 @@ int MapMenuShow(GameState *gameState) {
     // gameState->player->DEFSKILL+=SkillTotalDeffense(P);
 
     String command = StringCreate("");
+    String old_command = NULL;
     boolean game_loop = true;
     uint beforeMove = MAP_FREE;
     String status = NULL;
     while (game_loop) {
         showMapMenuInformation(gameState, status);
 
-        command = getCommand();
+        if (command == NULL) command = getCommand();
 
         boolean move = false;
         uint mx = 0;
@@ -176,19 +177,12 @@ int MapMenuShow(GameState *gameState) {
         else if(StringEquals(command, StringCreate("SKILL")))
             SkillMenuShow(gameState);
         else if (StringEquals(command, StringCreate("UPLEVEL"))){
-                gameState->player->LVL++;
-                Tree P;
-                LoadSkill(&P,gameState->player->LVL);
-                gameState->player->STRSKILL+=SkillTotalAttack(P);
-                gameState->player->DEFSKILL+=SkillTotalDeffense(P);
-                gameState->player->MAXHP=10+2*(gameState->player->LVL-1);
-                gameState->player->STR = (10+2*(gameState->player->LVL-1))/5;
-                gameState->player->DEF = (10+2*(gameState->player->LVL-1))/8;
+                LevelUp(gameState->player);
                 StringAppendString(&status, StringCreate("Cheat active. Your level is up, now your level is "));
                 StringAppendString(&status, StringFromUint(gameState->player->LVL));
         }
         else if (StringEquals(command, StringCreate("HESOYAM"))){
-                gameState->player->HP=10+2*(gameState->player->LVL-1);
+                gameState->player->HP=gameState->player->MAXHP;
                 StringAppendString(&status, StringCreate("Cheat active. Your HP is full"));
         }
         else if (StringEquals(command, StringCreate("OVERFLOW"))){
@@ -214,6 +208,9 @@ int MapMenuShow(GameState *gameState) {
             else if (StringEquals(cmd, StringCreate("MAXHP")))
                 gameState->player->MAXHP = max(0, val);
         }
+
+        old_command = command;
+        command = NULL;
 
         uint afterMove = MAP_FREE;
         if (move) {
@@ -294,9 +291,17 @@ int MapMenuShow(GameState *gameState) {
                 int result = BattleMenuShow(gameState, enemy, boss);
                 if (result == 0) beforeMove = MAP_ENEMY;
 
-                if (result == 0)
+                if (result == 0) {
                     status = StringCreate("It's a draw");
-                else if (result == 1 && !boss) {
+                    if (StringEquals(old_command, StringCreate("GU")))
+                        command = StringCreate("GD");
+                    else if (StringEquals(old_command, StringCreate("GD")))
+                        command = StringCreate("GU");
+                    else if (StringEquals(old_command, StringCreate("GR")))
+                        command = StringCreate("GL");
+                    else if (StringEquals(old_command, StringCreate("GL")))
+                        command = StringCreate("GR");
+                } else if (result == 1 && !boss) {
                     status = StringCreate("You win! You get ");
                     StringAppendString(&status, StringFromUint(enemy->EXP));
                     StringAppendString(&status, StringCreate(" EXP"));
