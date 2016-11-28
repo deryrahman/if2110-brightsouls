@@ -177,13 +177,13 @@ int MapMenuShow(GameState *gameState) {
         else if(StringEquals(command, StringCreate("SKILL")))
             SkillMenuShow(gameState);
         else if (StringEquals(command, StringCreate("UPLEVEL"))){
-                LevelUp(gameState->player);
-                StringAppendString(&status, StringCreate("Cheat active. Your level is up, now your level is "));
-                StringAppendString(&status, StringFromUint(gameState->player->LVL));
+            LevelUp(gameState->player);
+            StringAppendString(&status, StringCreate("Your level is up, now your level is "));
+            StringAppendString(&status, StringFromUint(gameState->player->LVL));
         }
         else if (StringEquals(command, StringCreate("HESOYAM"))){
-                gameState->player->HP=gameState->player->MAXHP;
-                StringAppendString(&status, StringCreate("Cheat active. Your HP is full"));
+            gameState->player->HP=gameState->player->MAXHP;
+            StringAppendString(&status, StringCreate("Cheat active. Your HP is full"));
         }
         else if (StringEquals(command, StringCreate("OVERFLOW"))){
                 gameState->player->LVL=2147483647;
@@ -319,10 +319,10 @@ int MapMenuShow(GameState *gameState) {
         }
 
         if (IsLevelUp(gameState->player)){
-            Tree P;
-            LoadSkill(&P,gameState->player->EXP);
-            gameState->player->STRSKILL+=SkillTotalAttack(P);
-            gameState->player->DEFSKILL+=SkillTotalDeffense(P);
+            // Tree P;
+            // LoadSkill(&P,gameState->player->EXP);
+            // gameState->player->STRSKILL+=SkillTotalAttack(P);
+            // gameState->player->DEFSKILL+=SkillTotalDeffense(P);
         }
         while (IsLevelUp(gameState->player)) {
             LevelUp(gameState->player);

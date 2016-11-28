@@ -273,8 +273,8 @@ void LevelUp(Player* player){
 	player->LVL++;
 	Tree P;
 	LoadSkill(&P,player->LVL);
-	player->STRSKILL += SkillTotalAttack(P);
-	player->DEFSKILL += SkillTotalDeffense(P);
+	player->STRSKILL = SkillTotalAttack(P);
+	player->DEFSKILL = SkillTotalDeffense(P);
 	player->MAXHP = 10+2*(player->LVL-1);
 	player->STR = (10+2*(player->LVL-1))/5;
 	player->DEF = (10+2*(player->LVL-1))/8;
@@ -308,7 +308,7 @@ int EnemyRNGMaxHP(int level){
 	//  		return (level+1)*10;
 	//  	}
 	//  }
-	return 10+8*(level-1);
+	return 10+20*(level-1);
 }
 
 int EnemyRNGStats(int level){
