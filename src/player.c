@@ -271,10 +271,6 @@ Player* PlayerNew(String name) {
 
 void LevelUp(Player* player){
 	player->LVL++;
-	Tree P;
-	LoadSkill(&P,player->LVL);
-	player->STRSKILL = SkillTotalAttack(P);
-	player->DEFSKILL = SkillTotalDeffense(P);
 	player->MAXHP = 10+2*(player->LVL-1);
 	player->STR = (10+2*(player->LVL-1))/5;
 	player->DEF = (10+2*(player->LVL-1))/8;

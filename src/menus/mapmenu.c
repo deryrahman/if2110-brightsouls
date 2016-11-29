@@ -137,6 +137,13 @@ void showMapMenuInformation(GameState *gameState, String status) {
 }
 
 int MapMenuShow(GameState *gameState) {
+
+    // Load SKILL setiap buka map
+    Tree P;
+    LoadSkill(&P,gameState->player->LVL);
+    gameState->player->STRSKILL = SkillTotalAttack(P);
+    gameState->player->DEFSKILL = SkillTotalDeffense(P);
+
     if (!gameState->currentMap) {
         gameState->nMap = 0;
         gameState->currentMap = getRandomMap(gameState);
