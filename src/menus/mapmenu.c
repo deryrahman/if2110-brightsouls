@@ -70,7 +70,7 @@ Enemy* getRandomEnemy(GameState* gameState) {
     Enemy* enemy = LoadPlayerFromFile(enemyFile[rand()%3]);
     // enemy->LVL = max(1, (int) (gameState->player->LVL + (rand()%5)-2));
     // enemy->EXP = max(5, (int) ((1<<(enemy->LVL)) + (rand()%(1<<(enemy->LVL - 1))) - (1<<(enemy->LVL-2))));
-    enemy->LVL = max(1, gameState->player->LVL - rand() % 2);
+    enemy->LVL = max(1, gameState->player->LVL - rand() % 5);
     LoadEXPMusuh(enemy);
     LoadMaxHPMusuh(enemy);
     LoadSTRMusuh(enemy);
@@ -116,7 +116,8 @@ void showMapMenuInformation(GameState *gameState, String status) {
     UIDrawHLine(*(gameState->terminal), left-2,++top, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
     UIDrawText(*(gameState->terminal), left, ++top, PixelStyleCreateDefault(), StringCreate("Player EXP"));
-    UIDrawText(*(gameState->terminal), left+13, top, PixelStyleCreateDefault(), StringFromUint(gameState->player->EXP));
+    String expstr = StringFromUint(gameState->player->EXP); StringAppendChar(&expstr,'/'); StringAppendString(&expstr, StringFromUint((10+10*pow(gameState->player->LVL,2))));
+    UIDrawText(*(gameState->terminal), left+13, top, PixelStyleCreateDefault(), expstr);
     UIDrawHLine(*(gameState->terminal), left-2,++top, 35, PixelCreateDefault(0x2523),PixelCreateDefault(0x252b),PixelCreateDefault(0x2501));
 
     UIDrawText(*(gameState->terminal), left, ++top, PixelStyleCreateDefault(), StringCreate("Player HP"));
