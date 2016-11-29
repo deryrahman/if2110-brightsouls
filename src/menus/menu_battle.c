@@ -185,9 +185,9 @@ void CommandDisplay(GameState* gameState,Queue QPlayer, Queue QMusuh,int info,in
 				case 2 : line1=StringCreate("PLAYER Attack! But it's blocked."); line2=StringCreate("HP ENEMY : +"); StringAppendString(&line2,StringFromUint(enemy->DEF/2)); break;
 				case 3 : line1=StringCreate("PLAYER Attack! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint(player->STR+player->STRSKILL)); break;
 				case 4 : line1=StringCreate("ENEMY Attack! But it's blocked."); line2=StringCreate("HP PLAYER : +"); StringAppendString(&line2,StringFromUint((player->DEF+player->DEFSKILL)/2)); break;
-				case 5 : line1=StringCreate("ENEMY Flank! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR)); break;
+				case 5 : line1=StringCreate("ENEMY Flank! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR*2)); break;
 				case 6 : line1=StringCreate("ENEMY Attack! Bad decision dude."); line2=StringCreate("HP PLAYER : -"); StringAppendString(&line2,StringFromUint(enemy->STR));break;
-				case 7 : line1=StringCreate("PLAYER Flank! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint((player->STR+player->STRSKILL))); break;
+				case 7 : line1=StringCreate("PLAYER Flank! It's very effective."); line2=StringCreate("HP ENEMY : -"); StringAppendString(&line2,StringFromUint((player->STR+player->STRSKILL*2))); break;
 				case 8 : line1=StringCreate("CONGRATULATION!"); line2=StringCreate("You Win!"); break;
 				case 9 : line1=StringCreate("GAME OVER!"); line2=StringCreate("Please restart game, or load previous saved game");break;
 				case 10 : line1=StringCreate("DRAW!"); line2=StringCreate("Try again"); break;
@@ -352,9 +352,9 @@ void CommandCalculation(GameState* gameState, Enemy* enemy, int STR, int ESTR, i
 		case 2 : *EHP+=(EDEF/2); break;
 		case 3 : *EHP-=(STR); break;
 		case 4 : *HP+=(DEF/2); break;
-		case 5 : *HP-=(ESTR); break;
+		case 5 : *HP-=(ESTR*2); break;
 		case 6 : *HP-=(ESTR); break;
-		case 7 : *EHP-=(STR); break;
+		case 7 : *EHP-=(STR*2); break;
 	}
 	*EHP=max(0,(*EHP>enemy->MAXHP)?enemy->MAXHP:*EHP);
 	*HP=max(0,(*HP>gameState->player->MAXHP)?gameState->player->MAXHP:*HP);
