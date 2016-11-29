@@ -327,7 +327,8 @@ void LoadEXPMusuh(Enemy* enemy){
 	if(enemy->LVL<=0){
 		enemy->EXP = 10;	
 	} else{
-		enemy->EXP = 10+10*pow((enemy->LVL-1),1.5);
+		// enemy->EXP = 10+10*pow((enemy->LVL-1),1.5);
+		enemy->EXP = 10+10*(enemy->LVL-1);
 	}
 }
 
