@@ -27,6 +27,11 @@ String EnemyCMD(int *irand, Queue QMusuh);
 int BattleMenuShow (GameState* gameState, Enemy* enemy, boolean BOSS){
 	Player* player = gameState->player;
 
+    Tree P;
+    LoadSkill(&P,gameState->player->LVL);
+    gameState->player->STRSKILL = SkillTotalAttack(P);
+    gameState->player->DEFSKILL = SkillTotalDeffense(P);
+
 	Stack SMusuh;
 	QueueInfoType Xq;
 	Queue QPlayer;
@@ -63,6 +68,7 @@ int BattleMenuShow (GameState* gameState, Enemy* enemy, boolean BOSS){
 				StringReadln(&str);
 			}
 			if(StringEquals(Jmp,str)){
+				enemy->HP=0;
 				break;
 			}
 			QueueAdd(&QPlayer,str[0]);
